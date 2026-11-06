@@ -3,7 +3,7 @@
   "name": "com.softwiro/templates",
   "title": "Softwiro Excel templates and calculators",
   "description": "Arabic Excel templates and 23 calculators (VAT, BMI, gold zakat...). No key, nothing stored.",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "websiteUrl": "https://softwiro.com/mcp",
   "remotes": [
     {
@@ -19,5 +19,9 @@
         "512x512"
       ]
     }
-  ]
+  ],
+  "repository": {
+    "url": "https://github.com/softwiro/softwiro-mcp",
+    "source": "github"
+  }
 }
