@@ -1,0 +1,355 @@
+{
+ "id": "teacher-weighted-gradebook",
+ "file": "softwiro-teacher-weighted-gradebook.xlsx",
+ "title": "دفتر درجات المدرس بالأوزان",
+ "language": "ar",
+ "direction": "rtl",
+ "how_it_works": "White cells are typed input; cells whose kind is \"formula\" are calculated and must not be overwritten. Add one record per row under the header row of a record table, keeping the columns in order.",
+ "sheets": [
+  {
+   "name": "ابدأ هنا",
+   "formula_cells": 0
+  },
+  {
+   "name": "الإعدادات",
+   "formula_cells": 2,
+   "record_tables": [
+    {
+     "header_row": 7,
+     "first_record_row": 8,
+     "sample_rows_filled": 14,
+     "capacity_last_row": 23,
+     "columns": [
+      {
+       "column": "A",
+       "header": "فئة التقييم",
+       "kind": "input",
+       "examples": [
+        "الواجبات",
+        "الاختبارات القصيرة",
+        "المشاريع"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "الوزن (من 100)",
+       "kind": "input",
+       "examples": [
+        20,
+        20,
+        20
+       ]
+      },
+      {
+       "column": "C",
+       "header": "الدرجة العظمى للفئة",
+       "kind": "input",
+       "examples": [
+        20,
+        30,
+        20
+       ]
+      }
+     ]
+    }
+   ],
+   "settings": [
+    {
+     "label": "المادة",
+     "cell": "B4",
+     "value": "الرياضيات"
+    },
+    {
+     "label": "الفصل",
+     "cell": "B5",
+     "value": "الصف الثاني الإعدادي - فصل 3"
+    }
+   ]
+  },
+  {
+   "name": "الدرجات",
+   "formula_cells": 1808,
+   "record_tables": [
+    {
+     "header_row": 5,
+     "first_record_row": 6,
+     "sample_rows_filled": 14,
+     "capacity_last_row": 205,
+     "columns": [
+      {
+       "column": "A",
+       "header": "رقم الطالب",
+       "kind": "input",
+       "examples": [
+        1,
+        2,
+        3
+       ]
+      },
+      {
+       "column": "B",
+       "header": "اسم الطالب",
+       "kind": "input",
+       "examples": [
+        "أحمد سمير",
+        "سارة عادل",
+        "محمد حسن"
+       ]
+      },
+      {
+       "column": "C",
+       "header": "درجة الفئة 1",
+       "kind": "input",
+       "examples": [
+        18,
+        15,
+        12
+       ]
+      },
+      {
+       "column": "D",
+       "header": "درجة الفئة 2",
+       "kind": "input",
+       "examples": [
+        27,
+        24,
+        18
+       ]
+      },
+      {
+       "column": "E",
+       "header": "درجة الفئة 3",
+       "kind": "input",
+       "examples": [
+        17,
+        16,
+        14
+       ]
+      },
+      {
+       "column": "F",
+       "header": "درجة الفئة 4",
+       "kind": "input",
+       "examples": [
+        52,
+        45,
+        36
+       ]
+      },
+      {
+       "column": "G",
+       "header": "الفئات المرصودة",
+       "kind": "formula",
+       "formula_row_1": "=IF(B6&\"\"=\"\",\"\",COUNT(C6:F6))"
+      },
+      {
+       "column": "H",
+       "header": "المجموع المرجّح",
+       "kind": "formula",
+       "formula_row_1": "=IF(B6&\"\"=\"\",\"\",ROUND(IF(AND(ISNUMBER(C6),N('الإعدادات'!$C$8)>0),C6/'الإعدادات'!$C$8*N('الإعدادات'!$B$8),0)+IF(AND(ISNUMBER(D6),N('الإعدادات'!$C$9)>0),D6/'الإعدادات'!$C$9*N('الإعدادات'!$B$9),0)+IF(AND(ISNUMBER(E6),N('الإعدادات'!$C$10)>0),E6/'الإعدادات'!$C$10*N('الإعدادات'!$B$10),0)+IF(AND(ISNUMBER(F6),N('الإعدادات'!$C$11)>0),F6/'الإعدادات'!$C$11*N('الإعدادات'!$B$11),0),2))"
+      },
+      {
+       "column": "I",
+       "header": "الوزن المرصود",
+       "kind": "formula",
+       "formula_row_1": "=IF(B6&\"\"=\"\",\"\",IF(AND(ISNUMBER(C6),N('الإعدادات'!$C$8)>0),N('الإعدادات'!$B$8),0)+IF(AND(ISNUMBER(D6),N('الإعدادات'!$C$9)>0),N('الإعدادات'!$B$9),0)+IF(AND(ISNUMBER(E6),N('الإعدادات'!$C$10)>0),N('الإعدادات'!$B$10),0)+IF(AND(ISNUMBER(F6),N('الإعدادات'!$C$11)>0),N('الإعدادات'!$B$11),0))"
+      },
+      {
+       "column": "J",
+       "header": "النسبة",
+       "kind": "formula",
+       "formula_row_1": "=IF(B6&\"\"=\"\",\"\",IF(N(I6)=0,\"\",H6/I6))"
+      },
+      {
+       "column": "K",
+       "header": "التقدير",
+       "kind": "formula",
+       "formula_row_1": "=IF(J6=\"\",\"\",INDEX('الإعدادات'!$B$19:$B$23,MATCH(J6,'الإعدادات'!$A$19:$A$23,1)))"
+      },
+      {
+       "column": "L",
+       "header": "الحالة",
+       "kind": "formula",
+       "formula_row_1": "=IF(J6=\"\",\"\",IF(J6<'الإعدادات'!$B$14,\"معرّض للرسوب\",IF(J6<'الإعدادات'!$B$14+'الإعدادات'!$B$15,\"على الحافة\",\"آمن\")))"
+      },
+      {
+       "column": "M",
+       "header": "ملاحظة",
+       "kind": "formula",
+       "formula_row_1": "=IF(B6&\"\"=\"\",\"\",IF(OR(AND(ISNUMBER(C6),OR(C6>N('الإعدادات'!$C$8),C6<0)),AND(ISNUMBER(D6),OR(D6>N('الإعدادات'!$C$9),D6<0)),AND(ISNUMBER(E6),OR(E6>N('الإعدادات'!$C$10),E6<0)),AND(ISNUMBER(F6),OR(F6>N('الإعدادات'!$C$11),F6<0))),\"درجة خارج الحد\",IF(G6<4,\"درجات ناقصة\",\"\")))"
+      },
+      {
+       "column": "N",
+       "header": "الترتيب",
+       "kind": "formula",
+       "formula_row_1": "=IF(J6=\"\",\"\",COUNTIFS($J$6:$J$205,\">\"&J6)+1)"
+      },
+      {
+       "column": "O",
+       "header": "ترتيب الخطر",
+       "kind": "formula",
+       "formula_row_1": "=IF(OR(L6=\"معرّض للرسوب\",L6=\"على الحافة\"),COUNTIFS($J$6:$J$205,\"<\"&J6,$L$6:$L$205,\"معرّض للرسوب\")+COUNTIFS($J$6:$J$205,\"<\"&J6,$L$6:$L$205,\"على الحافة\")+COUNTIFS($J$6:J6,J6,$L$6:L6,\"معرّض للرسوب\")+COUNTIFS($J$6:J6,J6,$L$6:L6,\"على الحافة\"),\"\")"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "المعرّضون",
+   "formula_cells": 281,
+   "record_tables": [
+    {
+     "header_row": 6,
+     "first_record_row": 7,
+     "sample_rows_filled": 0,
+     "capacity_last_row": 46,
+     "columns": [
+      {
+       "column": "A",
+       "header": "م",
+       "kind": "formula",
+       "formula_row_1": "=IF(1<=$B$4,1,\"\")"
+      },
+      {
+       "column": "B",
+       "header": "رقم الطالب",
+       "kind": "formula",
+       "formula_row_1": "=IF($A7=\"\",\"\",INDEX('الدرجات'!$A$6:$A$205,MATCH($A7,'الدرجات'!$O$6:$O$205,0)))"
+      },
+      {
+       "column": "C",
+       "header": "الطالب",
+       "kind": "formula",
+       "formula_row_1": "=IF($A7=\"\",\"\",INDEX('الدرجات'!$B$6:$B$205,MATCH($A7,'الدرجات'!$O$6:$O$205,0))&\"\")"
+      },
+      {
+       "column": "D",
+       "header": "النسبة",
+       "kind": "formula",
+       "formula_row_1": "=IF($A7=\"\",\"\",INDEX('الدرجات'!$J$6:$J$205,MATCH($A7,'الدرجات'!$O$6:$O$205,0)))"
+      },
+      {
+       "column": "E",
+       "header": "التقدير",
+       "kind": "formula",
+       "formula_row_1": "=IF($A7=\"\",\"\",INDEX('الدرجات'!$K$6:$K$205,MATCH($A7,'الدرجات'!$O$6:$O$205,0))&\"\")"
+      },
+      {
+       "column": "F",
+       "header": "الحالة",
+       "kind": "formula",
+       "formula_row_1": "=IF($A7=\"\",\"\",INDEX('الدرجات'!$L$6:$L$205,MATCH($A7,'الدرجات'!$O$6:$O$205,0))&\"\")"
+      },
+      {
+       "column": "G",
+       "header": "ملاحظة",
+       "kind": "formula",
+       "formula_row_1": "=IF($A7=\"\",\"\",INDEX('الدرجات'!$M$6:$M$205,MATCH($A7,'الدرجات'!$O$6:$O$205,0))&\"\")"
+      }
+     ]
+    }
+   ],
+   "results": [
+    {
+     "label": "عدد المعرّضين وعلى الحافة",
+     "cell": "B4",
+     "formula": "=COUNTIF('الدرجات'!$L$6:$L$205,\"معرّض للرسوب\")+COUNTIF('الدرجات'!$L$6:$L$205,\"على الحافة\")"
+    }
+   ]
+  },
+  {
+   "name": "الإحصائيات",
+   "formula_cells": 37,
+   "record_tables": [
+    {
+     "header_row": 19,
+     "first_record_row": 20,
+     "sample_rows_filled": 0,
+     "capacity_last_row": 32,
+     "columns": [
+      {
+       "column": "A",
+       "header": "الفئة",
+       "kind": "formula",
+       "formula_row_1": "='الإعدادات'!A8"
+      },
+      {
+       "column": "B",
+       "header": "الوزن",
+       "kind": "formula",
+       "formula_row_1": "='الإعدادات'!B8"
+      },
+      {
+       "column": "C",
+       "header": "متوسط الدرجة",
+       "kind": "formula",
+       "formula_row_1": "=IF(COUNT('الدرجات'!$C$6:$C$205)=0,\"\",SUM('الدرجات'!$C$6:$C$205)/COUNT('الدرجات'!$C$6:$C$205))"
+      },
+      {
+       "column": "D",
+       "header": "متوسط النسبة من العظمى",
+       "kind": "formula",
+       "formula_row_1": "=IF(OR(C20=\"\",N('الإعدادات'!$C$8)=0),\"\",C20/'الإعدادات'!$C$8)"
+      }
+     ]
+    }
+   ],
+   "results": [
+    {
+     "label": "عدد الطلاب",
+     "cell": "B5",
+     "formula": "=COUNTIF('الدرجات'!$B$6:$B$205,\"?*\")"
+    },
+    {
+     "label": "طلاب لهم نسبة",
+     "cell": "B6",
+     "formula": "=COUNT('الدرجات'!$J$6:$J$205)"
+    },
+    {
+     "label": "طلاب بلا أي درجة",
+     "cell": "B7",
+     "formula": "=B5-B6"
+    },
+    {
+     "label": "متوسط النسبة",
+     "cell": "B8",
+     "formula": "=IF(B6=0,\"\",SUM('الدرجات'!$J$6:$J$205)/B6)"
+    },
+    {
+     "label": "أعلى نسبة",
+     "cell": "B9",
+     "formula": "=IF(B6=0,\"\",MAX('الدرجات'!$J$6:$J$205))"
+    },
+    {
+     "label": "أدنى نسبة",
+     "cell": "B10",
+     "formula": "=IF(B6=0,\"\",MIN('الدرجات'!$J$6:$J$205))"
+    },
+    {
+     "label": "معرّض للرسوب",
+     "cell": "B13",
+     "formula": "=COUNTIF('الدرجات'!$L$6:$L$205,\"معرّض للرسوب\")"
+    },
+    {
+     "label": "على الحافة",
+     "cell": "B14",
+     "formula": "=COUNTIF('الدرجات'!$L$6:$L$205,\"على الحافة\")"
+    },
+    {
+     "label": "آمن",
+     "cell": "B15",
+     "formula": "=COUNTIF('الدرجات'!$L$6:$L$205,\"آمن\")"
+    },
+    {
+     "label": "نسبة المعرّضين للرسوب من أصحاب النسب",
+     "cell": "B16",
+     "formula": "=IF(B6=0,\"\",B13/B6)"
+    }
+   ]
+  },
+  {
+   "name": "لماذا ما زلت على إكسل؟",
+   "formula_cells": 0
+  }
+ ]
+}

@@ -1,0 +1,265 @@
+{
+ "id": "student-attendance",
+ "file": "softwiro-student-attendance.xlsx",
+ "title": "شيت حضور وغياب الطلاب",
+ "language": "ar",
+ "direction": "rtl",
+ "how_it_works": "White cells are typed input; cells whose kind is \"formula\" are calculated and must not be overwritten. Add one record per row under the header row of a record table, keeping the columns in order.",
+ "sheets": [
+  {
+   "name": "ابدأ هنا",
+   "formula_cells": 0
+  },
+  {
+   "name": "الإعدادات",
+   "formula_cells": 1,
+   "settings": [
+    {
+     "label": "اسم المدرسة",
+     "cell": "B4",
+     "value": "مدرسة النور الإعدادية"
+    },
+    {
+     "label": "الفصل",
+     "cell": "B5",
+     "value": "الصف الثاني - فصل 2"
+    },
+    {
+     "label": "الشهر (تاريخ أول يوم فيه)",
+     "cell": "B6",
+     "value": "2026-10-01"
+    },
+    {
+     "label": "حد الغياب بدون عذر (عدد الأيام)",
+     "cell": "B7",
+     "value": 3
+    },
+    {
+     "label": "الرمز",
+     "cell": "B10",
+     "value": "المعنى"
+    },
+    {
+     "label": "ح",
+     "cell": "B11",
+     "value": "حاضر"
+    },
+    {
+     "label": "غ",
+     "cell": "B12",
+     "value": "غائب بدون عذر"
+    },
+    {
+     "label": "ت",
+     "cell": "B13",
+     "value": "متأخر"
+    },
+    {
+     "label": "ع",
+     "cell": "B14",
+     "value": "غياب بعذر"
+    },
+    {
+     "label": "الخانة الفارغة",
+     "cell": "B15",
+     "value": "لا دراسة في ذلك اليوم، ولا تُحسب"
+    }
+   ],
+   "results": [
+    {
+     "label": "عدد أيام الشهر",
+     "cell": "B8",
+     "formula": "=IF(B6=\"\",\"\",DAY(EOMONTH(B6,0)))"
+    }
+   ]
+  },
+  {
+   "name": "الطلاب",
+   "formula_cells": 0,
+   "record_tables": [
+    {
+     "header_row": 5,
+     "first_record_row": 6,
+     "sample_rows_filled": 12,
+     "capacity_last_row": 17,
+     "columns": [
+      {
+       "column": "A",
+       "header": "رقم الطالب",
+       "kind": "input",
+       "examples": [
+        1,
+        2,
+        3
+       ]
+      },
+      {
+       "column": "B",
+       "header": "اسم الطالب",
+       "kind": "input",
+       "examples": [
+        "أحمد سالم",
+        "محمد عادل",
+        "سارة حسن"
+       ]
+      },
+      {
+       "column": "C",
+       "header": "هاتف ولي الأمر",
+       "kind": "input",
+       "examples": [
+        "01000000001",
+        "01000000002",
+        "01000000003"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "الحضور",
+   "formula_cells": 725,
+   "record_tables": [
+    {
+     "header_row": 5,
+     "first_record_row": 6,
+     "sample_rows_filled": 0,
+     "capacity_last_row": 65,
+     "columns": [
+      {
+       "column": "AH",
+       "header": "حاضر",
+       "kind": "formula",
+       "formula_row_1": "=IF($B6=\"\",\"\",COUNTIF($C6:$AG6,\"ح\"))"
+      },
+      {
+       "column": "AI",
+       "header": "غائب",
+       "kind": "formula",
+       "formula_row_1": "=IF($B6=\"\",\"\",COUNTIF($C6:$AG6,\"غ\"))"
+      },
+      {
+       "column": "AJ",
+       "header": "متأخر",
+       "kind": "formula",
+       "formula_row_1": "=IF($B6=\"\",\"\",COUNTIF($C6:$AG6,\"ت\"))"
+      },
+      {
+       "column": "AK",
+       "header": "بعذر",
+       "kind": "formula",
+       "formula_row_1": "=IF($B6=\"\",\"\",COUNTIF($C6:$AG6,\"ع\"))"
+      },
+      {
+       "column": "AL",
+       "header": "الأيام المسجلة",
+       "kind": "formula",
+       "formula_row_1": "=IF($B6=\"\",\"\",AH6+AI6+AJ6+AK6)"
+      },
+      {
+       "column": "AM",
+       "header": "نسبة الحضور",
+       "kind": "formula",
+       "formula_row_1": "=IF($B6=\"\",\"\",IF(AL6=0,\"\",(AH6+AJ6)/AL6))"
+      },
+      {
+       "column": "AN",
+       "header": "الحالة",
+       "kind": "formula",
+       "formula_row_1": "=IF($B6=\"\",\"\",IF(AI6>='الإعدادات'!$B$7,\"تجاوز حد الغياب\",IF(AND('الإعدادات'!$B$7>1,AI6>='الإعدادات'!$B$7-1),\"قريب من الحد\",\"منتظم\")))"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "ملخص الشهر",
+   "formula_cells": 23,
+   "record_tables": [
+    {
+     "header_row": 13,
+     "first_record_row": 14,
+     "sample_rows_filled": 6,
+     "capacity_last_row": 19,
+     "columns": [
+      {
+       "column": "A",
+       "header": "الترتيب",
+       "kind": "input",
+       "examples": [
+        1,
+        2,
+        3
+       ]
+      },
+      {
+       "column": "B",
+       "header": "الاسم",
+       "kind": "formula",
+       "formula_row_1": "=IFERROR(IF(INDEX('الحضور'!$AI$6:$AI$65,MATCH($A14,'الحضور'!$AO$6:$AO$65,0))=0,\"\",INDEX('الحضور'!$B$6:$B$65,MATCH($A14,'الحضور'!$AO$6:$AO$65,0))),\"\")"
+      },
+      {
+       "column": "C",
+       "header": "أيام الغياب (غ)",
+       "kind": "formula",
+       "formula_row_1": "=IFERROR(IF(INDEX('الحضور'!$AI$6:$AI$65,MATCH($A14,'الحضور'!$AO$6:$AO$65,0))=0,\"\",INDEX('الحضور'!$AI$6:$AI$65,MATCH($A14,'الحضور'!$AO$6:$AO$65,0))),\"\")"
+      },
+      {
+       "column": "D",
+       "header": "الحالة",
+       "kind": "formula",
+       "formula_row_1": "=IF(B14=\"\",\"\",INDEX('الحضور'!$AN$6:$AN$65,MATCH($A14,'الحضور'!$AO$6:$AO$65,0)))"
+      }
+     ]
+    }
+   ],
+   "results": [
+    {
+     "label": "عدد الأيام الدراسية في الشهر",
+     "cell": "B4",
+     "formula": "=COUNTIF('الحضور'!$C$67:$AG$67,\"نعم\")"
+    },
+    {
+     "label": "متوسط نسبة حضور الفصل",
+     "cell": "B5",
+     "formula": "=IF(COUNT('الحضور'!$AM$6:$AM$65)=0,\"\",SUM('الحضور'!$AM$6:$AM$65)/COUNT('الحضور'!$AM$6:$AM$65))"
+    },
+    {
+     "label": "طلاب تجاوزوا حد الغياب",
+     "cell": "B6",
+     "formula": "=COUNTIF('الحضور'!$AN$6:$AN$65,\"تجاوز حد الغياب\")"
+    },
+    {
+     "label": "طلاب قريبون من الحد",
+     "cell": "B7",
+     "formula": "=COUNTIF('الحضور'!$AN$6:$AN$65,\"قريب من الحد\")"
+    },
+    {
+     "label": "إجمالي أيام الغياب بدون عذر (غ)",
+     "cell": "B8",
+     "formula": "=SUM('الحضور'!$AI$6:$AI$65)"
+    },
+    {
+     "label": "إجمالي أيام الغياب بعذر (ع)",
+     "cell": "B9",
+     "formula": "=SUM('الحضور'!$AK$6:$AK$65)"
+    },
+    {
+     "label": "أكثر يوم غيابًا",
+     "cell": "B10",
+     "formula": "=IF(MAX('الحضور'!$C$66:$AG$66)=0,\"لا غياب\",DATE(YEAR('الإعدادات'!$B$6),MONTH('الإعدادات'!$B$6),MATCH(MAX('الحضور'!$C$66:$AG$66),'الحضور'!$C$66:$AG$66,0)))"
+    },
+    {
+     "label": "عدد الغائبين في ذلك اليوم",
+     "cell": "B11",
+     "formula": "=MAX('الحضور'!$C$66:$AG$66)"
+    }
+   ]
+  },
+  {
+   "name": "لماذا ما زلت على إكسل؟",
+   "formula_cells": 0
+  }
+ ]
+}

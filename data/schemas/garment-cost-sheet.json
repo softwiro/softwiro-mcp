@@ -1,0 +1,150 @@
+{
+ "id": "garment-cost-sheet",
+ "file": "softwiro-garment-cost-sheet.xlsx",
+ "title": "شيت تكلفة الموديل لمصانع الملابس",
+ "language": "ar",
+ "direction": "rtl",
+ "how_it_works": "White cells are typed input; cells whose kind is \"formula\" are calculated and must not be overwritten. Add one record per row under the header row of a record table, keeping the columns in order.",
+ "sheets": [
+  {
+   "name": "ابدأ هنا",
+   "formula_cells": 0
+  },
+  {
+   "name": "تكلفة الموديل",
+   "formula_cells": 36,
+   "record_tables": [
+    {
+     "header_row": 11,
+     "first_record_row": 12,
+     "sample_rows_filled": 39,
+     "capacity_last_row": 75,
+     "columns": [
+      {
+       "column": "A",
+       "header": "البند",
+       "kind": "input",
+       "examples": [
+        "الخامات",
+        "التشغيل",
+        "مصاريف أخرى"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "للقطعة",
+       "kind": "formula",
+       "formula_row_1": "=F43"
+      },
+      {
+       "column": "C",
+       "header": "من التكلفة",
+       "kind": "formula",
+       "formula_row_1": "=IF(B17>0,B12/B17,\"\")"
+      }
+     ]
+    }
+   ],
+   "settings": [
+    {
+     "label": "اسم الموديل",
+     "cell": "B5",
+     "value": "تيشيرت قطن أطفال"
+    },
+    {
+     "label": "كمية الأمر (قطعة)",
+     "cell": "B6",
+     "value": 1000
+    },
+    {
+     "label": "العملة",
+     "cell": "B7",
+     "value": "ج.م"
+    }
+   ]
+  },
+  {
+   "name": "مقارنة الموديلات",
+   "formula_cells": 90,
+   "record_tables": [
+    {
+     "header_row": 7,
+     "first_record_row": 8,
+     "sample_rows_filled": 3,
+     "capacity_last_row": 37,
+     "columns": [
+      {
+       "column": "A",
+       "header": "الموديل",
+       "kind": "input",
+       "examples": [
+        "تيشيرت قطن أطفال",
+        "بنطلون جينز",
+        "بيجامة شتوي"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "تكلفة القطعة",
+       "kind": "input",
+       "examples": [
+        117.07,
+        182.5,
+        140
+       ]
+      },
+      {
+       "column": "C",
+       "header": "سعر البيع",
+       "kind": "input",
+       "examples": [
+        156.1,
+        215,
+        190
+       ]
+      },
+      {
+       "column": "D",
+       "header": "الكمية",
+       "kind": "input",
+       "examples": [
+        1000,
+        600,
+        800
+       ]
+      },
+      {
+       "column": "E",
+       "header": "ربح القطعة",
+       "kind": "formula",
+       "formula_row_1": "=IF(OR(B8=\"\",C8=\"\"),\"\",C8-B8)"
+      },
+      {
+       "column": "F",
+       "header": "الهامش",
+       "kind": "formula",
+       "formula_row_1": "=IF(OR(B8=\"\",C8=\"\",C8=0),\"\",(C8-B8)/C8)"
+      },
+      {
+       "column": "G",
+       "header": "ربح الأمر",
+       "kind": "formula",
+       "formula_row_1": "=IF(OR(E8=\"\",D8=\"\"),\"\",E8*D8)"
+      }
+     ]
+    }
+   ],
+   "settings": [
+    {
+     "label": "الهامش المستهدف (%)",
+     "cell": "B4",
+     "value": 20
+    }
+   ]
+  },
+  {
+   "name": "لماذا ما زلت على إكسل؟",
+   "formula_cells": 0
+  }
+ ]
+}

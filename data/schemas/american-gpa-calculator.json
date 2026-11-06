@@ -1,0 +1,277 @@
+{
+ "id": "american-gpa-calculator",
+ "file": "softwiro-american-gpa-calculator.xlsx",
+ "title": "حاسبة GPA للدبلومة الأمريكية",
+ "language": "ar",
+ "direction": "rtl",
+ "how_it_works": "White cells are typed input; cells whose kind is \"formula\" are calculated and must not be overwritten. Add one record per row under the header row of a record table, keeping the columns in order.",
+ "sheets": [
+  {
+   "name": "ابدأ هنا",
+   "formula_cells": 0
+  },
+  {
+   "name": "الإعدادات",
+   "formula_cells": 0,
+   "settings": [
+    {
+     "label": "اسم الطالب",
+     "cell": "B4",
+     "value": "سيف أحمد"
+    },
+    {
+     "label": "تُضاف إضافة النوع فقط إذا كانت نقاط التقدير أكبر من",
+     "cell": "B5",
+     "value": 0
+    },
+    {
+     "label": "التقدير الحرفي",
+     "cell": "B9",
+     "value": "النقاط (غير مرجّحة)"
+    },
+    {
+     "label": "A+",
+     "cell": "B10",
+     "value": 4
+    },
+    {
+     "label": "A",
+     "cell": "B11",
+     "value": 4
+    },
+    {
+     "label": "A-",
+     "cell": "B12",
+     "value": 3.7
+    },
+    {
+     "label": "B+",
+     "cell": "B13",
+     "value": 3.3
+    },
+    {
+     "label": "B",
+     "cell": "B14",
+     "value": 3
+    },
+    {
+     "label": "B-",
+     "cell": "B15",
+     "value": 2.7
+    },
+    {
+     "label": "C+",
+     "cell": "B16",
+     "value": 2.3
+    },
+    {
+     "label": "C",
+     "cell": "B17",
+     "value": 2
+    },
+    {
+     "label": "C-",
+     "cell": "B18",
+     "value": 1.7
+    },
+    {
+     "label": "D+",
+     "cell": "B19",
+     "value": 1.3
+    },
+    {
+     "label": "D",
+     "cell": "B20",
+     "value": 1
+    },
+    {
+     "label": "D-",
+     "cell": "B21",
+     "value": 0.7
+    },
+    {
+     "label": "F",
+     "cell": "B22",
+     "value": 0
+    }
+   ]
+  },
+  {
+   "name": "المقررات",
+   "formula_cells": 1800,
+   "record_tables": [
+    {
+     "header_row": 5,
+     "first_record_row": 6,
+     "sample_rows_filled": 22,
+     "capacity_last_row": 305,
+     "columns": [
+      {
+       "column": "A",
+       "header": "السنة (Grade)",
+       "kind": "input",
+       "examples": [
+        9,
+        9,
+        9
+       ],
+       "allowed_values": [
+        "9",
+        "10",
+        "11",
+        "12"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "المقرر",
+       "kind": "input",
+       "examples": [
+        "Algebra I",
+        "English 9",
+        "Biology"
+       ]
+      },
+      {
+       "column": "C",
+       "header": "الكريديت (Credit)",
+       "kind": "input",
+       "examples": [
+        1,
+        1,
+        1
+       ]
+      },
+      {
+       "column": "D",
+       "header": "النوع",
+       "kind": "input",
+       "examples": [
+        "عادي",
+        "عادي",
+        "Honors"
+       ],
+       "allowed_values": {
+        "from_range": "'الإعدادات'!$D$10:$D$17"
+       }
+      },
+      {
+       "column": "E",
+       "header": "التقدير الحرفي",
+       "kind": "input",
+       "examples": [
+        "A",
+        "A-",
+        "B+"
+       ],
+       "allowed_values": {
+        "from_range": "'الإعدادات'!$A$10:$A$24"
+       }
+      },
+      {
+       "column": "F",
+       "header": "نقاط غير مرجّحة",
+       "kind": "formula",
+       "formula_row_1": "=IF(E6&\"\"=\"\",\"\",IFERROR(VLOOKUP(E6&\"\",'الإعدادات'!$A$10:$B$24,2,FALSE),\"\"))"
+      },
+      {
+       "column": "G",
+       "header": "الإضافة",
+       "kind": "formula",
+       "formula_row_1": "=IF(F6=\"\",\"\",IF(D6&\"\"=\"\",0,IFERROR(VLOOKUP(D6&\"\",'الإعدادات'!$D$10:$E$17,2,FALSE),\"\")))"
+      },
+      {
+       "column": "H",
+       "header": "نقاط مرجّحة",
+       "kind": "formula",
+       "formula_row_1": "=IF(OR(F6=\"\",G6=\"\"),\"\",IF(F6>'الإعدادات'!$B$5,ROUND(F6+G6,4),F6))"
+      },
+      {
+       "column": "I",
+       "header": "جودة غير مرجّحة",
+       "kind": "formula",
+       "formula_row_1": "=IF(K6=\"محسوب\",ROUND(C6*F6,4),\"\")"
+      },
+      {
+       "column": "J",
+       "header": "جودة مرجّحة",
+       "kind": "formula",
+       "formula_row_1": "=IF(K6=\"محسوب\",ROUND(C6*H6,4),\"\")"
+      },
+      {
+       "column": "K",
+       "header": "الحالة",
+       "kind": "formula",
+       "formula_row_1": "=IF(AND(A6&\"\"=\"\",B6&\"\"=\"\",C6&\"\"=\"\",D6&\"\"=\"\",E6&\"\"=\"\"),\"\",IF(NOT(ISNUMBER(A6)),\"السنة ناقصة\",IF(NOT(ISNUMBER(C6)),\"الكريديت ناقص\",IF(C6<=0,\"الكريديت ناقص\",IF(E6&\"\"=\"\",\"بدون تقدير\",IF(F6=\"\",\"تقدير غير موجود\",IF(G6=\"\",\"نوع غير موجود\",\"محسوب\")))))))"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "الملخص",
+   "formula_cells": 32,
+   "record_tables": [
+    {
+     "header_row": 7,
+     "first_record_row": 8,
+     "sample_rows_filled": 15,
+     "capacity_last_row": 24,
+     "columns": [
+      {
+       "column": "A",
+       "header": "السنة (Grade)",
+       "kind": "input",
+       "examples": [
+        9,
+        10,
+        11
+       ]
+      },
+      {
+       "column": "B",
+       "header": "عدد المقررات",
+       "kind": "formula",
+       "formula_row_1": "=COUNTIFS('المقررات'!$A$6:$A$305,A8,'المقررات'!$K$6:$K$305,\"محسوب\")"
+      },
+      {
+       "column": "C",
+       "header": "الكريديت",
+       "kind": "formula",
+       "formula_row_1": "=SUMIFS('المقررات'!$C$6:$C$305,'المقررات'!$A$6:$A$305,A8,'المقررات'!$K$6:$K$305,\"محسوب\")"
+      },
+      {
+       "column": "D",
+       "header": "GPA غير مرجّح",
+       "kind": "formula",
+       "formula_row_1": "=IF(C8=0,\"\",ROUND(SUMIFS('المقررات'!$I$6:$I$305,'المقررات'!$A$6:$A$305,A8,'المقررات'!$K$6:$K$305,\"محسوب\")/C8,2))"
+      },
+      {
+       "column": "E",
+       "header": "GPA مرجّح",
+       "kind": "formula",
+       "formula_row_1": "=IF(C8=0,\"\",ROUND(SUMIFS('المقررات'!$J$6:$J$305,'المقررات'!$A$6:$A$305,A8,'المقررات'!$K$6:$K$305,\"محسوب\")/C8,2))"
+      },
+      {
+       "column": "F",
+       "header": "مقررات Honors/AP",
+       "kind": "formula",
+       "formula_row_1": "=COUNTIFS('المقررات'!$A$6:$A$305,A8,'المقررات'!$K$6:$K$305,\"محسوب\",'المقررات'!$G$6:$G$305,\">0\")"
+      }
+     ]
+    }
+   ],
+   "results": [
+    {
+     "label": "الطالب",
+     "cell": "B4",
+     "formula": "='الإعدادات'!B4"
+    }
+   ]
+  },
+  {
+   "name": "لماذا ما زلت على إكسل؟",
+   "formula_cells": 0
+  }
+ ]
+}

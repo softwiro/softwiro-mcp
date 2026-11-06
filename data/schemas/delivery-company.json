@@ -1,0 +1,433 @@
+{
+ "id": "delivery-company",
+ "file": "softwiro-delivery-company.xlsx",
+ "title": "شيت شركة توصيل: الشحنات والتحصيل",
+ "language": "ar",
+ "direction": "rtl",
+ "how_it_works": "White cells are typed input; cells whose kind is \"formula\" are calculated and must not be overwritten. Add one record per row under the header row of a record table, keeping the columns in order.",
+ "sheets": [
+  {
+   "name": "ابدأ هنا",
+   "formula_cells": 0
+  },
+  {
+   "name": "الإعدادات",
+   "formula_cells": 0,
+   "settings": [
+    {
+     "label": "من تاريخ",
+     "cell": "B4",
+     "value": "2026-10-01"
+    },
+    {
+     "label": "إلى تاريخ",
+     "cell": "B5",
+     "value": "2026-10-31"
+    }
+   ]
+  },
+  {
+   "name": "المناطق",
+   "formula_cells": 0,
+   "record_tables": [
+    {
+     "header_row": 4,
+     "first_record_row": 5,
+     "sample_rows_filled": 4,
+     "capacity_last_row": 8,
+     "columns": [
+      {
+       "column": "A",
+       "header": "المنطقة",
+       "kind": "input",
+       "examples": [
+        "القاهرة",
+        "الجيزة",
+        "الإسكندرية"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "رسوم التوصيل على التاجر",
+       "kind": "input",
+       "examples": [
+        40,
+        45,
+        60
+       ]
+      },
+      {
+       "column": "C",
+       "header": "رسوم المرتجع على التاجر",
+       "kind": "input",
+       "examples": [
+        20,
+        25,
+        30
+       ]
+      },
+      {
+       "column": "D",
+       "header": "عمولة المندوب للتسليم",
+       "kind": "input",
+       "examples": [
+        12,
+        14,
+        18
+       ]
+      },
+      {
+       "column": "E",
+       "header": "عمولة المندوب للمرتجع",
+       "kind": "input",
+       "examples": [
+        6,
+        7,
+        9
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "التجار",
+   "formula_cells": 0,
+   "record_tables": [
+    {
+     "header_row": 4,
+     "first_record_row": 5,
+     "sample_rows_filled": 3,
+     "capacity_last_row": 7,
+     "columns": [
+      {
+       "column": "A",
+       "header": "الكود",
+       "kind": "input",
+       "examples": [
+        "T01",
+        "T02",
+        "T03"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "الاسم",
+       "kind": "input",
+       "examples": [
+        "متجر النيل للأزياء",
+        "بيت الأناقة",
+        "مخزن الأمل"
+       ]
+      },
+      {
+       "column": "C",
+       "header": "التليفون",
+       "kind": "input",
+       "examples": [
+        "01000000001",
+        "01000000002",
+        "01000000003"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "المناديب",
+   "formula_cells": 0,
+   "settings": [
+    {
+     "label": "الكود",
+     "cell": "B4",
+     "value": "الاسم"
+    },
+    {
+     "label": "M01",
+     "cell": "B5",
+     "value": "أحمد سالم"
+    },
+    {
+     "label": "M02",
+     "cell": "B6",
+     "value": "محمود عادل"
+    },
+    {
+     "label": "M03",
+     "cell": "B7",
+     "value": "يوسف كمال"
+    }
+   ]
+  },
+  {
+   "name": "الشحنات",
+   "formula_cells": 4000,
+   "record_tables": [
+    {
+     "header_row": 4,
+     "first_record_row": 5,
+     "sample_rows_filled": 21,
+     "capacity_last_row": 1004,
+     "columns": [
+      {
+       "column": "A",
+       "header": "التاريخ",
+       "kind": "input",
+       "examples": [
+        "2026-10-01",
+        "2026-10-01",
+        "2026-10-02"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "رقم الشحنة",
+       "kind": "input",
+       "examples": [
+        "S1001",
+        "S1002",
+        "S1003"
+       ]
+      },
+      {
+       "column": "C",
+       "header": "كود التاجر",
+       "kind": "input",
+       "examples": [
+        "T01",
+        "T01",
+        "T02"
+       ],
+       "allowed_values": {
+        "from_range": "'التجار'!$A$5:$A$104"
+       }
+      },
+      {
+       "column": "D",
+       "header": "كود المندوب",
+       "kind": "input",
+       "examples": [
+        "M01",
+        "M01",
+        "M02"
+       ],
+       "allowed_values": {
+        "from_range": "'المناديب'!$A$5:$A$64"
+       }
+      },
+      {
+       "column": "E",
+       "header": "المنطقة",
+       "kind": "input",
+       "examples": [
+        "القاهرة",
+        "القاهرة",
+        "الجيزة"
+       ],
+       "allowed_values": {
+        "from_range": "'المناطق'!$A$5:$A$64"
+       }
+      },
+      {
+       "column": "F",
+       "header": "قيمة التحصيل (COD)",
+       "kind": "input",
+       "examples": [
+        500,
+        350,
+        800
+       ]
+      },
+      {
+       "column": "G",
+       "header": "الحالة",
+       "kind": "input",
+       "examples": [
+        "تم التسليم",
+        "تم التسليم",
+        "تم التسليم"
+       ],
+       "allowed_values": [
+        "تم التسليم",
+        "مرتجع",
+        "مؤجل",
+        "قيد التوصيل"
+       ]
+      },
+      {
+       "column": "H",
+       "header": "رسوم الشحنة",
+       "kind": "formula",
+       "formula_row_1": "=IF(AND(B5=\"\",G5=\"\"),\"\",IF(G5=\"تم التسليم\",IFERROR(INDEX('المناطق'!$B$5:$B$64,MATCH($E5,'المناطق'!$A$5:$A$64,0)),0),IF(G5=\"مرتجع\",IFERROR(INDEX('المناطق'!$C$5:$C$64,MATCH($E5,'المناطق'!$A$5:$A$64,0)),0),0)))"
+      },
+      {
+       "column": "I",
+       "header": "المحصّل نقدًا",
+       "kind": "formula",
+       "formula_row_1": "=IF(AND(B5=\"\",G5=\"\"),\"\",IF(G5=\"تم التسليم\",F5,0))"
+      },
+      {
+       "column": "J",
+       "header": "المستحق للتاجر",
+       "kind": "formula",
+       "formula_row_1": "=IF(AND(B5=\"\",G5=\"\"),\"\",IF(G5=\"تم التسليم\",F5-H5,IF(G5=\"مرتجع\",-H5,0)))"
+      },
+      {
+       "column": "K",
+       "header": "عمولة المندوب",
+       "kind": "formula",
+       "formula_row_1": "=IF(AND(B5=\"\",G5=\"\"),\"\",IF(G5=\"تم التسليم\",IFERROR(INDEX('المناطق'!$D$5:$D$64,MATCH($E5,'المناطق'!$A$5:$A$64,0)),0),IF(G5=\"مرتجع\",IFERROR(INDEX('المناطق'!$E$5:$E$64,MATCH($E5,'المناطق'!$A$5:$A$64,0)),0),0)))"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "تسوية التجار",
+   "formula_cells": 808,
+   "record_tables": [
+    {
+     "header_row": 6,
+     "first_record_row": 7,
+     "sample_rows_filled": 101,
+     "capacity_last_row": 107,
+     "columns": [
+      {
+       "column": "A",
+       "header": "الكود",
+       "kind": "input",
+       "examples": [
+        "الإجمالي",
+        "=IF('التجار'!A5=\"\",\"\",'التجار'!A5)",
+        "=IF('التجار'!A6=\"\",\"\",'التجار'!A6)"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "الاسم",
+       "kind": "input",
+       "examples": [
+        "=IF(A8=\"\",\"\",'التجار'!B5&\"\")",
+        "=IF(A9=\"\",\"\",'التجار'!B6&\"\")",
+        "=IF(A10=\"\",\"\",'التجار'!B7&\"\")"
+       ]
+      },
+      {
+       "column": "C",
+       "header": "عدد الشحنات",
+       "kind": "formula",
+       "formula_row_1": "=SUM(C8:C107)"
+      },
+      {
+       "column": "D",
+       "header": "تم التسليم",
+       "kind": "formula",
+       "formula_row_1": "=SUM(D8:D107)"
+      },
+      {
+       "column": "E",
+       "header": "المرتجع",
+       "kind": "formula",
+       "formula_row_1": "=SUM(E8:E107)"
+      },
+      {
+       "column": "F",
+       "header": "إجمالي التحصيل",
+       "kind": "formula",
+       "formula_row_1": "=SUM(F8:F107)"
+      },
+      {
+       "column": "G",
+       "header": "إجمالي الرسوم",
+       "kind": "formula",
+       "formula_row_1": "=SUM(G8:G107)"
+      },
+      {
+       "column": "H",
+       "header": "صافي المستحق للتاجر",
+       "kind": "formula",
+       "formula_row_1": "=SUM(H8:H107)"
+      }
+     ]
+    }
+   ],
+   "results": [
+    {
+     "label": "الفترة",
+     "cell": "B3",
+     "formula": "='الإعدادات'!$B$4"
+    }
+   ]
+  },
+  {
+   "name": "حساب المناديب",
+   "formula_cells": 366,
+   "record_tables": [
+    {
+     "header_row": 6,
+     "first_record_row": 7,
+     "sample_rows_filled": 61,
+     "capacity_last_row": 67,
+     "columns": [
+      {
+       "column": "A",
+       "header": "الكود",
+       "kind": "input",
+       "examples": [
+        "الإجمالي",
+        "=IF('المناديب'!A5=\"\",\"\",'المناديب'!A5)",
+        "=IF('المناديب'!A6=\"\",\"\",'المناديب'!A6)"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "الاسم",
+       "kind": "input",
+       "examples": [
+        "=IF(A8=\"\",\"\",'المناديب'!B5&\"\")",
+        "=IF(A9=\"\",\"\",'المناديب'!B6&\"\")",
+        "=IF(A10=\"\",\"\",'المناديب'!B7&\"\")"
+       ]
+      },
+      {
+       "column": "C",
+       "header": "تم التسليم",
+       "kind": "formula",
+       "formula_row_1": "=SUM(C8:C67)"
+      },
+      {
+       "column": "D",
+       "header": "المرتجع",
+       "kind": "formula",
+       "formula_row_1": "=SUM(D8:D67)"
+      },
+      {
+       "column": "E",
+       "header": "النقدية المحصّلة",
+       "kind": "formula",
+       "formula_row_1": "=SUM(E8:E67)"
+      },
+      {
+       "column": "F",
+       "header": "العمولة",
+       "kind": "formula",
+       "formula_row_1": "=SUM(F8:F67)"
+      }
+     ]
+    }
+   ],
+   "results": [
+    {
+     "label": "الفترة",
+     "cell": "B3",
+     "formula": "='الإعدادات'!$B$4"
+    }
+   ]
+  },
+  {
+   "name": "لماذا ما زلت على إكسل؟",
+   "formula_cells": 0
+  }
+ ]
+}

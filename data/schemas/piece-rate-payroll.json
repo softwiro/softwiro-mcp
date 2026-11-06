@@ -1,0 +1,314 @@
+{
+ "id": "piece-rate-payroll",
+ "file": "softwiro-piece-rate-payroll.xlsx",
+ "title": "شيت أجور القطعة وإنتاجية العمال",
+ "language": "ar",
+ "direction": "rtl",
+ "how_it_works": "White cells are typed input; cells whose kind is \"formula\" are calculated and must not be overwritten. Add one record per row under the header row of a record table, keeping the columns in order.",
+ "sheets": [
+  {
+   "name": "ابدأ هنا",
+   "formula_cells": 0
+  },
+  {
+   "name": "الإعدادات",
+   "formula_cells": 0,
+   "settings": [
+    {
+     "label": "السنة",
+     "cell": "B4",
+     "value": 2026
+    },
+    {
+     "label": "الشهر (من 1 إلى 12)",
+     "cell": "B5",
+     "value": 10
+    },
+    {
+     "label": "دقائق العمل في اليوم",
+     "cell": "B6",
+     "value": 540
+    }
+   ]
+  },
+  {
+   "name": "العمليات",
+   "formula_cells": 0,
+   "record_tables": [
+    {
+     "header_row": 4,
+     "first_record_row": 5,
+     "sample_rows_filled": 6,
+     "capacity_last_row": 10,
+     "columns": [
+      {
+       "column": "A",
+       "header": "العملية",
+       "kind": "input",
+       "examples": [
+        "تركيب الكتف",
+        "تركيب الكم",
+        "الرقبة"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "الوقت القياسي SAM (دقيقة)",
+       "kind": "input",
+       "examples": [
+        1.2,
+        1.5,
+        1.8
+       ]
+      },
+      {
+       "column": "C",
+       "header": "أجر القطعة",
+       "kind": "input",
+       "examples": [
+        0.6,
+        0.75,
+        0.9
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "العمال",
+   "formula_cells": 0,
+   "record_tables": [
+    {
+     "header_row": 4,
+     "first_record_row": 5,
+     "sample_rows_filled": 5,
+     "capacity_last_row": 9,
+     "columns": [
+      {
+       "column": "A",
+       "header": "كود العامل",
+       "kind": "input",
+       "examples": [
+        "W01",
+        "W02",
+        "W03"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "الاسم",
+       "kind": "input",
+       "examples": [
+        "أحمد محمود",
+        "سعاد علي",
+        "محمد حسن"
+       ]
+      },
+      {
+       "column": "C",
+       "header": "القسم",
+       "kind": "input",
+       "examples": [
+        "الخياطة",
+        "الخياطة",
+        "الخياطة"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "الإنتاج اليومي",
+   "formula_cells": 6000,
+   "record_tables": [
+    {
+     "header_row": 4,
+     "first_record_row": 5,
+     "sample_rows_filled": 28,
+     "capacity_last_row": 1004,
+     "columns": [
+      {
+       "column": "A",
+       "header": "التاريخ",
+       "kind": "input",
+       "examples": [
+        "2026-09-28",
+        "2026-09-30",
+        "2026-10-01"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "كود العامل",
+       "kind": "input",
+       "examples": [
+        "W01",
+        "W02",
+        "W01"
+       ],
+       "allowed_values": {
+        "from_range": "'العمال'!$A$5:$A$104"
+       }
+      },
+      {
+       "column": "C",
+       "header": "اسم العامل",
+       "kind": "formula",
+       "formula_row_1": "=IF(B5=\"\",\"\",IFERROR(INDEX('العمال'!$B$5:$B$104,MATCH(B5,'العمال'!$A$5:$A$104,0)),\"\"))"
+      },
+      {
+       "column": "D",
+       "header": "العملية",
+       "kind": "input",
+       "examples": [
+        "الرقبة",
+        "الجوانب",
+        "الرقبة"
+       ],
+       "allowed_values": {
+        "from_range": "'العمليات'!$A$5:$A$64"
+       }
+      },
+      {
+       "column": "E",
+       "header": "الكمية",
+       "kind": "input",
+       "examples": [
+        300,
+        200,
+        280
+       ]
+      },
+      {
+       "column": "F",
+       "header": "دقائق العمل",
+       "kind": "input",
+       "examples": [
+        270,
+        270,
+        480
+       ]
+      },
+      {
+       "column": "G",
+       "header": "الوقت القياسي",
+       "kind": "formula",
+       "formula_row_1": "=IF(D5=\"\",\"\",IFERROR(INDEX('العمليات'!$B$5:$B$64,MATCH(D5,'العمليات'!$A$5:$A$64,0)),\"\"))"
+      },
+      {
+       "column": "H",
+       "header": "الدقائق المنتجة",
+       "kind": "formula",
+       "formula_row_1": "=IF(OR(E5=\"\",G5=\"\"),\"\",E5*G5)"
+      },
+      {
+       "column": "I",
+       "header": "الكفاءة",
+       "kind": "formula",
+       "formula_row_1": "=IF(OR(H5=\"\",K5=\"\"),\"\",IF(K5>0,H5/K5,\"\"))"
+      },
+      {
+       "column": "J",
+       "header": "الأجر",
+       "kind": "formula",
+       "formula_row_1": "=IF(OR(E5=\"\",D5=\"\"),\"\",IFERROR(E5*INDEX('العمليات'!$C$5:$C$64,MATCH(D5,'العمليات'!$A$5:$A$64,0)),\"\"))"
+      },
+      {
+       "column": "K",
+       "header": "دقائق العمل المعتمدة",
+       "kind": "formula",
+       "formula_row_1": "=IF(E5=\"\",\"\",IF(F5=\"\",'الإعدادات'!$B$6,F5))"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "كشف الشهر",
+   "formula_cells": 806,
+   "record_tables": [
+    {
+     "header_row": 6,
+     "first_record_row": 7,
+     "sample_rows_filled": 101,
+     "capacity_last_row": 107,
+     "columns": [
+      {
+       "column": "A",
+       "header": "كود العامل",
+       "kind": "input",
+       "examples": [
+        "الإجمالي",
+        "=IF('العمال'!A5=\"\",\"\",'العمال'!A5)",
+        "=IF('العمال'!A6=\"\",\"\",'العمال'!A6)"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "الاسم",
+       "kind": "input",
+       "examples": [
+        "=IF(A8=\"\",\"\",'العمال'!B5&\"\")",
+        "=IF(A9=\"\",\"\",'العمال'!B6&\"\")",
+        "=IF(A10=\"\",\"\",'العمال'!B7&\"\")"
+       ]
+      },
+      {
+       "column": "C",
+       "header": "القسم",
+       "kind": "input",
+       "examples": [
+        "=IF(A8=\"\",\"\",'العمال'!C5&\"\")",
+        "=IF(A9=\"\",\"\",'العمال'!C6&\"\")",
+        "=IF(A10=\"\",\"\",'العمال'!C7&\"\")"
+       ]
+      },
+      {
+       "column": "D",
+       "header": "إجمالي القطع",
+       "kind": "formula",
+       "formula_row_1": "=SUM(D8:D107)"
+      },
+      {
+       "column": "E",
+       "header": "الدقائق المنتجة",
+       "kind": "formula",
+       "formula_row_1": "=SUM(E8:E107)"
+      },
+      {
+       "column": "F",
+       "header": "دقائق العمل",
+       "kind": "formula",
+       "formula_row_1": "=SUM(F8:F107)"
+      },
+      {
+       "column": "G",
+       "header": "متوسط الكفاءة",
+       "kind": "formula",
+       "formula_row_1": "=IF(F7>0,E7/F7,\"\")"
+      },
+      {
+       "column": "H",
+       "header": "إجمالي الأجر",
+       "kind": "formula",
+       "formula_row_1": "=SUM(H8:H107)"
+      }
+     ]
+    }
+   ],
+   "results": [
+    {
+     "label": "الشهر المعروض",
+     "cell": "B4",
+     "formula": "='الإعدادات'!$B$4&\" / \"&'الإعدادات'!$B$5"
+    }
+   ]
+  },
+  {
+   "name": "لماذا ما زلت على إكسل؟",
+   "formula_cells": 0
+  }
+ ]
+}

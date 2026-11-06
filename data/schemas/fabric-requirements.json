@@ -1,0 +1,292 @@
+{
+ "id": "fabric-requirements",
+ "file": "softwiro-fabric-requirements.xlsx",
+ "title": "شيت احتياجات القماش والماركر",
+ "language": "ar",
+ "direction": "rtl",
+ "how_it_works": "White cells are typed input; cells whose kind is \"formula\" are calculated and must not be overwritten. Add one record per row under the header row of a record table, keeping the columns in order.",
+ "sheets": [
+  {
+   "name": "ابدأ هنا",
+   "formula_cells": 0
+  },
+  {
+   "name": "الماركرات",
+   "formula_cells": 300,
+   "record_tables": [
+    {
+     "header_row": 4,
+     "first_record_row": 5,
+     "sample_rows_filled": 3,
+     "capacity_last_row": 104,
+     "columns": [
+      {
+       "column": "A",
+       "header": "الموديل",
+       "kind": "input",
+       "examples": [
+        "تيشيرت بولو",
+        "ليجن نسائي",
+        "بنطلون رجالي"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "القماش",
+       "kind": "input",
+       "examples": [
+        "جيرسيه قطن",
+        "ليكرا ميلانج",
+        "جبردين"
+       ]
+      },
+      {
+       "column": "C",
+       "header": "طول الماركر (متر)",
+       "kind": "input",
+       "examples": [
+        6.5,
+        5.2,
+        8.4
+       ]
+      },
+      {
+       "column": "D",
+       "header": "عدد القطع في الماركر",
+       "kind": "input",
+       "examples": [
+        5,
+        4,
+        6
+       ]
+      },
+      {
+       "column": "E",
+       "header": "فاقد الأطراف (سم)",
+       "kind": "input",
+       "examples": [
+        4,
+        3,
+        5
+       ]
+      },
+      {
+       "column": "F",
+       "header": "فواقد أخرى (%)",
+       "kind": "input",
+       "examples": [
+        2,
+        2,
+        3
+       ]
+      },
+      {
+       "column": "G",
+       "header": "العرض (سم)",
+       "kind": "input",
+       "examples": [
+        180,
+        160
+       ]
+      },
+      {
+       "column": "H",
+       "header": "الوزن GSM",
+       "kind": "input",
+       "examples": [
+        180,
+        220
+       ]
+      },
+      {
+       "column": "I",
+       "header": "الاستهلاك بالمتر للقطعة",
+       "kind": "formula",
+       "formula_row_1": "=IF(OR(A5=\"\",C5=\"\",D5=\"\"),\"\",IF(D5>0,(C5+E5/100)/D5*(1+F5/100),\"\"))"
+      },
+      {
+       "column": "J",
+       "header": "وزن المتر (كيلو)",
+       "kind": "formula",
+       "formula_row_1": "=IF(OR(A5=\"\",G5=\"\",H5=\"\"),\"\",G5/100*H5/1000)"
+      },
+      {
+       "column": "K",
+       "header": "الاستهلاك بالكيلو للقطعة",
+       "kind": "formula",
+       "formula_row_1": "=IF(OR(I5=\"\",J5=\"\"),\"\",I5*J5)"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "الأوامر",
+   "formula_cells": 1800,
+   "record_tables": [
+    {
+     "header_row": 4,
+     "first_record_row": 5,
+     "sample_rows_filled": 4,
+     "capacity_last_row": 304,
+     "columns": [
+      {
+       "column": "A",
+       "header": "رقم الأمر",
+       "kind": "input",
+       "examples": [
+        "ق-101",
+        "ق-102",
+        "ق-103"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "الموديل",
+       "kind": "input",
+       "examples": [
+        "تيشيرت بولو",
+        "تيشيرت بولو",
+        "ليجن نسائي"
+       ],
+       "allowed_values": {
+        "from_range": "'الماركرات'!$A$5:$A$104"
+       }
+      },
+      {
+       "column": "C",
+       "header": "الكمية",
+       "kind": "input",
+       "examples": [
+        1000,
+        400,
+        600
+       ]
+      },
+      {
+       "column": "D",
+       "header": "المرفوض (%)",
+       "kind": "input",
+       "examples": [
+        3,
+        2,
+        4
+       ]
+      },
+      {
+       "column": "E",
+       "header": "القماش",
+       "kind": "formula",
+       "formula_row_1": "=IF(B5=\"\",\"\",IFERROR(INDEX('الماركرات'!$B$5:$B$104,MATCH($B5,'الماركرات'!$A$5:$A$104,0))&\"\",\"\"))"
+      },
+      {
+       "column": "F",
+       "header": "القطع المطلوبة",
+       "kind": "formula",
+       "formula_row_1": "=IF(OR(B5=\"\",C5=\"\"),\"\",IF(D5<100,ROUNDUP(C5/(1-D5/100),0),\"\"))"
+      },
+      {
+       "column": "G",
+       "header": "الطبقات",
+       "kind": "formula",
+       "formula_row_1": "=IF(F5=\"\",\"\",IFERROR(ROUNDUP(F5/INDEX('الماركرات'!$D$5:$D$104,MATCH($B5,'الماركرات'!$A$5:$A$104,0)),0),\"\"))"
+      },
+      {
+       "column": "H",
+       "header": "القطع التي ستُقص",
+       "kind": "formula",
+       "formula_row_1": "=IF(G5=\"\",\"\",IFERROR(G5*INDEX('الماركرات'!$D$5:$D$104,MATCH($B5,'الماركرات'!$A$5:$A$104,0)),\"\"))"
+      },
+      {
+       "column": "I",
+       "header": "المتر المطلوب",
+       "kind": "formula",
+       "formula_row_1": "=IF(G5=\"\",\"\",IFERROR(G5*(INDEX('الماركرات'!$C$5:$C$104,MATCH($B5,'الماركرات'!$A$5:$A$104,0))+INDEX('الماركرات'!$E$5:$E$104,MATCH($B5,'الماركرات'!$A$5:$A$104,0))/100)*(1+INDEX('الماركرات'!$F$5:$F$104,MATCH($B5,'الماركرات'!$A$5:$A$104,0))/100),\"\"))"
+      },
+      {
+       "column": "J",
+       "header": "الكيلو المطلوب",
+       "kind": "formula",
+       "formula_row_1": "=IF(I5=\"\",\"\",IFERROR(I5*INDEX('الماركرات'!$J$5:$J$104,MATCH($B5,'الماركرات'!$A$5:$A$104,0)),\"\"))"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "المخزون والنواقص",
+   "formula_cells": 500,
+   "record_tables": [
+    {
+     "header_row": 4,
+     "first_record_row": 5,
+     "sample_rows_filled": 3,
+     "capacity_last_row": 104,
+     "columns": [
+      {
+       "column": "A",
+       "header": "القماش",
+       "kind": "input",
+       "examples": [
+        "جيرسيه قطن",
+        "ليكرا ميلانج",
+        "جبردين"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "الرصيد بالمتر",
+       "kind": "input",
+       "examples": [
+        1800,
+        800
+       ]
+      },
+      {
+       "column": "C",
+       "header": "الرصيد بالكيلو",
+       "kind": "input",
+       "examples": [
+        400
+       ]
+      },
+      {
+       "column": "D",
+       "header": "المطلوب بالمتر",
+       "kind": "formula",
+       "formula_row_1": "=IF(A5=\"\",\"\",SUMIFS('الأوامر'!$I$5:$I$304,'الأوامر'!$E$5:$E$304,A5))"
+      },
+      {
+       "column": "E",
+       "header": "المطلوب بالكيلو",
+       "kind": "formula",
+       "formula_row_1": "=IF(A5=\"\",\"\",SUMIFS('الأوامر'!$J$5:$J$304,'الأوامر'!$E$5:$E$304,A5))"
+      },
+      {
+       "column": "F",
+       "header": "العجز بالمتر",
+       "kind": "formula",
+       "formula_row_1": "=IF(OR(A5=\"\",B5=\"\"),\"\",MAX(0,D5-B5))"
+      },
+      {
+       "column": "G",
+       "header": "العجز بالكيلو",
+       "kind": "formula",
+       "formula_row_1": "=IF(OR(A5=\"\",C5=\"\"),\"\",MAX(0,E5-C5))"
+      },
+      {
+       "column": "H",
+       "header": "الحالة",
+       "kind": "formula",
+       "formula_row_1": "=IF(A5=\"\",\"\",IF(AND(B5=\"\",C5=\"\"),\"اكتب الرصيد\",IF(IF(F5=\"\",0,F5)+IF(G5=\"\",0,G5)>0,\"ناقص\",\"يكفي\")))"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "لماذا ما زلت على إكسل؟",
+   "formula_cells": 0
+  }
+ ]
+}

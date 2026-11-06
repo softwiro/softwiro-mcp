@@ -1,0 +1,645 @@
+{
+ "id": "dental-clinic-treatments",
+ "file": "softwiro-dental-clinic-treatments.xlsx",
+ "title": "شيت خطط علاج الأسنان",
+ "language": "ar",
+ "direction": "rtl",
+ "how_it_works": "White cells are typed input; cells whose kind is \"formula\" are calculated and must not be overwritten. Add one record per row under the header row of a record table, keeping the columns in order.",
+ "sheets": [
+  {
+   "name": "ابدأ هنا",
+   "formula_cells": 0
+  },
+  {
+   "name": "الإعدادات",
+   "formula_cells": 2,
+   "settings": [
+    {
+     "label": "تاريخ اليوم",
+     "cell": "B4",
+     "value": "2026-11-01"
+    },
+    {
+     "label": "أي تاريخ داخل شهر الملخص",
+     "cell": "B5",
+     "value": "2026-10-15"
+    }
+   ],
+   "results": [
+    {
+     "label": "بداية شهر الملخص",
+     "cell": "B6",
+     "formula": "=DATE(YEAR(B5),MONTH(B5),1)"
+    },
+    {
+     "label": "بداية الشهر التالي",
+     "cell": "B7",
+     "formula": "=EDATE(B6,1)"
+    }
+   ]
+  },
+  {
+   "name": "الإجراءات",
+   "formula_cells": 150,
+   "record_tables": [
+    {
+     "header_row": 5,
+     "first_record_row": 6,
+     "sample_rows_filled": 7,
+     "capacity_last_row": 55,
+     "columns": [
+      {
+       "column": "A",
+       "header": "الإجراء",
+       "kind": "input",
+       "examples": [
+        "علاج عصب",
+        "تركيب تاج",
+        "حشو"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "عدد الخطط",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",COUNTIFS('الخطط'!$C$6:$C$505,A6&\"\"))"
+      },
+      {
+       "column": "C",
+       "header": "إجمالي الأسعار المتفق عليها",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",SUMIFS('الخطط'!$E$6:$E$505,'الخطط'!$C$6:$C$505,A6&\"\"))"
+      },
+      {
+       "column": "D",
+       "header": "الجلسات المنجزة",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",SUMIFS('الخطط'!$I$6:$I$505,'الخطط'!$C$6:$C$505,A6&\"\"))"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "المرضى",
+   "formula_cells": 2700,
+   "record_tables": [
+    {
+     "header_row": 5,
+     "first_record_row": 6,
+     "sample_rows_filled": 7,
+     "capacity_last_row": 305,
+     "columns": [
+      {
+       "column": "A",
+       "header": "كود المريض",
+       "kind": "input",
+       "examples": [
+        "D001",
+        "D002",
+        "D003"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "الاسم",
+       "kind": "input",
+       "examples": [
+        "عصام نبيل",
+        "ريم صبحي",
+        "تامر وجدي"
+       ]
+      },
+      {
+       "column": "C",
+       "header": "الجوال",
+       "kind": "input",
+       "examples": [
+        "01030000001",
+        "01030000002",
+        "01030000003"
+       ]
+      },
+      {
+       "column": "D",
+       "header": "أول زيارة",
+       "kind": "input",
+       "examples": [
+        "2026-10-01",
+        "2026-10-05",
+        "2026-09-20"
+       ]
+      },
+      {
+       "column": "E",
+       "header": "عدد الخطط",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",COUNTIFS('الخطط'!$B$6:$B$505,A6&\"\"))"
+      },
+      {
+       "column": "F",
+       "header": "إجمالي أسعار الخطط",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",SUMIFS('الخطط'!$E$6:$E$505,'الخطط'!$B$6:$B$505,A6&\"\"))"
+      },
+      {
+       "column": "G",
+       "header": "المدفوع",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",SUMIFS('المدفوعات'!$C$6:$C$1005,'المدفوعات'!$B$6:$B$1005,A6&\"\"))"
+      },
+      {
+       "column": "H",
+       "header": "المتبقي على الخطط",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",ROUND(F6-G6,2))"
+      },
+      {
+       "column": "I",
+       "header": "قيمة العمل المنجز",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",SUMIFS('الخطط'!$L$6:$L$505,'الخطط'!$B$6:$B$505,A6&\"\"))"
+      },
+      {
+       "column": "J",
+       "header": "الرصيد المستحق الآن",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",ROUND(I6-G6,2))"
+      },
+      {
+       "column": "K",
+       "header": "آخر جلسة",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",IFERROR(SUMIFS('الجلسات'!$A$6:$A$2005,'الجلسات'!$E$6:$E$2005,A6&\"\",'الجلسات'!$C$6:$C$2005,\"تمت\",'الجلسات'!$G$6:$G$2005,1)/COUNTIFS('الجلسات'!$E$6:$E$2005,A6&\"\",'الجلسات'!$C$6:$C$2005,\"تمت\",'الجلسات'!$G$6:$G$2005,1),\"\"))"
+      },
+      {
+       "column": "L",
+       "header": "الحالة",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",IF(E6=0,\"بدون خطة\",IF(J6>0,\"عليه رصيد\",IF(J6<0,\"دفع مقدمًا\",IF(I6>0,\"مسدد\",\"لم يبدأ العلاج\")))))"
+      },
+      {
+       "column": "M",
+       "header": "ترتيب المتابعة",
+       "kind": "formula",
+       "formula_row_1": "=IF(ISNUMBER(J6),IF(J6>0,COUNTIFS($J$6:$J$305,\">\"&J6)+COUNTIFS($J$6:J6,J6),\"\"),\"\")"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "الخطط",
+   "formula_cells": 3500,
+   "record_tables": [
+    {
+     "header_row": 5,
+     "first_record_row": 6,
+     "sample_rows_filled": 8,
+     "capacity_last_row": 505,
+     "columns": [
+      {
+       "column": "A",
+       "header": "رقم الخطة",
+       "kind": "input",
+       "examples": [
+        "T001",
+        "T002",
+        "T003"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "كود المريض",
+       "kind": "input",
+       "examples": [
+        "D001",
+        "D001",
+        "D002"
+       ],
+       "allowed_values": {
+        "from_range": "'المرضى'!$A$6:$A$305"
+       }
+      },
+      {
+       "column": "C",
+       "header": "الإجراء",
+       "kind": "input",
+       "examples": [
+        "علاج عصب",
+        "تركيب تاج",
+        "حشو"
+       ],
+       "allowed_values": {
+        "from_range": "'الإجراءات'!$A$6:$A$55"
+       }
+      },
+      {
+       "column": "D",
+       "header": "الجلسات المخططة",
+       "kind": "input",
+       "examples": [
+        3,
+        2,
+        1
+       ]
+      },
+      {
+       "column": "E",
+       "header": "السعر المتفق عليه",
+       "kind": "input",
+       "examples": [
+        1500,
+        2500,
+        500
+       ]
+      },
+      {
+       "column": "F",
+       "header": "تاريخ البدء",
+       "kind": "input",
+       "examples": [
+        "2026-10-01",
+        "2026-10-20",
+        "2026-10-05"
+       ]
+      },
+      {
+       "column": "G",
+       "header": "موعد الجلسة القادمة",
+       "kind": "input",
+       "examples": [
+        "2026-11-05",
+        "2026-10-28",
+        "2026-11-08"
+       ]
+      },
+      {
+       "column": "H",
+       "header": "المريض",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",IFERROR(INDEX('المرضى'!$B$6:$B$305,MATCH(B6&\"\",'المرضى'!$A$6:$A$305,0))&\"\",\"كود غير موجود\"))"
+      },
+      {
+       "column": "I",
+       "header": "الجلسات المنجزة",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",COUNTIFS('الجلسات'!$B$6:$B$2005,A6&\"\",'الجلسات'!$C$6:$C$2005,\"تمت\"))"
+      },
+      {
+       "column": "J",
+       "header": "المتبقي من الجلسات",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",MAX(0,N(D6)-I6))"
+      },
+      {
+       "column": "K",
+       "header": "نسبة الإنجاز",
+       "kind": "formula",
+       "formula_row_1": "=IF(OR(A6&\"\"=\"\",N(D6)=0),\"\",MIN(1,I6/D6))"
+      },
+      {
+       "column": "L",
+       "header": "قيمة العمل المنجز",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",IF(N(D6)>0,ROUND(N(E6)*MIN(I6,D6)/D6,2),0))"
+      },
+      {
+       "column": "M",
+       "header": "الحالة",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",IF(I6=0,\"لم تبدأ\",IF(I6>=N(D6),\"مكتملة\",\"جارية\")))"
+      },
+      {
+       "column": "N",
+       "header": "التنبيه",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",IF(M6=\"مكتملة\",\"\",IF(NOT(ISNUMBER(G6)),\"يحتاج موعدًا\",IF(G6<'الإعدادات'!$B$4,\"يحتاج موعدًا\",\"\"))))"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "الجلسات",
+   "formula_cells": 6000,
+   "record_tables": [
+    {
+     "header_row": 5,
+     "first_record_row": 6,
+     "sample_rows_filled": 13,
+     "capacity_last_row": 2005,
+     "columns": [
+      {
+       "column": "A",
+       "header": "التاريخ",
+       "kind": "input",
+       "examples": [
+        "2026-09-20",
+        "2026-10-01",
+        "2026-10-04"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "رقم الخطة",
+       "kind": "input",
+       "examples": [
+        "T005",
+        "T001",
+        "T005"
+       ],
+       "allowed_values": {
+        "from_range": "'الخطط'!$A$6:$A$505"
+       }
+      },
+      {
+       "column": "C",
+       "header": "الحالة",
+       "kind": "input",
+       "examples": [
+        "تمت",
+        "تمت",
+        "غاب"
+       ],
+       "allowed_values": [
+        "تمت",
+        "غاب",
+        "ملغاة"
+       ]
+      },
+      {
+       "column": "D",
+       "header": "ملاحظة",
+       "kind": "input"
+      },
+      {
+       "column": "E",
+       "header": "كود المريض",
+       "kind": "formula",
+       "formula_row_1": "=IF(B6&\"\"=\"\",\"\",IFERROR(INDEX('الخطط'!$B$6:$B$505,MATCH(B6&\"\",'الخطط'!$A$6:$A$505,0))&\"\",\"خطة غير موجودة\"))"
+      },
+      {
+       "column": "F",
+       "header": "المريض",
+       "kind": "formula",
+       "formula_row_1": "=IF(E6=\"\",\"\",IFERROR(INDEX('المرضى'!$B$6:$B$305,MATCH(E6,'المرضى'!$A$6:$A$305,0))&\"\",\"\"))"
+      },
+      {
+       "column": "G",
+       "header": "آخر جلسة للمريض",
+       "kind": "formula",
+       "formula_row_1": "=IF(OR(C6<>\"تمت\",E6=\"\",NOT(ISNUMBER(A6))),\"\",IF(COUNTIFS($E$6:$E$2005,E6,$C$6:$C$2005,\"تمت\",$A$6:$A$2005,\">\"&A6)=0,1,0))"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "المدفوعات",
+   "formula_cells": 1000,
+   "record_tables": [
+    {
+     "header_row": 5,
+     "first_record_row": 6,
+     "sample_rows_filled": 8,
+     "capacity_last_row": 1005,
+     "columns": [
+      {
+       "column": "A",
+       "header": "التاريخ",
+       "kind": "input",
+       "examples": [
+        "2026-09-20",
+        "2026-10-01",
+        "2026-10-05"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "كود المريض",
+       "kind": "input",
+       "examples": [
+        "D003",
+        "D001",
+        "D002"
+       ],
+       "allowed_values": {
+        "from_range": "'المرضى'!$A$6:$A$305"
+       }
+      },
+      {
+       "column": "C",
+       "header": "المبلغ",
+       "kind": "input",
+       "examples": [
+        500,
+        500,
+        850
+       ]
+      },
+      {
+       "column": "D",
+       "header": "طريقة الدفع",
+       "kind": "input",
+       "examples": [
+        "نقدًا",
+        "بطاقة",
+        "تحويل بنكي"
+       ],
+       "allowed_values": [
+        "نقدًا",
+        "بطاقة",
+        "تحويل بنكي"
+       ]
+      },
+      {
+       "column": "E",
+       "header": "ملاحظة",
+       "kind": "input"
+      },
+      {
+       "column": "F",
+       "header": "المريض",
+       "kind": "formula",
+       "formula_row_1": "=IF(B6&\"\"=\"\",\"\",IFERROR(INDEX('المرضى'!$B$6:$B$305,MATCH(B6&\"\",'المرضى'!$A$6:$A$305,0))&\"\",\"كود غير موجود\"))"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "للمتابعة",
+   "formula_cells": 211,
+   "record_tables": [
+    {
+     "header_row": 6,
+     "first_record_row": 7,
+     "sample_rows_filled": 0,
+     "capacity_last_row": 36,
+     "columns": [
+      {
+       "column": "A",
+       "header": "م",
+       "kind": "formula",
+       "formula_row_1": "=IF(1<=$B$4,1,\"\")"
+      },
+      {
+       "column": "B",
+       "header": "الكود",
+       "kind": "formula",
+       "formula_row_1": "=IF($A7=\"\",\"\",INDEX('المرضى'!$A$6:$A$305,MATCH($A7,'المرضى'!$M$6:$M$305,0))&\"\")"
+      },
+      {
+       "column": "C",
+       "header": "المريض",
+       "kind": "formula",
+       "formula_row_1": "=IF($A7=\"\",\"\",INDEX('المرضى'!$B$6:$B$305,MATCH($A7,'المرضى'!$M$6:$M$305,0))&\"\")"
+      },
+      {
+       "column": "D",
+       "header": "الجوال",
+       "kind": "formula",
+       "formula_row_1": "=IF($A7=\"\",\"\",INDEX('المرضى'!$C$6:$C$305,MATCH($A7,'المرضى'!$M$6:$M$305,0))&\"\")"
+      },
+      {
+       "column": "E",
+       "header": "الرصيد المستحق الآن",
+       "kind": "formula",
+       "formula_row_1": "=IF($A7=\"\",\"\",INDEX('المرضى'!$J$6:$J$305,MATCH($A7,'المرضى'!$M$6:$M$305,0)))"
+      },
+      {
+       "column": "F",
+       "header": "آخر جلسة",
+       "kind": "formula",
+       "formula_row_1": "=IF($A7=\"\",\"\",INDEX('المرضى'!$K$6:$K$305,MATCH($A7,'المرضى'!$M$6:$M$305,0)))"
+      },
+      {
+       "column": "G",
+       "header": "المتبقي على الخطط",
+       "kind": "formula",
+       "formula_row_1": "=IF($A7=\"\",\"\",INDEX('المرضى'!$H$6:$H$305,MATCH($A7,'المرضى'!$M$6:$M$305,0)))"
+      }
+     ]
+    }
+   ],
+   "results": [
+    {
+     "label": "مرضى عليهم رصيد",
+     "cell": "B4",
+     "formula": "=COUNTIF('المرضى'!$L$6:$L$305,\"عليه رصيد\")"
+    }
+   ]
+  },
+  {
+   "name": "الملخص",
+   "formula_cells": 20,
+   "results": [
+    {
+     "label": "عدد المرضى",
+     "cell": "B5",
+     "formula": "=COUNTIF('المرضى'!$A$6:$A$305,\"?*\")"
+    },
+    {
+     "label": "عليهم رصيد",
+     "cell": "B6",
+     "formula": "=COUNTIF('المرضى'!$L$6:$L$305,\"عليه رصيد\")"
+    },
+    {
+     "label": "دفعوا مقدمًا",
+     "cell": "B7",
+     "formula": "=COUNTIF('المرضى'!$L$6:$L$305,\"دفع مقدمًا\")"
+    },
+    {
+     "label": "بدون خطة علاج",
+     "cell": "B8",
+     "formula": "=COUNTIF('المرضى'!$L$6:$L$305,\"بدون خطة\")"
+    },
+    {
+     "label": "عدد الخطط",
+     "cell": "B11",
+     "formula": "=COUNTIF('الخطط'!$A$6:$A$505,\"?*\")"
+    },
+    {
+     "label": "لم تبدأ",
+     "cell": "B12",
+     "formula": "=COUNTIF('الخطط'!$M$6:$M$505,\"لم تبدأ\")"
+    },
+    {
+     "label": "جارية",
+     "cell": "B13",
+     "formula": "=COUNTIF('الخطط'!$M$6:$M$505,\"جارية\")"
+    },
+    {
+     "label": "مكتملة",
+     "cell": "B14",
+     "formula": "=COUNTIF('الخطط'!$M$6:$M$505,\"مكتملة\")"
+    },
+    {
+     "label": "خطط تحتاج موعدًا",
+     "cell": "B15",
+     "formula": "=COUNTIF('الخطط'!$N$6:$N$505,\"يحتاج موعدًا\")"
+    },
+    {
+     "label": "إجمالي أسعار الخطط",
+     "cell": "B18",
+     "formula": "=SUM('الخطط'!$E$6:$E$505)"
+    },
+    {
+     "label": "قيمة العمل المنجز",
+     "cell": "B19",
+     "formula": "=SUM('الخطط'!$L$6:$L$505)"
+    },
+    {
+     "label": "إجمالي المدفوع",
+     "cell": "B20",
+     "formula": "=SUM('المدفوعات'!$C$6:$C$1005)"
+    },
+    {
+     "label": "المستحق الآن عن العمل المنجز",
+     "cell": "B21",
+     "formula": "=SUMIF('المرضى'!$J$6:$J$305,\">0\")"
+    },
+    {
+     "label": "دفعات مقدمة (رصيد للمرضى)",
+     "cell": "B22",
+     "formula": "=-SUMIF('المرضى'!$J$6:$J$305,\"<0\")"
+    },
+    {
+     "label": "المتبقي على الخطط",
+     "cell": "B23",
+     "formula": "=SUMIF('المرضى'!$H$6:$H$305,\">0\")"
+    },
+    {
+     "label": "جلسات تمت",
+     "cell": "B26",
+     "formula": "=COUNTIFS('الجلسات'!$A$6:$A$2005,\">=\"&'الإعدادات'!$B$6,'الجلسات'!$A$6:$A$2005,\"<\"&'الإعدادات'!$B$7,'الجلسات'!$C$6:$C$2005,\"تمت\")"
+    },
+    {
+     "label": "جلسات غاب عنها المريض",
+     "cell": "B27",
+     "formula": "=COUNTIFS('الجلسات'!$A$6:$A$2005,\">=\"&'الإعدادات'!$B$6,'الجلسات'!$A$6:$A$2005,\"<\"&'الإعدادات'!$B$7,'الجلسات'!$C$6:$C$2005,\"غاب\")"
+    },
+    {
+     "label": "جلسات ملغاة",
+     "cell": "B28",
+     "formula": "=COUNTIFS('الجلسات'!$A$6:$A$2005,\">=\"&'الإعدادات'!$B$6,'الجلسات'!$A$6:$A$2005,\"<\"&'الإعدادات'!$B$7,'الجلسات'!$C$6:$C$2005,\"ملغاة\")"
+    },
+    {
+     "label": "نسبة الحضور",
+     "cell": "B29",
+     "formula": "=IF(B26+B27=0,\"\",B26/(B26+B27))"
+    },
+    {
+     "label": "المحصّل في الشهر",
+     "cell": "B30",
+     "formula": "=SUMIFS('المدفوعات'!$C$6:$C$1005,'المدفوعات'!$A$6:$A$1005,\">=\"&'الإعدادات'!$B$6,'المدفوعات'!$A$6:$A$1005,\"<\"&'الإعدادات'!$B$7)"
+    }
+   ]
+  },
+  {
+   "name": "لماذا ما زلت على إكسل؟",
+   "formula_cells": 0
+  }
+ ]
+}

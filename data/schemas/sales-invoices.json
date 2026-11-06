@@ -1,0 +1,254 @@
+{
+ "id": "sales-invoices",
+ "file": "softwiro-sales-invoices.xlsx",
+ "title": "شيت فاتورة مبيعات بضريبة القيمة المضافة",
+ "language": "ar",
+ "direction": "rtl",
+ "how_it_works": "White cells are typed input; cells whose kind is \"formula\" are calculated and must not be overwritten. Add one record per row under the header row of a record table, keeping the columns in order.",
+ "sheets": [
+  {
+   "name": "ابدأ هنا",
+   "formula_cells": 0
+  },
+  {
+   "name": "بيانات المحل",
+   "formula_cells": 0,
+   "settings": [
+    {
+     "label": "اسم المحل",
+     "cell": "B4",
+     "value": "محل الأناقة للملابس"
+    },
+    {
+     "label": "العنوان",
+     "cell": "B5",
+     "value": "12 شارع الجمهورية، القاهرة"
+    },
+    {
+     "label": "التليفون",
+     "cell": "B6",
+     "value": "0100 000 0000"
+    },
+    {
+     "label": "الرقم الضريبي",
+     "cell": "B7",
+     "value": "123-456-789"
+    },
+    {
+     "label": "نسبة الضريبة (%)",
+     "cell": "B8",
+     "value": 14
+    },
+    {
+     "label": "العملة",
+     "cell": "B9",
+     "value": "ج.م"
+    }
+   ]
+  },
+  {
+   "name": "الأصناف",
+   "formula_cells": 0,
+   "record_tables": [
+    {
+     "header_row": 4,
+     "first_record_row": 5,
+     "sample_rows_filled": 8,
+     "capacity_last_row": 12,
+     "columns": [
+      {
+       "column": "A",
+       "header": "الكود",
+       "kind": "input",
+       "examples": [
+        "1001",
+        "1002",
+        "1003"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "الصنف",
+       "kind": "input",
+       "examples": [
+        "تيشيرت قطن",
+        "قميص كلاسيك",
+        "بنطلون جينز"
+       ]
+      },
+      {
+       "column": "C",
+       "header": "سعر البيع (قبل الضريبة)",
+       "kind": "input",
+       "examples": [
+        220,
+        450,
+        520
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "الفاتورة",
+   "formula_cells": 53,
+   "record_tables": [
+    {
+     "header_row": 12,
+     "first_record_row": 13,
+     "sample_rows_filled": 4,
+     "capacity_last_row": 33,
+     "columns": [
+      {
+       "column": "A",
+       "header": "الكود",
+       "kind": "input",
+       "examples": [
+        "1001",
+        "1003",
+        "1005"
+       ],
+       "allowed_values": {
+        "from_range": "'الأصناف'!$A$5:$A$304"
+       }
+      },
+      {
+       "column": "B",
+       "header": "الصنف",
+       "kind": "formula",
+       "formula_row_1": "=IF(A13=\"\",\"\",IFERROR(INDEX('الأصناف'!$B$5:$B$304,MATCH(A13,'الأصناف'!$A$5:$A$304,0)),\"\"))"
+      },
+      {
+       "column": "C",
+       "header": "الكمية",
+       "kind": "input",
+       "examples": [
+        3,
+        2,
+        1
+       ]
+      },
+      {
+       "column": "D",
+       "header": "سعر الوحدة",
+       "kind": "formula",
+       "formula_row_1": "=IF(A13=\"\",\"\",IFERROR(INDEX('الأصناف'!$C$5:$C$304,MATCH(A13,'الأصناف'!$A$5:$A$304,0)),\"\"))"
+      },
+      {
+       "column": "E",
+       "header": "سعر مختلف",
+       "kind": "input",
+       "examples": [
+        130
+       ]
+      },
+      {
+       "column": "F",
+       "header": "الخصم (%)",
+       "kind": "input",
+       "examples": [
+        10
+       ]
+      },
+      {
+       "column": "G",
+       "header": "الإجمالي",
+       "kind": "formula",
+       "formula_row_1": "=IF(OR(A13=\"\",C13=\"\"),\"\",IFERROR(C13*IF(E13=\"\",D13,E13)*(1-IF(F13=\"\",0,F13)/100),\"\"))"
+      }
+     ]
+    }
+   ],
+   "settings": [
+    {
+     "label": "رقم الفاتورة",
+     "cell": "B8",
+     "value": 6
+    },
+    {
+     "label": "اسم العميل",
+     "cell": "B9",
+     "value": "محمود حسن"
+    }
+   ],
+   "results": [
+    {
+     "label": "العملة",
+     "cell": "B10",
+     "formula": "='بيانات المحل'!B9"
+    }
+   ]
+  },
+  {
+   "name": "سجل الفواتير",
+   "formula_cells": 1052,
+   "record_tables": [
+    {
+     "header_row": 4,
+     "first_record_row": 5,
+     "sample_rows_filled": 6,
+     "capacity_last_row": 504,
+     "columns": [
+      {
+       "column": "A",
+       "header": "رقم الفاتورة",
+       "kind": "input",
+       "examples": [
+        1,
+        2,
+        3
+       ]
+      },
+      {
+       "column": "B",
+       "header": "التاريخ",
+       "kind": "input",
+       "examples": [
+        "2026-09-03",
+        "2026-09-12",
+        "2026-09-25"
+       ]
+      },
+      {
+       "column": "C",
+       "header": "العميل",
+       "kind": "input",
+       "examples": [
+        "عميل نقدي",
+        "أحمد سعيد",
+        "منى علي"
+       ]
+      },
+      {
+       "column": "D",
+       "header": "الصافي قبل الضريبة",
+       "kind": "input",
+       "examples": [
+        1800,
+        2450.5,
+        980
+       ]
+      },
+      {
+       "column": "E",
+       "header": "الضريبة",
+       "kind": "formula",
+       "formula_row_1": "=IF(D5=\"\",\"\",ROUND(D5*'بيانات المحل'!$B$8/100,2))"
+      },
+      {
+       "column": "F",
+       "header": "الإجمالي",
+       "kind": "formula",
+       "formula_row_1": "=IF(D5=\"\",\"\",D5+E5)"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "لماذا ما زلت على إكسل؟",
+   "formula_cells": 0
+  }
+ ]
+}

@@ -1,0 +1,407 @@
+{
+ "id": "igcse-past-papers-log",
+ "file": "softwiro-igcse-past-papers-log.xlsx",
+ "title": "سجل حل Past Papers لمنهج IGCSE",
+ "language": "ar",
+ "direction": "rtl",
+ "how_it_works": "White cells are typed input; cells whose kind is \"formula\" are calculated and must not be overwritten. Add one record per row under the header row of a record table, keeping the columns in order.",
+ "sheets": [
+  {
+   "name": "ابدأ هنا",
+   "formula_cells": 0
+  },
+  {
+   "name": "الإعدادات",
+   "formula_cells": 0,
+   "settings": [
+    {
+     "label": "أقل فرق يُعدّ تحسنًا أو تراجعًا (نقاط مئوية)",
+     "cell": "B4",
+     "value": 0.02
+    }
+   ]
+  },
+  {
+   "name": "المواد",
+   "formula_cells": 330,
+   "record_tables": [
+    {
+     "header_row": 5,
+     "first_record_row": 6,
+     "sample_rows_filled": 5,
+     "capacity_last_row": 35,
+     "columns": [
+      {
+       "column": "A",
+       "header": "المادة",
+       "kind": "input",
+       "examples": [
+        "Mathematics (رياضيات)",
+        "Physics (فيزياء)",
+        "Chemistry (كيمياء)"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "نسبة الهدف",
+       "kind": "input",
+       "examples": [
+        0.8,
+        0.75,
+        0.7
+       ]
+      },
+      {
+       "column": "C",
+       "header": "عدد المحاولات",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",COUNTIFS('السجل'!$A$6:$A$505,A6&\"\",'السجل'!$J$6:$J$505,\">=0\"))"
+      },
+      {
+       "column": "D",
+       "header": "متوسط النسبة",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",IF(C6=0,\"\",SUMIFS('السجل'!$J$6:$J$505,'السجل'!$A$6:$A$505,A6&\"\",'السجل'!$J$6:$J$505,\">=0\")/C6))"
+      },
+      {
+       "column": "E",
+       "header": "متوسط أول 3",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",IF(C6<6,\"\",SUMIFS('السجل'!$J$6:$J$505,'السجل'!$A$6:$A$505,A6&\"\",'السجل'!$K$6:$K$505,\"<=3\")/3))"
+      },
+      {
+       "column": "F",
+       "header": "متوسط آخر 3",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",IF(C6<6,\"\",SUMIFS('السجل'!$J$6:$J$505,'السجل'!$A$6:$A$505,A6&\"\",'السجل'!$K$6:$K$505,\">\"&(C6-3))/3))"
+      },
+      {
+       "column": "G",
+       "header": "الفرق",
+       "kind": "formula",
+       "formula_row_1": "=IF(E6=\"\",\"\",ROUND(F6-E6,4))"
+      },
+      {
+       "column": "H",
+       "header": "الاتجاه",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",IF(C6=0,\"لا محاولات\",IF(C6<6,\"تحتاج 6 محاولات\",IF(G6>='الإعدادات'!$B$4,\"تحسن\",IF(G6<=-'الإعدادات'!$B$4,\"تراجع\",\"ثابت\")))))"
+      },
+      {
+       "column": "I",
+       "header": "متوسط الزمن (دقيقة)",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",IF(C6=0,\"\",IFERROR(SUMIFS('السجل'!$F$6:$F$505,'السجل'!$A$6:$A$505,A6&\"\",'السجل'!$J$6:$J$505,\">=0\")/COUNTIFS('السجل'!$A$6:$A$505,A6&\"\",'السجل'!$J$6:$J$505,\">=0\",'السجل'!$F$6:$F$505,\">0\"),\"\")))"
+      },
+      {
+       "column": "J",
+       "header": "آخر نسبة",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",IF(C6=0,\"\",SUMIFS('السجل'!$J$6:$J$505,'السجل'!$A$6:$A$505,A6&\"\",'السجل'!$K$6:$K$505,C6)))"
+      },
+      {
+       "column": "K",
+       "header": "تاريخ آخر محاولة",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",IF(C6=0,\"\",SUMIFS('السجل'!$H$6:$H$505,'السجل'!$A$6:$A$505,A6&\"\",'السجل'!$K$6:$K$505,C6)))"
+      },
+      {
+       "column": "L",
+       "header": "الفرق عن الهدف",
+       "kind": "formula",
+       "formula_row_1": "=IF(OR(D6=\"\",B6=\"\"),\"\",D6-B6)"
+      },
+      {
+       "column": "M",
+       "header": "أخطاء مسجلة",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",COUNTIFS('السجل'!$A$6:$A$505,A6&\"\",'السجل'!$G$6:$G$505,\"?*\"))"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "السجل",
+   "formula_cells": 1500,
+   "record_tables": [
+    {
+     "header_row": 5,
+     "first_record_row": 6,
+     "sample_rows_filled": 25,
+     "capacity_last_row": 505,
+     "columns": [
+      {
+       "column": "A",
+       "header": "المادة",
+       "kind": "input",
+       "examples": [
+        "Mathematics (رياضيات)",
+        "Physics (فيزياء)",
+        "English Language (لغة إنجليزية)"
+       ],
+       "allowed_values": {
+        "from_range": "'المواد'!$A$6:$A$35"
+       }
+      },
+      {
+       "column": "B",
+       "header": "رقم الورقة / Component",
+       "kind": "input",
+       "examples": [
+        "Paper 2",
+        "Paper 2",
+        "Paper 1"
+       ]
+      },
+      {
+       "column": "C",
+       "header": "الـ Session والسنة",
+       "kind": "input",
+       "examples": [
+        "May/June 2021",
+        "May/June 2021",
+        "May/June 2022"
+       ]
+      },
+      {
+       "column": "D",
+       "header": "الدرجة",
+       "kind": "input",
+       "examples": [
+        48,
+        24,
+        40
+       ]
+      },
+      {
+       "column": "E",
+       "header": "الدرجة الكاملة",
+       "kind": "input",
+       "examples": [
+        80,
+        40,
+        50
+       ]
+      },
+      {
+       "column": "F",
+       "header": "الزمن (دقيقة)",
+       "kind": "input",
+       "examples": [
+        95,
+        50,
+        70
+       ]
+      },
+      {
+       "column": "G",
+       "header": "نوع الخطأ الأبرز",
+       "kind": "input",
+       "examples": [
+        "خطأ حسابي",
+        "لم أفهم السؤال",
+        "صياغة الإجابة"
+       ],
+       "allowed_values": {
+        "from_range": "'الأخطاء'!$A$9:$A$16"
+       }
+      },
+      {
+       "column": "H",
+       "header": "تاريخ الحل",
+       "kind": "input",
+       "examples": [
+        "2026-08-03",
+        "2026-08-05",
+        "2026-08-06"
+       ]
+      },
+      {
+       "column": "I",
+       "header": "ملاحظة",
+       "kind": "input"
+      },
+      {
+       "column": "J",
+       "header": "النسبة",
+       "kind": "formula",
+       "formula_row_1": "=IF(OR(A6&\"\"=\"\",NOT(ISNUMBER(D6)),NOT(ISNUMBER(E6)),NOT(ISNUMBER(H6))),\"\",IF(OR(E6<=0,D6<0,D6>E6),\"\",D6/E6))"
+      },
+      {
+       "column": "K",
+       "header": "رقم المحاولة",
+       "kind": "formula",
+       "formula_row_1": "=IF(J6=\"\",\"\",COUNTIFS($A$6:$A$505,A6&\"\",$H$6:$H$505,\"<\"&H6,$J$6:$J$505,\">=0\")+COUNTIFS($A$6:A6,A6&\"\",$H$6:H6,H6&\"\",$J$6:J6,\">=0\"))"
+      },
+      {
+       "column": "L",
+       "header": "الفحص",
+       "kind": "formula",
+       "formula_row_1": "=IF(AND(A6&\"\"=\"\",D6&\"\"=\"\"),\"\",IF(J6=\"\",\"راجع البيانات\",\"سليم\"))"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "الأخطاء",
+   "formula_cells": 27,
+   "record_tables": [
+    {
+     "header_row": 8,
+     "first_record_row": 9,
+     "sample_rows_filled": 7,
+     "capacity_last_row": 16,
+     "columns": [
+      {
+       "column": "A",
+       "header": "نوع الخطأ",
+       "kind": "input",
+       "examples": [
+        "خطأ حسابي",
+        "لم أفهم السؤال",
+        "نقص معلومة"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "التكرار",
+       "kind": "formula",
+       "formula_row_1": "=IF(A9&\"\"=\"\",\"\",COUNTIF('السجل'!$G$6:$G$505,A9&\"\"))"
+      },
+      {
+       "column": "C",
+       "header": "نسبته من الأخطاء",
+       "kind": "formula",
+       "formula_row_1": "=IF(OR(B9=\"\",$B$4=0),\"\",B9/$B$4)"
+      },
+      {
+       "column": "D",
+       "header": "الترتيب",
+       "kind": "formula",
+       "formula_row_1": "=IF(OR(B9=\"\",B9=0),\"\",COUNTIF($B$9:$B$16,\">\"&B9)+COUNTIF($B$9:B9,B9))"
+      }
+     ]
+    }
+   ],
+   "results": [
+    {
+     "label": "إجمالي الأخطاء المسجلة",
+     "cell": "B4",
+     "formula": "=COUNTIF('السجل'!$G$6:$G$505,\"?*\")"
+    },
+    {
+     "label": "أكثر نوع تكرارًا",
+     "cell": "B5",
+     "formula": "=IF(MAX(B9:B16)=0,\"\",INDEX(A9:A16,MATCH(1,D9:D16,0)))"
+    },
+    {
+     "label": "تكراره",
+     "cell": "B6",
+     "formula": "=IF(MAX(B9:B16)=0,\"\",MAX(B9:B16))"
+    }
+   ]
+  },
+  {
+   "name": "الملخص",
+   "formula_cells": 18,
+   "results": [
+    {
+     "label": "الأوراق المحتسبة",
+     "cell": "B5",
+     "formula": "=COUNT('السجل'!$J$6:$J$505)"
+    },
+    {
+     "label": "أسطر تحتاج مراجعة",
+     "cell": "B6",
+     "formula": "=COUNTIF('السجل'!$L$6:$L$505,\"راجع البيانات\")"
+    },
+    {
+     "label": "متوسط النسبة في كل الأوراق",
+     "cell": "B7",
+     "formula": "=IF(B5=0,\"\",SUM('السجل'!$J$6:$J$505)/B5)"
+    },
+    {
+     "label": "متوسط الزمن (دقيقة)",
+     "cell": "B8",
+     "formula": "=IFERROR(SUMIFS('السجل'!$F$6:$F$505,'السجل'!$J$6:$J$505,\">=0\")/COUNTIFS('السجل'!$J$6:$J$505,\">=0\",'السجل'!$F$6:$F$505,\">0\"),\"\")"
+    },
+    {
+     "label": "آخر تاريخ مسجل في السجل",
+     "cell": "B9",
+     "formula": "=IF(COUNT('السجل'!$H$6:$H$505)=0,\"\",MAX('السجل'!$H$6:$H$505))"
+    },
+    {
+     "label": "مواد مسجلة",
+     "cell": "B12",
+     "formula": "=COUNTIF('المواد'!$A$6:$A$35,\"?*\")"
+    },
+    {
+     "label": "مواد لها محاولات",
+     "cell": "B13",
+     "formula": "=COUNTIF('المواد'!$C$6:$C$35,\">0\")"
+    },
+    {
+     "label": "أعلى متوسط نسبة (المادة)",
+     "cell": "B14",
+     "formula": "=IF(B13=0,\"\",INDEX('المواد'!$A$6:$A$35,MATCH(MAX('المواد'!$D$6:$D$35),'المواد'!$D$6:$D$35,0)))"
+    },
+    {
+     "label": "أقل متوسط نسبة (المادة)",
+     "cell": "B15",
+     "formula": "=IF(B13=0,\"\",INDEX('المواد'!$A$6:$A$35,MATCH(MIN('المواد'!$D$6:$D$35),'المواد'!$D$6:$D$35,0)))"
+    },
+    {
+     "label": "مواد في تحسن",
+     "cell": "B16",
+     "formula": "=COUNTIF('المواد'!$H$6:$H$35,\"تحسن\")"
+    },
+    {
+     "label": "مواد في تراجع",
+     "cell": "B17",
+     "formula": "=COUNTIF('المواد'!$H$6:$H$35,\"تراجع\")"
+    },
+    {
+     "label": "مواد ثابتة",
+     "cell": "B18",
+     "formula": "=COUNTIF('المواد'!$H$6:$H$35,\"ثابت\")"
+    },
+    {
+     "label": "مواد تحتاج 6 محاولات",
+     "cell": "B19",
+     "formula": "=COUNTIF('المواد'!$H$6:$H$35,\"تحتاج 6 محاولات\")"
+    },
+    {
+     "label": "مواد بلا محاولات",
+     "cell": "B20",
+     "formula": "=COUNTIF('المواد'!$H$6:$H$35,\"لا محاولات\")"
+    },
+    {
+     "label": "إجمالي الأخطاء المسجلة",
+     "cell": "B23",
+     "formula": "='الأخطاء'!B4"
+    },
+    {
+     "label": "أكثر نوع تكرارًا",
+     "cell": "B24",
+     "formula": "='الأخطاء'!B5"
+    },
+    {
+     "label": "تكراره",
+     "cell": "B25",
+     "formula": "='الأخطاء'!B6"
+    },
+    {
+     "label": "نسبته من الأخطاء",
+     "cell": "B26",
+     "formula": "=IF(OR(B25=\"\",B23=0),\"\",B25/B23)"
+    }
+   ]
+  },
+  {
+   "name": "لماذا ما زلت على إكسل؟",
+   "formula_cells": 0
+  }
+ ]
+}

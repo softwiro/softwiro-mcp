@@ -1,0 +1,738 @@
+{
+ "id": "poultry-farm-tracker",
+ "file": "softwiro-poultry-farm-tracker.xlsx",
+ "title": "شيت متابعة دورة تسمين الدواجن",
+ "language": "ar",
+ "direction": "rtl",
+ "how_it_works": "White cells are typed input; cells whose kind is \"formula\" are calculated and must not be overwritten. Add one record per row under the header row of a record table, keeping the columns in order.",
+ "sheets": [
+  {
+   "name": "ابدأ هنا",
+   "formula_cells": 0
+  },
+  {
+   "name": "الإعدادات",
+   "formula_cells": 0,
+   "settings": [
+    {
+     "label": "تاريخ اليوم",
+     "cell": "B4",
+     "value": "2026-11-01"
+    },
+    {
+     "label": "تنبيه عند نسبة نفوق أعلى من",
+     "cell": "B5",
+     "value": 0.02
+    }
+   ]
+  },
+  {
+   "name": "الدورات",
+   "formula_cells": 2000,
+   "record_tables": [
+    {
+     "header_row": 5,
+     "first_record_row": 6,
+     "sample_rows_filled": 4,
+     "capacity_last_row": 105,
+     "columns": [
+      {
+       "column": "A",
+       "header": "كود الدورة",
+       "kind": "input",
+       "examples": [
+        "C01",
+        "C02",
+        "C03"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "الوصف",
+       "kind": "input",
+       "examples": [
+        "عنبر 1 - دورة يونيو",
+        "عنبر 2 - دورة يوليو",
+        "عنبر 1 - دورة سبتمبر"
+       ]
+      },
+      {
+       "column": "C",
+       "header": "تاريخ التحضين",
+       "kind": "input",
+       "examples": [
+        "2026-06-10",
+        "2026-07-20",
+        "2026-09-25"
+       ]
+      },
+      {
+       "column": "D",
+       "header": "عدد الكتاكيت",
+       "kind": "input",
+       "examples": [
+        5000,
+        4000,
+        5000
+       ]
+      },
+      {
+       "column": "E",
+       "header": "سعر الكتكوت",
+       "kind": "input",
+       "examples": [
+        18,
+        19,
+        21
+       ]
+      },
+      {
+       "column": "F",
+       "header": "تاريخ الإغلاق",
+       "kind": "input",
+       "examples": [
+        "2026-07-18",
+        "2026-08-26"
+       ]
+      },
+      {
+       "column": "G",
+       "header": "الحالة",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",IF(ISNUMBER(F6),\"مغلقة\",\"جارية\"))"
+      },
+      {
+       "column": "H",
+       "header": "العمر (يوم)",
+       "kind": "formula",
+       "formula_row_1": "=IF(OR(A6&\"\"=\"\",NOT(ISNUMBER(C6))),\"\",IF(G6=\"مغلقة\",F6-C6,MAX(0,'الإعدادات'!$B$4-C6)))"
+      },
+      {
+       "column": "I",
+       "header": "النافق",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",SUMIFS('النفوق'!$C$6:$C$1005,'النفوق'!$B$6:$B$1005,A6&\"\"))"
+      },
+      {
+       "column": "J",
+       "header": "نسبة النفوق",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",IF(N(D6)>0,I6/D6,\"\"))"
+      },
+      {
+       "column": "K",
+       "header": "المباع (طائر)",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",SUMIFS('المبيعات'!$C$6:$C$505,'المبيعات'!$B$6:$B$505,A6&\"\"))"
+      },
+      {
+       "column": "L",
+       "header": "الباقي في العنبر",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",N(D6)-I6-K6)"
+      },
+      {
+       "column": "M",
+       "header": "العلف (كجم)",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",SUMIFS('الأعلاف'!$D$6:$D$1005,'الأعلاف'!$B$6:$B$1005,A6&\"\"))"
+      },
+      {
+       "column": "N",
+       "header": "تكلفة العلف",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",SUMIFS('الأعلاف'!$F$6:$F$1005,'الأعلاف'!$B$6:$B$1005,A6&\"\"))"
+      },
+      {
+       "column": "O",
+       "header": "مصروفات أخرى",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",SUMIFS('المصروفات'!$D$6:$D$1005,'المصروفات'!$B$6:$B$1005,A6&\"\"))"
+      },
+      {
+       "column": "P",
+       "header": "تكلفة الكتاكيت",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",ROUND(N(D6)*N(E6),2))"
+      },
+      {
+       "column": "Q",
+       "header": "إجمالي التكلفة",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",ROUND(N6+O6+P6,2))"
+      },
+      {
+       "column": "R",
+       "header": "الوزن المباع (كجم)",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",SUMIFS('المبيعات'!$D$6:$D$505,'المبيعات'!$B$6:$B$505,A6&\"\"))"
+      },
+      {
+       "column": "S",
+       "header": "إيراد المبيعات",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",SUMIFS('المبيعات'!$G$6:$G$505,'المبيعات'!$B$6:$B$505,A6&\"\"))"
+      },
+      {
+       "column": "T",
+       "header": "ربح الدورة",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",IF(G6=\"مغلقة\",ROUND(S6-Q6,2),\"\"))"
+      },
+      {
+       "column": "U",
+       "header": "تكلفة الكيلو",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",IF(AND(G6=\"مغلقة\",R6>0),ROUND(Q6/R6,2),\"\"))"
+      },
+      {
+       "column": "V",
+       "header": "متوسط وزن الطائر المباع",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",IF(K6>0,ROUND(R6/K6,3),\"\"))"
+      },
+      {
+       "column": "W",
+       "header": "العلف لكل كيلو مباع",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",IF(AND(M6>0,R6>0),ROUND(M6/R6,2),\"\"))"
+      },
+      {
+       "column": "X",
+       "header": "آخر متوسط وزن (كجم)",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",IFERROR(SUMIFS('الأوزان'!$F$6:$F$505,'الأوزان'!$B$6:$B$505,A6&\"\",'الأوزان'!$G$6:$G$505,1)/COUNTIFS('الأوزان'!$B$6:$B$505,A6&\"\",'الأوزان'!$G$6:$G$505,1),\"\"))"
+      },
+      {
+       "column": "Y",
+       "header": "تنبيه الأعداد",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",IF(OR(AND(G6=\"مغلقة\",L6<>0),L6<0),\"راجع الأعداد\",\"\"))"
+      },
+      {
+       "column": "Z",
+       "header": "تنبيه النفوق",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",IF(AND(ISNUMBER(J6),J6>N('الإعدادات'!$B$5)),\"نفوق مرتفع\",\"\"))"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "الأعلاف",
+   "formula_cells": 2000,
+   "record_tables": [
+    {
+     "header_row": 5,
+     "first_record_row": 6,
+     "sample_rows_filled": 9,
+     "capacity_last_row": 1005,
+     "columns": [
+      {
+       "column": "A",
+       "header": "التاريخ",
+       "kind": "input",
+       "examples": [
+        "2026-06-12",
+        "2026-06-24",
+        "2026-07-05"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "كود الدورة",
+       "kind": "input",
+       "examples": [
+        "C01",
+        "C01",
+        "C01"
+       ],
+       "allowed_values": {
+        "from_range": "'الدورات'!$A$6:$A$105"
+       }
+      },
+      {
+       "column": "C",
+       "header": "نوع العلف",
+       "kind": "input",
+       "examples": [
+        "علف بادئ",
+        "علف نامي",
+        "علف ناهي"
+       ],
+       "allowed_values": [
+        "علف بادئ",
+        "علف نامي",
+        "علف ناهي"
+       ]
+      },
+      {
+       "column": "D",
+       "header": "الكمية (كجم)",
+       "kind": "input",
+       "examples": [
+        3000,
+        6000,
+        8000
+       ]
+      },
+      {
+       "column": "E",
+       "header": "سعر الكيلو",
+       "kind": "input",
+       "examples": [
+        24,
+        22,
+        21
+       ]
+      },
+      {
+       "column": "F",
+       "header": "التكلفة",
+       "kind": "formula",
+       "formula_row_1": "=IF(OR(D6&\"\"=\"\",E6&\"\"=\"\"),\"\",ROUND(D6*E6,2))"
+      },
+      {
+       "column": "G",
+       "header": "تنبيه",
+       "kind": "formula",
+       "formula_row_1": "=IF(B6&\"\"=\"\",\"\",IF(COUNTIF('الدورات'!$A$6:$A$105,B6&\"\")=0,\"كود دورة غير موجود\",\"\"))"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "النفوق",
+   "formula_cells": 1000,
+   "record_tables": [
+    {
+     "header_row": 5,
+     "first_record_row": 6,
+     "sample_rows_filled": 12,
+     "capacity_last_row": 1005,
+     "columns": [
+      {
+       "column": "A",
+       "header": "التاريخ",
+       "kind": "input",
+       "examples": [
+        "2026-06-14",
+        "2026-06-20",
+        "2026-06-28"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "كود الدورة",
+       "kind": "input",
+       "examples": [
+        "C01",
+        "C01",
+        "C01"
+       ],
+       "allowed_values": {
+        "from_range": "'الدورات'!$A$6:$A$105"
+       }
+      },
+      {
+       "column": "C",
+       "header": "عدد النافق",
+       "kind": "input",
+       "examples": [
+        40,
+        25,
+        20
+       ]
+      },
+      {
+       "column": "D",
+       "header": "السبب",
+       "kind": "input",
+       "examples": [
+        "حرارة",
+        "مرض",
+        "مرض"
+       ],
+       "allowed_values": [
+        "حرارة",
+        "مرض",
+        "حادث",
+        "غير معروف"
+       ]
+      },
+      {
+       "column": "E",
+       "header": "ملاحظة",
+       "kind": "input"
+      },
+      {
+       "column": "F",
+       "header": "تنبيه",
+       "kind": "formula",
+       "formula_row_1": "=IF(B6&\"\"=\"\",\"\",IF(COUNTIF('الدورات'!$A$6:$A$105,B6&\"\")=0,\"كود دورة غير موجود\",\"\"))"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "الأوزان",
+   "formula_cells": 1500,
+   "record_tables": [
+    {
+     "header_row": 5,
+     "first_record_row": 6,
+     "sample_rows_filled": 5,
+     "capacity_last_row": 505,
+     "columns": [
+      {
+       "column": "A",
+       "header": "التاريخ",
+       "kind": "input",
+       "examples": [
+        "2026-07-10",
+        "2026-08-20",
+        "2026-10-10"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "كود الدورة",
+       "kind": "input",
+       "examples": [
+        "C01",
+        "C02",
+        "C03"
+       ],
+       "allowed_values": {
+        "from_range": "'الدورات'!$A$6:$A$105"
+       }
+      },
+      {
+       "column": "C",
+       "header": "عدد طيور العينة",
+       "kind": "input",
+       "examples": [
+        50,
+        50,
+        40
+       ]
+      },
+      {
+       "column": "D",
+       "header": "وزن العينة (كجم)",
+       "kind": "input",
+       "examples": [
+        87.5,
+        80,
+        36
+       ]
+      },
+      {
+       "column": "E",
+       "header": "ملاحظة",
+       "kind": "input"
+      },
+      {
+       "column": "F",
+       "header": "متوسط وزن الطائر (كجم)",
+       "kind": "formula",
+       "formula_row_1": "=IF(OR(N(C6)=0,D6&\"\"=\"\"),\"\",ROUND(D6/C6,3))"
+      },
+      {
+       "column": "G",
+       "header": "آخر عينة للدورة",
+       "kind": "formula",
+       "formula_row_1": "=IF(OR(B6&\"\"=\"\",NOT(ISNUMBER(A6))),\"\",IF(COUNTIFS($B$6:$B$505,B6&\"\",$A$6:$A$505,\">\"&A6)=0,1,0))"
+      },
+      {
+       "column": "H",
+       "header": "تنبيه",
+       "kind": "formula",
+       "formula_row_1": "=IF(B6&\"\"=\"\",\"\",IF(COUNTIF('الدورات'!$A$6:$A$105,B6&\"\")=0,\"كود دورة غير موجود\",\"\"))"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "المبيعات",
+   "formula_cells": 1000,
+   "record_tables": [
+    {
+     "header_row": 5,
+     "first_record_row": 6,
+     "sample_rows_filled": 4,
+     "capacity_last_row": 505,
+     "columns": [
+      {
+       "column": "A",
+       "header": "التاريخ",
+       "kind": "input",
+       "examples": [
+        "2026-07-16",
+        "2026-07-18",
+        "2026-08-24"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "كود الدورة",
+       "kind": "input",
+       "examples": [
+        "C01",
+        "C01",
+        "C02"
+       ],
+       "allowed_values": {
+        "from_range": "'الدورات'!$A$6:$A$105"
+       }
+      },
+      {
+       "column": "C",
+       "header": "عدد الطيور",
+       "kind": "input",
+       "examples": [
+        2400,
+        2505,
+        1900
+       ]
+      },
+      {
+       "column": "D",
+       "header": "الوزن الكلي (كجم)",
+       "kind": "input",
+       "examples": [
+        4560,
+        4885,
+        3610
+       ]
+      },
+      {
+       "column": "E",
+       "header": "سعر الكيلو",
+       "kind": "input",
+       "examples": [
+        75,
+        74,
+        72
+       ]
+      },
+      {
+       "column": "F",
+       "header": "ملاحظة",
+       "kind": "input"
+      },
+      {
+       "column": "G",
+       "header": "المبلغ",
+       "kind": "formula",
+       "formula_row_1": "=IF(OR(D6&\"\"=\"\",E6&\"\"=\"\"),\"\",ROUND(D6*E6,2))"
+      },
+      {
+       "column": "H",
+       "header": "تنبيه",
+       "kind": "formula",
+       "formula_row_1": "=IF(B6&\"\"=\"\",\"\",IF(COUNTIF('الدورات'!$A$6:$A$105,B6&\"\")=0,\"كود دورة غير موجود\",\"\"))"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "المصروفات",
+   "formula_cells": 1000,
+   "record_tables": [
+    {
+     "header_row": 5,
+     "first_record_row": 6,
+     "sample_rows_filled": 15,
+     "capacity_last_row": 1005,
+     "columns": [
+      {
+       "column": "A",
+       "header": "التاريخ",
+       "kind": "input",
+       "examples": [
+        "2026-06-10",
+        "2026-06-10",
+        "2026-07-10"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "كود الدورة",
+       "kind": "input",
+       "examples": [
+        "C01",
+        "C01",
+        "C01"
+       ],
+       "allowed_values": {
+        "from_range": "'الدورات'!$A$6:$A$105"
+       }
+      },
+      {
+       "column": "C",
+       "header": "البند",
+       "kind": "input",
+       "examples": [
+        "أدوية وتحصينات",
+        "فرشة",
+        "عمالة"
+       ],
+       "allowed_values": [
+        "أدوية وتحصينات",
+        "عمالة",
+        "كهرباء وغاز",
+        "فرشة",
+        "نقل",
+        "أخرى"
+       ]
+      },
+      {
+       "column": "D",
+       "header": "المبلغ",
+       "kind": "input",
+       "examples": [
+        12500,
+        6000,
+        15000
+       ]
+      },
+      {
+       "column": "E",
+       "header": "ملاحظة",
+       "kind": "input"
+      },
+      {
+       "column": "F",
+       "header": "تنبيه",
+       "kind": "formula",
+       "formula_row_1": "=IF(B6&\"\"=\"\",\"\",IF(COUNTIF('الدورات'!$A$6:$A$105,B6&\"\")=0,\"كود دورة غير موجود\",\"\"))"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "الملخص",
+   "formula_cells": 27,
+   "record_tables": [
+    {
+     "header_row": 26,
+     "first_record_row": 27,
+     "sample_rows_filled": 11,
+     "capacity_last_row": 38,
+     "columns": [
+      {
+       "column": "A",
+       "header": "النوع",
+       "kind": "input",
+       "examples": [
+        "علف بادئ",
+        "علف نامي",
+        "علف ناهي"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "الكمية (كجم)",
+       "kind": "formula",
+       "formula_row_1": "=SUMIFS('الأعلاف'!$D$6:$D$1005,'الأعلاف'!$C$6:$C$1005,A27)"
+      },
+      {
+       "column": "C",
+       "header": "التكلفة",
+       "kind": "formula",
+       "formula_row_1": "=SUMIFS('الأعلاف'!$F$6:$F$1005,'الأعلاف'!$C$6:$C$1005,A27)"
+      }
+     ]
+    }
+   ],
+   "results": [
+    {
+     "label": "عدد الدورات",
+     "cell": "B5",
+     "formula": "=COUNTIF('الدورات'!$A$6:$A$105,\"?*\")"
+    },
+    {
+     "label": "دورات مغلقة",
+     "cell": "B6",
+     "formula": "=COUNTIF('الدورات'!$G$6:$G$105,\"مغلقة\")"
+    },
+    {
+     "label": "دورات جارية",
+     "cell": "B7",
+     "formula": "=COUNTIF('الدورات'!$G$6:$G$105,\"جارية\")"
+    },
+    {
+     "label": "إجمالي التكلفة",
+     "cell": "B10",
+     "formula": "=SUMIFS('الدورات'!$Q$6:$Q$105,'الدورات'!$G$6:$G$105,\"مغلقة\")"
+    },
+    {
+     "label": "إجمالي إيراد المبيعات",
+     "cell": "B11",
+     "formula": "=SUMIFS('الدورات'!$S$6:$S$105,'الدورات'!$G$6:$G$105,\"مغلقة\")"
+    },
+    {
+     "label": "إجمالي الربح",
+     "cell": "B12",
+     "formula": "=SUM('الدورات'!$T$6:$T$105)"
+    },
+    {
+     "label": "متوسط ربح الدورة",
+     "cell": "B13",
+     "formula": "=IF(B6=0,\"\",ROUND(B12/B6,2))"
+    },
+    {
+     "label": "أعلى ربح لدورة",
+     "cell": "B14",
+     "formula": "=IF(B6=0,\"\",MAX('الدورات'!$T$6:$T$105))"
+    },
+    {
+     "label": "أقل ربح لدورة",
+     "cell": "B15",
+     "formula": "=IF(B6=0,\"\",MIN('الدورات'!$T$6:$T$105))"
+    },
+    {
+     "label": "تكلفة الكيلو الإجمالية",
+     "cell": "B16",
+     "formula": "=IF(SUMIFS('الدورات'!$R$6:$R$105,'الدورات'!$G$6:$G$105,\"مغلقة\")=0,\"\",ROUND(B10/SUMIFS('الدورات'!$R$6:$R$105,'الدورات'!$G$6:$G$105,\"مغلقة\"),2))"
+    },
+    {
+     "label": "نسبة النفوق في الدورات المغلقة",
+     "cell": "B17",
+     "formula": "=IF(SUMIFS('الدورات'!$D$6:$D$105,'الدورات'!$G$6:$G$105,\"مغلقة\")=0,\"\",SUMIFS('الدورات'!$I$6:$I$105,'الدورات'!$G$6:$G$105,\"مغلقة\")/SUMIFS('الدورات'!$D$6:$D$105,'الدورات'!$G$6:$G$105,\"مغلقة\"))"
+    },
+    {
+     "label": "هامش الربح من الإيراد",
+     "cell": "B18",
+     "formula": "=IF(B11=0,\"\",B12/B11)"
+    },
+    {
+     "label": "التكلفة حتى اليوم",
+     "cell": "B21",
+     "formula": "=SUMIFS('الدورات'!$Q$6:$Q$105,'الدورات'!$G$6:$G$105,\"جارية\")"
+    },
+    {
+     "label": "الطيور الباقية في العنابر",
+     "cell": "B22",
+     "formula": "=SUMIFS('الدورات'!$L$6:$L$105,'الدورات'!$G$6:$G$105,\"جارية\")"
+    },
+    {
+     "label": "دورات بتنبيه أعداد أو نفوق",
+     "cell": "B23",
+     "formula": "=COUNTIF('الدورات'!$Y$6:$Y$105,\"?*\")+COUNTIF('الدورات'!$Z$6:$Z$105,\"?*\")-SUMPRODUCT(('الدورات'!$Y$6:$Y$105<>\"\")*('الدورات'!$Z$6:$Z$105<>\"\"))"
+    }
+   ]
+  },
+  {
+   "name": "لماذا ما زلت على إكسل؟",
+   "formula_cells": 0
+  }
+ ]
+}

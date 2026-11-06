@@ -1,0 +1,374 @@
+{
+ "id": "hoa-common-utilities-split",
+ "file": "softwiro-hoa-common-utilities-split.xlsx",
+ "title": "شيت توزيع فواتير الكهرباء والمياه المشتركة على الوحدات",
+ "language": "ar",
+ "direction": "rtl",
+ "how_it_works": "White cells are typed input; cells whose kind is \"formula\" are calculated and must not be overwritten. Add one record per row under the header row of a record table, keeping the columns in order.",
+ "sheets": [
+  {
+   "name": "ابدأ هنا",
+   "formula_cells": 0
+  },
+  {
+   "name": "الإعدادات",
+   "formula_cells": 0,
+   "settings": [
+    {
+     "label": "طريقة التوزيع",
+     "cell": "B4",
+     "value": "بالمساحة"
+    },
+    {
+     "label": "فرق التقريب المسموح (جنيه)",
+     "cell": "B5",
+     "value": 0.05
+    }
+   ]
+  },
+  {
+   "name": "الوحدات",
+   "formula_cells": 600,
+   "record_tables": [
+    {
+     "header_row": 5,
+     "first_record_row": 6,
+     "sample_rows_filled": 9,
+     "capacity_last_row": 205,
+     "columns": [
+      {
+       "column": "A",
+       "header": "كود الوحدة",
+       "kind": "input",
+       "examples": [
+        "A101",
+        "A102",
+        "A201"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "المالك",
+       "kind": "input",
+       "examples": [
+        "أحمد سالم",
+        "مها حسن",
+        "خالد عمر"
+       ]
+      },
+      {
+       "column": "C",
+       "header": "المساحة (م²)",
+       "kind": "input",
+       "examples": [
+        100,
+        120,
+        100
+       ]
+      },
+      {
+       "column": "D",
+       "header": "عدد الأفراد",
+       "kind": "input",
+       "examples": [
+        4,
+        3,
+        2
+       ]
+      },
+      {
+       "column": "E",
+       "header": "حصة ثابتة",
+       "kind": "input",
+       "examples": [
+        10,
+        12,
+        10
+       ]
+      },
+      {
+       "column": "F",
+       "header": "الوزن",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",IF('الإعدادات'!$B$4=\"بالمساحة\",N(C6),IF('الإعدادات'!$B$4=\"بعدد الأفراد\",N(D6),IF('الإعدادات'!$B$4=\"بحصة ثابتة\",N(E6),1))))"
+      },
+      {
+       "column": "G",
+       "header": "النسبة",
+       "kind": "formula",
+       "formula_row_1": "=IF(F6=\"\",\"\",IF(SUM($F$6:$F$205)=0,0,F6/SUM($F$6:$F$205)))"
+      },
+      {
+       "column": "H",
+       "header": "تنبيه",
+       "kind": "formula",
+       "formula_row_1": "=IF(F6=\"\",\"\",IF(F6=0,\"بيانات ناقصة\",\"\"))"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "الفواتير",
+   "formula_cells": 500,
+   "record_tables": [
+    {
+     "header_row": 5,
+     "first_record_row": 6,
+     "sample_rows_filled": 11,
+     "capacity_last_row": 505,
+     "columns": [
+      {
+       "column": "A",
+       "header": "الشهر",
+       "kind": "input",
+       "examples": [
+        "2026-08",
+        "2026-08",
+        "2026-08"
+       ],
+       "allowed_values": {
+        "from_range": "'الإعدادات'!$D$6:$D$17"
+       }
+      },
+      {
+       "column": "B",
+       "header": "النوع",
+       "kind": "input",
+       "examples": [
+        "كهرباء",
+        "مياه",
+        "مصعد"
+       ],
+       "allowed_values": [
+        "كهرباء",
+        "مياه",
+        "غاز",
+        "مصعد"
+       ]
+      },
+      {
+       "column": "C",
+       "header": "المبلغ",
+       "kind": "input",
+       "examples": [
+        4500,
+        1800,
+        900
+       ]
+      },
+      {
+       "column": "D",
+       "header": "ملاحظة",
+       "kind": "input",
+       "examples": [
+        "فاتورة العداد الرئيسي",
+        "صيانة وكهرباء المصعد",
+        "فاتورة العداد الرئيسي"
+       ]
+      },
+      {
+       "column": "E",
+       "header": "تنبيه",
+       "kind": "formula",
+       "formula_row_1": "=IF(AND(A6&\"\"=\"\",B6&\"\"=\"\",C6&\"\"=\"\"),\"\",IF(COUNTIF('الإعدادات'!$D$6:$D$17,A6&\"\")=0,\"الشهر غير موجود في الإعدادات\",IF(NOT(ISNUMBER(C6)),\"المبلغ ناقص\",\"\")))"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "الأنصبة",
+   "formula_cells": 3012,
+   "settings": [
+    {
+     "label": "كود الوحدة",
+     "cell": "B5",
+     "value": "المالك"
+    }
+   ]
+  },
+  {
+   "name": "كشف الوحدة",
+   "formula_cells": 16,
+   "record_tables": [
+    {
+     "header_row": 11,
+     "first_record_row": 12,
+     "sample_rows_filled": 7,
+     "capacity_last_row": 19,
+     "columns": [
+      {
+       "column": "A",
+       "header": "البند",
+       "kind": "input",
+       "examples": [
+        "فاتورة كهرباء",
+        "فاتورة مياه",
+        "فاتورة غاز"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "إجمالي فاتورة المبنى",
+       "kind": "formula",
+       "formula_row_1": "=IFERROR(INDEX('الملخص'!$B$14:$E$25,MATCH($B$5,'الملخص'!$A$14:$A$25,0),1),0)",
+       "allowed_values": {
+        "from_range": "'الإعدادات'!$D$6:$D$17"
+       }
+      },
+      {
+       "column": "C",
+       "header": "نصيب الوحدة",
+       "kind": "formula",
+       "formula_row_1": "=IF($B$9=\"\",0,ROUND(B12*$B$9,2))"
+      }
+     ]
+    }
+   ],
+   "settings": [
+    {
+     "label": "الوحدة (اختر)",
+     "cell": "B4",
+     "value": "A202"
+    },
+    {
+     "label": "الشهر (اختر)",
+     "cell": "B5",
+     "value": "2026-10"
+    }
+   ],
+   "results": [
+    {
+     "label": "المالك",
+     "cell": "B6",
+     "formula": "=IFERROR(INDEX('الوحدات'!$B$6:$B$205,MATCH($B$4,'الوحدات'!$A$6:$A$205,0))&\"\",\"\")"
+    },
+    {
+     "label": "طريقة التوزيع",
+     "cell": "B7",
+     "formula": "='الإعدادات'!$B$4"
+    },
+    {
+     "label": "وزن الوحدة",
+     "cell": "B8",
+     "formula": "=IFERROR(INDEX('الوحدات'!$F$6:$F$205,MATCH($B$4,'الوحدات'!$A$6:$A$205,0)),\"\")"
+    },
+    {
+     "label": "نسبة الوحدة",
+     "cell": "B9",
+     "formula": "=IFERROR(INDEX('الوحدات'!$G$6:$G$205,MATCH($B$4,'الوحدات'!$A$6:$A$205,0)),\"\")"
+    }
+   ]
+  },
+  {
+   "name": "الملخص",
+   "formula_cells": 115,
+   "record_tables": [
+    {
+     "header_row": 13,
+     "first_record_row": 14,
+     "sample_rows_filled": 0,
+     "capacity_last_row": 25,
+     "columns": [
+      {
+       "column": "A",
+       "header": "الشهر",
+       "kind": "formula",
+       "formula_row_1": "=IF('الإعدادات'!$D$6=\"\",\"\",'الإعدادات'!$D$6)"
+      },
+      {
+       "column": "B",
+       "header": "كهرباء",
+       "kind": "formula",
+       "formula_row_1": "=IF($A14=\"\",\"\",SUMIFS('الفواتير'!$C$6:$C$505,'الفواتير'!$A$6:$A$505,$A14&\"\",'الفواتير'!$B$6:$B$505,B$13))"
+      },
+      {
+       "column": "C",
+       "header": "مياه",
+       "kind": "formula",
+       "formula_row_1": "=IF($A14=\"\",\"\",SUMIFS('الفواتير'!$C$6:$C$505,'الفواتير'!$A$6:$A$505,$A14&\"\",'الفواتير'!$B$6:$B$505,C$13))"
+      },
+      {
+       "column": "D",
+       "header": "غاز",
+       "kind": "formula",
+       "formula_row_1": "=IF($A14=\"\",\"\",SUMIFS('الفواتير'!$C$6:$C$505,'الفواتير'!$A$6:$A$505,$A14&\"\",'الفواتير'!$B$6:$B$505,D$13))"
+      },
+      {
+       "column": "E",
+       "header": "مصعد",
+       "kind": "formula",
+       "formula_row_1": "=IF($A14=\"\",\"\",SUMIFS('الفواتير'!$C$6:$C$505,'الفواتير'!$A$6:$A$505,$A14&\"\",'الفواتير'!$B$6:$B$505,E$13))"
+      },
+      {
+       "column": "F",
+       "header": "إجمالي الفواتير",
+       "kind": "formula",
+       "formula_row_1": "=IF($A14=\"\",\"\",SUM(B14:E14))"
+      },
+      {
+       "column": "G",
+       "header": "مجموع الأنصبة",
+       "kind": "formula",
+       "formula_row_1": "=IF($A14=\"\",\"\",SUM('الأنصبة'!C$6:C$205))"
+      },
+      {
+       "column": "H",
+       "header": "الفرق",
+       "kind": "formula",
+       "formula_row_1": "=IF($A14=\"\",\"\",ROUND(F14-G14,2))"
+      },
+      {
+       "column": "I",
+       "header": "الحالة",
+       "kind": "formula",
+       "formula_row_1": "=IF($A14=\"\",\"\",IF(ABS(H14)<='الإعدادات'!$B$5,\"مطابق\",\"راجع\"))"
+      }
+     ]
+    }
+   ],
+   "results": [
+    {
+     "label": "طريقة التوزيع الحالية",
+     "cell": "B4",
+     "formula": "='الإعدادات'!$B$4"
+    },
+    {
+     "label": "عدد الوحدات",
+     "cell": "B5",
+     "formula": "=COUNTIF('الوحدات'!$A$6:$A$205,\"?*\")"
+    },
+    {
+     "label": "وحدات ببيانات ناقصة",
+     "cell": "B6",
+     "formula": "=COUNTIF('الوحدات'!$H$6:$H$205,\"بيانات ناقصة\")"
+    },
+    {
+     "label": "إجمالي كل الفواتير",
+     "cell": "B7",
+     "formula": "=SUM('الفواتير'!$C$6:$C$505)"
+    },
+    {
+     "label": "مجموع الأنصبة في كل الأشهر",
+     "cell": "B8",
+     "formula": "=SUM('الأنصبة'!$O$6:$O$205)"
+    },
+    {
+     "label": "فواتير خارج قائمة الأشهر",
+     "cell": "B9",
+     "formula": "=ROUND(B7-SUM(F14:F25),2)"
+    },
+    {
+     "label": "أشهر تحتاج مراجعة",
+     "cell": "B10",
+     "formula": "=COUNTIF(I14:I25,\"راجع\")"
+    }
+   ]
+  },
+  {
+   "name": "لماذا ما زلت على إكسل؟",
+   "formula_cells": 0
+  }
+ ]
+}

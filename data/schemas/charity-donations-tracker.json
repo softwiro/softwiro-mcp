@@ -1,0 +1,471 @@
+{
+ "id": "charity-donations-tracker",
+ "file": "softwiro-charity-donations-tracker.xlsx",
+ "title": "شيت تبرعات وصرف جمعية خيرية",
+ "language": "ar",
+ "direction": "rtl",
+ "how_it_works": "White cells are typed input; cells whose kind is \"formula\" are calculated and must not be overwritten. Add one record per row under the header row of a record table, keeping the columns in order.",
+ "sheets": [
+  {
+   "name": "ابدأ هنا",
+   "formula_cells": 0
+  },
+  {
+   "name": "الإعدادات",
+   "formula_cells": 2,
+   "record_tables": [
+    {
+     "header_row": 11,
+     "first_record_row": 12,
+     "sample_rows_filled": 7,
+     "capacity_last_row": 19,
+     "columns": [
+      {
+       "column": "A",
+       "header": "أنواع التبرع",
+       "kind": "input",
+       "examples": [
+        "تبرع عام",
+        "زكاة مال",
+        "صدقات"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "بنود الصرف",
+       "kind": "input",
+       "examples": [
+        "مساعدات نقدية",
+        "مواد غذائية",
+        "علاج وأدوية"
+       ],
+       "allowed_values": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "10",
+        "11",
+        "12"
+       ]
+      },
+      {
+       "column": "C",
+       "header": "فئات المستفيدين",
+       "kind": "input",
+       "examples": [
+        "أسرة",
+        "يتيم",
+        "مريض"
+       ]
+      }
+     ]
+    }
+   ],
+   "settings": [
+    {
+     "label": "اسم الجمعية",
+     "cell": "B4",
+     "value": "جمعية الخير للتنمية (مثال)"
+    },
+    {
+     "label": "السنة",
+     "cell": "B5",
+     "value": 2026
+    },
+    {
+     "label": "شهر التقرير (1 إلى 12)",
+     "cell": "B6",
+     "value": 10
+    },
+    {
+     "label": "الرصيد الافتتاحي (قبل أول سجل)",
+     "cell": "B7",
+     "value": 20000
+    }
+   ],
+   "results": [
+    {
+     "label": "بداية شهر التقرير",
+     "cell": "B8",
+     "formula": "=DATE(B5,B6,1)"
+    },
+    {
+     "label": "بداية الشهر التالي",
+     "cell": "B9",
+     "formula": "=DATE(B5,B6+1,1)"
+    }
+   ]
+  },
+  {
+   "name": "التبرعات",
+   "formula_cells": 2000,
+   "record_tables": [
+    {
+     "header_row": 5,
+     "first_record_row": 6,
+     "sample_rows_filled": 18,
+     "capacity_last_row": 2005,
+     "columns": [
+      {
+       "column": "A",
+       "header": "التاريخ",
+       "kind": "input",
+       "examples": [
+        "2026-08-05",
+        "2026-08-12",
+        "2026-08-20"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "كود المتبرع",
+       "kind": "input",
+       "examples": [
+        "DN01",
+        "DN02",
+        "DN03"
+       ]
+      },
+      {
+       "column": "C",
+       "header": "نوع التبرع",
+       "kind": "input",
+       "examples": [
+        "تبرع عام",
+        "زكاة مال",
+        "كفالة يتيم"
+       ],
+       "allowed_values": {
+        "from_range": "'الإعدادات'!$A$12:$A$17"
+       }
+      },
+      {
+       "column": "D",
+       "header": "المبلغ",
+       "kind": "input",
+       "examples": [
+        1000,
+        3000,
+        500
+       ]
+      },
+      {
+       "column": "E",
+       "header": "طريقة الدفع",
+       "kind": "input",
+       "examples": [
+        "نقدًا",
+        "تحويل بنكي",
+        "محفظة إلكترونية"
+       ],
+       "allowed_values": [
+        "نقدًا",
+        "تحويل بنكي",
+        "محفظة إلكترونية"
+       ]
+      },
+      {
+       "column": "F",
+       "header": "ملاحظة",
+       "kind": "input"
+      },
+      {
+       "column": "G",
+       "header": "أول ظهور للكود",
+       "kind": "formula",
+       "formula_row_1": "=IF(B6&\"\"=\"\",\"\",IF(COUNTIF($B$6:B6,B6&\"\")=1,1,0))"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "المستفيدون",
+   "formula_cells": 2500,
+   "record_tables": [
+    {
+     "header_row": 5,
+     "first_record_row": 6,
+     "sample_rows_filled": 8,
+     "capacity_last_row": 505,
+     "columns": [
+      {
+       "column": "A",
+       "header": "كود المستفيد",
+       "kind": "input",
+       "examples": [
+        "B001",
+        "B002",
+        "B003"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "الفئة",
+       "kind": "input",
+       "examples": [
+        "أسرة",
+        "أسرة",
+        "يتيم"
+       ],
+       "allowed_values": {
+        "from_range": "'الإعدادات'!$C$12:$C$15"
+       }
+      },
+      {
+       "column": "C",
+       "header": "المنطقة",
+       "kind": "input",
+       "examples": [
+        "حي الأمل",
+        "حي الأمل",
+        "قرية النور"
+       ]
+      },
+      {
+       "column": "D",
+       "header": "عدد الأفراد",
+       "kind": "input",
+       "examples": [
+        5,
+        4,
+        1
+       ]
+      },
+      {
+       "column": "E",
+       "header": "تاريخ التسجيل",
+       "kind": "input",
+       "examples": [
+        "2026-01-10",
+        "2026-02-03",
+        "2026-03-15"
+       ]
+      },
+      {
+       "column": "F",
+       "header": "مرات الصرف",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",COUNTIFS('المصارف'!$B$6:$B$2005,A6&\"\"))"
+      },
+      {
+       "column": "G",
+       "header": "إجمالي ما صُرف له",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",SUMIFS('المصارف'!$D$6:$D$2005,'المصارف'!$B$6:$B$2005,A6&\"\"))"
+      },
+      {
+       "column": "H",
+       "header": "مرات الصرف في الشهر",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",COUNTIFS('المصارف'!$B$6:$B$2005,A6&\"\",'المصارف'!$A$6:$A$2005,\">=\"&'الإعدادات'!$B$8,'المصارف'!$A$6:$A$2005,\"<\"&'الإعدادات'!$B$9))"
+      },
+      {
+       "column": "I",
+       "header": "المصروف له في الشهر",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",SUMIFS('المصارف'!$D$6:$D$2005,'المصارف'!$B$6:$B$2005,A6&\"\",'المصارف'!$A$6:$A$2005,\">=\"&'الإعدادات'!$B$8,'المصارف'!$A$6:$A$2005,\"<\"&'الإعدادات'!$B$9))"
+      },
+      {
+       "column": "J",
+       "header": "الحالة",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",IF(F6=0,\"لم يستلم بعد\",IF(H6>0,\"استلم هذا الشهر\",\"استلم سابقًا\")))"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "المصارف",
+   "formula_cells": 4000,
+   "record_tables": [
+    {
+     "header_row": 5,
+     "first_record_row": 6,
+     "sample_rows_filled": 19,
+     "capacity_last_row": 2005,
+     "columns": [
+      {
+       "column": "A",
+       "header": "التاريخ",
+       "kind": "input",
+       "examples": [
+        "2026-08-10",
+        "2026-08-15",
+        "2026-08-25"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "كود المستفيد",
+       "kind": "input",
+       "examples": [
+        "B001",
+        "B004",
+        "B001"
+       ],
+       "allowed_values": {
+        "from_range": "'المستفيدون'!$A$6:$A$505"
+       }
+      },
+      {
+       "column": "C",
+       "header": "بند الصرف",
+       "kind": "input",
+       "examples": [
+        "مساعدات نقدية",
+        "علاج وأدوية",
+        "مصروفات إدارية"
+       ],
+       "allowed_values": {
+        "from_range": "'الإعدادات'!$B$12:$B$17"
+       }
+      },
+      {
+       "column": "D",
+       "header": "المبلغ",
+       "kind": "input",
+       "examples": [
+        800,
+        1200,
+        400
+       ]
+      },
+      {
+       "column": "E",
+       "header": "ملاحظة",
+       "kind": "input"
+      },
+      {
+       "column": "F",
+       "header": "فئة المستفيد",
+       "kind": "formula",
+       "formula_row_1": "=IF(B6&\"\"=\"\",\"\",IFERROR(INDEX('المستفيدون'!$B$6:$B$505,MATCH(B6&\"\",'المستفيدون'!$A$6:$A$505,0))&\"\",\"كود غير موجود\"))"
+      },
+      {
+       "column": "G",
+       "header": "تنبيه",
+       "kind": "formula",
+       "formula_row_1": "=IF(F6=\"كود غير موجود\",\"راجع الكود\",IF(AND(N(D6)>0,NOT(ISNUMBER(A6))),\"بدون تاريخ\",\"\"))"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "تقرير الشفافية",
+   "formula_cells": 74,
+   "record_tables": [
+    {
+     "header_row": 8,
+     "first_record_row": 9,
+     "sample_rows_filled": 0,
+     "capacity_last_row": 46,
+     "columns": [
+      {
+       "column": "A",
+       "header": "نوع التبرع",
+       "kind": "formula",
+       "formula_row_1": "=IF('الإعدادات'!A12=\"\",\"\",'الإعدادات'!A12)"
+      },
+      {
+       "column": "B",
+       "header": "المبلغ",
+       "kind": "formula",
+       "formula_row_1": "=IF(A9=\"\",\"\",SUMIFS('التبرعات'!$D$6:$D$2005,'التبرعات'!$C$6:$C$2005,A9,'التبرعات'!$A$6:$A$2005,\">=\"&'الإعدادات'!$B$8,'التبرعات'!$A$6:$A$2005,\"<\"&'الإعدادات'!$B$9))"
+      },
+      {
+       "column": "C",
+       "header": "النسبة",
+       "kind": "formula",
+       "formula_row_1": "=IF(OR(A9=\"\",$B$15=0),\"\",B9/$B$15)"
+      },
+      {
+       "column": "D",
+       "header": "عدد التبرعات",
+       "kind": "formula",
+       "formula_row_1": "=IF(A9=\"\",\"\",COUNTIFS('التبرعات'!$C$6:$C$2005,A9,'التبرعات'!$A$6:$A$2005,\">=\"&'الإعدادات'!$B$8,'التبرعات'!$A$6:$A$2005,\"<\"&'الإعدادات'!$B$9))"
+      }
+     ]
+    }
+   ],
+   "results": [
+    {
+     "label": "الجمعية",
+     "cell": "B4",
+     "formula": "='الإعدادات'!B4"
+    },
+    {
+     "label": "الشهر",
+     "cell": "B5",
+     "formula": "='الإعدادات'!B6&\" / \"&'الإعدادات'!B5"
+    }
+   ]
+  },
+  {
+   "name": "ملخص السنة",
+   "formula_cells": 65,
+   "record_tables": [
+    {
+     "header_row": 4,
+     "first_record_row": 5,
+     "sample_rows_filled": 13,
+     "capacity_last_row": 17,
+     "columns": [
+      {
+       "column": "A",
+       "header": "الشهر",
+       "kind": "input",
+       "examples": [
+        "يناير",
+        "فبراير",
+        "مارس"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "التبرعات",
+       "kind": "formula",
+       "formula_row_1": "=SUMIFS('التبرعات'!$D$6:$D$2005,'التبرعات'!$A$6:$A$2005,\">=\"&DATE('الإعدادات'!$B$5,1,1),'التبرعات'!$A$6:$A$2005,\"<\"&DATE('الإعدادات'!$B$5,2,1))"
+      },
+      {
+       "column": "C",
+       "header": "المصروفات",
+       "kind": "formula",
+       "formula_row_1": "=SUMIFS('المصارف'!$D$6:$D$2005,'المصارف'!$A$6:$A$2005,\">=\"&DATE('الإعدادات'!$B$5,1,1),'المصارف'!$A$6:$A$2005,\"<\"&DATE('الإعدادات'!$B$5,2,1))"
+      },
+      {
+       "column": "D",
+       "header": "الصافي",
+       "kind": "formula",
+       "formula_row_1": "=B5-C5"
+      },
+      {
+       "column": "E",
+       "header": "رصيد آخر الشهر",
+       "kind": "formula",
+       "formula_row_1": "='الإعدادات'!$B$7+SUMIFS('التبرعات'!$D$6:$D$2005,'التبرعات'!$A$6:$A$2005,\"<\"&DATE('الإعدادات'!$B$5,2,1))-SUMIFS('المصارف'!$D$6:$D$2005,'المصارف'!$A$6:$A$2005,\"<\"&DATE('الإعدادات'!$B$5,2,1))"
+      },
+      {
+       "column": "F",
+       "header": "عدد التبرعات",
+       "kind": "formula",
+       "formula_row_1": "=COUNTIFS('التبرعات'!$A$6:$A$2005,\">=\"&DATE('الإعدادات'!$B$5,1,1),'التبرعات'!$A$6:$A$2005,\"<\"&DATE('الإعدادات'!$B$5,2,1),'التبرعات'!$D$6:$D$2005,\">0\")"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "لماذا ما زلت على إكسل؟",
+   "formula_cells": 0
+  }
+ ]
+}

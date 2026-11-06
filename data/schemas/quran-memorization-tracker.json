@@ -1,0 +1,466 @@
+{
+ "id": "quran-memorization-tracker",
+ "file": "softwiro-quran-memorization-tracker.xlsx",
+ "title": "شيت متابعة حفظ ومراجعة القرآن",
+ "language": "ar",
+ "direction": "rtl",
+ "how_it_works": "White cells are typed input; cells whose kind is \"formula\" are calculated and must not be overwritten. Add one record per row under the header row of a record table, keeping the columns in order.",
+ "sheets": [
+  {
+   "name": "ابدأ هنا",
+   "formula_cells": 0
+  },
+  {
+   "name": "الإعدادات",
+   "formula_cells": 0,
+   "settings": [
+    {
+     "label": "تاريخ اليوم",
+     "cell": "B4",
+     "value": "2026-11-01"
+    },
+    {
+     "label": "تأخر المراجعة بعد (يوم)",
+     "cell": "B5",
+     "value": 14
+    },
+    {
+     "label": "عدد الأوجه في الصفحة الواحدة",
+     "cell": "B6",
+     "value": 2
+    }
+   ]
+  },
+  {
+   "name": "الطلاب",
+   "formula_cells": 2200,
+   "record_tables": [
+    {
+     "header_row": 5,
+     "first_record_row": 6,
+     "sample_rows_filled": 6,
+     "capacity_last_row": 205,
+     "columns": [
+      {
+       "column": "A",
+       "header": "الطالب (اسم أول أو كود)",
+       "kind": "input",
+       "examples": [
+        "أحمد",
+        "محمد",
+        "يوسف"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "الحلقة",
+       "kind": "input",
+       "examples": [
+        "حلقة 1",
+        "حلقة 1",
+        "حلقة 1"
+       ],
+       "allowed_values": {
+        "from_range": "'الإعدادات'!$A$13:$A$22"
+       }
+      },
+      {
+       "column": "C",
+       "header": "إجمالي المحفوظ (أوجه)",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",SUMIFS('التسميع'!$F$6:$F$2005,'التسميع'!$B$6:$B$2005,A6&\"\",'التسميع'!$C$6:$C$2005,\"حفظ جديد\"))"
+      },
+      {
+       "column": "D",
+       "header": "إجمالي المراجعة (أوجه)",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",SUMIFS('التسميع'!$F$6:$F$2005,'التسميع'!$B$6:$B$2005,A6&\"\",'التسميع'!$C$6:$C$2005,\"مراجعة\"))"
+      },
+      {
+       "column": "E",
+       "header": "عدد الجلسات",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",COUNTIFS('التسميع'!$B$6:$B$2005,A6&\"\"))"
+      },
+      {
+       "column": "F",
+       "header": "آخر حفظ",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",IFERROR(SUMIFS('التسميع'!$A$6:$A$2005,'التسميع'!$B$6:$B$2005,A6&\"\",'التسميع'!$J$6:$J$2005,1)/COUNTIFS('التسميع'!$B$6:$B$2005,A6&\"\",'التسميع'!$J$6:$J$2005,1),\"\"))"
+      },
+      {
+       "column": "G",
+       "header": "آخر مراجعة",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",IFERROR(SUMIFS('التسميع'!$A$6:$A$2005,'التسميع'!$B$6:$B$2005,A6&\"\",'التسميع'!$K$6:$K$2005,1)/COUNTIFS('التسميع'!$B$6:$B$2005,A6&\"\",'التسميع'!$K$6:$K$2005,1),\"\"))"
+      },
+      {
+       "column": "H",
+       "header": "أيام منذ آخر مراجعة",
+       "kind": "formula",
+       "formula_row_1": "=IF(ISNUMBER(G6),'الإعدادات'!$B$4-G6,\"\")"
+      },
+      {
+       "column": "I",
+       "header": "التنبيه",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",IF(G6=\"\",\"لم تُسجَّل مراجعة\",IF(H6>'الإعدادات'!$B$5,\"تأخر مراجعة\",\"\")))"
+      },
+      {
+       "column": "J",
+       "header": "مرات «يعاد»",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",COUNTIFS('التسميع'!$B$6:$B$2005,A6&\"\",'التسميع'!$G$6:$G$2005,\"يعاد\"))"
+      },
+      {
+       "column": "K",
+       "header": "آخر موضع حفظ (إلى)",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",IFERROR(INDEX('التسميع'!$E$6:$E$2005,MATCH(A6&\"|H\",'التسميع'!$L$6:$L$2005,0))&\"\",\"\"))"
+      },
+      {
+       "column": "L",
+       "header": "ترتيب المتابعة",
+       "kind": "formula",
+       "formula_row_1": "=IF(I6=\"تأخر مراجعة\",COUNTIFS($H$6:$H$205,\">\"&H6)+COUNTIFS($H$6:H6,H6,$I$6:I6,\"تأخر مراجعة\"),\"\")"
+      },
+      {
+       "column": "M",
+       "header": "ملاحظة",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",IF(B6&\"\"=\"\",\"اختر الحلقة\",\"\"))"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "التسميع",
+   "formula_cells": 10000,
+   "record_tables": [
+    {
+     "header_row": 5,
+     "first_record_row": 6,
+     "sample_rows_filled": 24,
+     "capacity_last_row": 2005,
+     "columns": [
+      {
+       "column": "A",
+       "header": "التاريخ",
+       "kind": "input",
+       "examples": [
+        "2026-09-27",
+        "2026-10-01",
+        "2026-10-01"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "الطالب",
+       "kind": "input",
+       "examples": [
+        "عمر",
+        "محمد",
+        "يوسف"
+       ],
+       "allowed_values": {
+        "from_range": "'الطلاب'!$A$6:$A$205"
+       }
+      },
+      {
+       "column": "C",
+       "header": "النوع",
+       "kind": "input",
+       "examples": [
+        "حفظ جديد",
+        "مراجعة",
+        "مراجعة"
+       ],
+       "allowed_values": [
+        "حفظ جديد",
+        "مراجعة"
+       ]
+      },
+      {
+       "column": "D",
+       "header": "من (سورة وآية)",
+       "kind": "input",
+       "examples": [
+        "الملك 1",
+        "البقرة 1",
+        "النبأ 1"
+       ]
+      },
+      {
+       "column": "E",
+       "header": "إلى (سورة وآية)",
+       "kind": "input",
+       "examples": [
+        "الملك 10",
+        "البقرة 15",
+        "النبأ 40"
+       ]
+      },
+      {
+       "column": "F",
+       "header": "عدد الأوجه",
+       "kind": "input",
+       "examples": [
+        1,
+        3,
+        2
+       ]
+      },
+      {
+       "column": "G",
+       "header": "التقدير",
+       "kind": "input",
+       "examples": [
+        "جيد",
+        "ممتاز",
+        "يعاد"
+       ],
+       "allowed_values": [
+        "ممتاز",
+        "جيد جدًا",
+        "جيد",
+        "مقبول",
+        "يعاد"
+       ]
+      },
+      {
+       "column": "H",
+       "header": "ملاحظة",
+       "kind": "input"
+      },
+      {
+       "column": "I",
+       "header": "تحقق",
+       "kind": "formula",
+       "formula_row_1": "=IF(B6&\"\"=\"\",\"\",IF(COUNTIF('الطلاب'!$A$6:$A$205,B6&\"\")=0,\"طالب غير موجود\",IF(NOT(ISNUMBER(A6)),\"تاريخ ناقص\",IF(OR(C6=\"حفظ جديد\",C6=\"مراجعة\")=FALSE,\"اختر النوع\",IF(NOT(ISNUMBER(F6)),\"عدد الأوجه ناقص\",\"\")))))"
+      },
+      {
+       "column": "J",
+       "header": "آخر حفظ",
+       "kind": "formula",
+       "formula_row_1": "=IF(OR(B6&\"\"=\"\",C6<>\"حفظ جديد\",NOT(ISNUMBER(A6))),\"\",IF(COUNTIFS($B$6:$B$2005,B6&\"\",$C$6:$C$2005,\"حفظ جديد\",$A$6:$A$2005,\">\"&A6)=0,1,0))"
+      },
+      {
+       "column": "K",
+       "header": "آخر مراجعة",
+       "kind": "formula",
+       "formula_row_1": "=IF(OR(B6&\"\"=\"\",C6<>\"مراجعة\",NOT(ISNUMBER(A6))),\"\",IF(COUNTIFS($B$6:$B$2005,B6&\"\",$C$6:$C$2005,\"مراجعة\",$A$6:$A$2005,\">\"&A6)=0,1,0))"
+      },
+      {
+       "column": "L",
+       "header": "مفتاح الحفظ",
+       "kind": "formula",
+       "formula_row_1": "=IF(J6=1,B6&\"|H\",\"\")"
+      },
+      {
+       "column": "M",
+       "header": "مفتاح المراجعة",
+       "kind": "formula",
+       "formula_row_1": "=IF(K6=1,B6&\"|R\",\"\")"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "للمتابعة",
+   "formula_cells": 351,
+   "record_tables": [
+    {
+     "header_row": 6,
+     "first_record_row": 7,
+     "sample_rows_filled": 0,
+     "capacity_last_row": 56,
+     "columns": [
+      {
+       "column": "A",
+       "header": "م",
+       "kind": "formula",
+       "formula_row_1": "=IF(1<=$B$4,1,\"\")"
+      },
+      {
+       "column": "B",
+       "header": "الطالب",
+       "kind": "formula",
+       "formula_row_1": "=IF($A7=\"\",\"\",INDEX('الطلاب'!$A$6:$A$205,MATCH($A7,'الطلاب'!$L$6:$L$205,0))&\"\")"
+      },
+      {
+       "column": "C",
+       "header": "الحلقة",
+       "kind": "formula",
+       "formula_row_1": "=IF($A7=\"\",\"\",INDEX('الطلاب'!$B$6:$B$205,MATCH($A7,'الطلاب'!$L$6:$L$205,0))&\"\")"
+      },
+      {
+       "column": "D",
+       "header": "آخر مراجعة",
+       "kind": "formula",
+       "formula_row_1": "=IF($A7=\"\",\"\",INDEX('الطلاب'!$G$6:$G$205,MATCH($A7,'الطلاب'!$L$6:$L$205,0)))"
+      },
+      {
+       "column": "E",
+       "header": "أيام التأخر",
+       "kind": "formula",
+       "formula_row_1": "=IF($A7=\"\",\"\",INDEX('الطلاب'!$H$6:$H$205,MATCH($A7,'الطلاب'!$L$6:$L$205,0)))"
+      },
+      {
+       "column": "F",
+       "header": "آخر موضع حفظ",
+       "kind": "formula",
+       "formula_row_1": "=IF($A7=\"\",\"\",INDEX('الطلاب'!$K$6:$K$205,MATCH($A7,'الطلاب'!$L$6:$L$205,0))&\"\")"
+      },
+      {
+       "column": "G",
+       "header": "إجمالي المحفوظ",
+       "kind": "formula",
+       "formula_row_1": "=IF($A7=\"\",\"\",INDEX('الطلاب'!$C$6:$C$205,MATCH($A7,'الطلاب'!$L$6:$L$205,0)))"
+      }
+     ]
+    }
+   ],
+   "results": [
+    {
+     "label": "عدد المتأخرين",
+     "cell": "B4",
+     "formula": "=COUNTIF('الطلاب'!$I$6:$I$205,\"تأخر مراجعة\")"
+    }
+   ]
+  },
+  {
+   "name": "الملخص",
+   "formula_cells": 65,
+   "record_tables": [
+    {
+     "header_row": 27,
+     "first_record_row": 28,
+     "sample_rows_filled": 0,
+     "capacity_last_row": 37,
+     "columns": [
+      {
+       "column": "A",
+       "header": "الحلقة",
+       "kind": "formula",
+       "formula_row_1": "=IF('الإعدادات'!A13&\"\"=\"\",\"\",'الإعدادات'!A13)"
+      },
+      {
+       "column": "B",
+       "header": "الطلاب",
+       "kind": "formula",
+       "formula_row_1": "=IF(A28=\"\",\"\",COUNTIF('الطلاب'!$B$6:$B$205,A28))"
+      },
+      {
+       "column": "C",
+       "header": "أوجه الحفظ",
+       "kind": "formula",
+       "formula_row_1": "=IF(A28=\"\",\"\",SUMIFS('الطلاب'!$C$6:$C$205,'الطلاب'!$B$6:$B$205,A28))"
+      },
+      {
+       "column": "D",
+       "header": "أوجه المراجعة",
+       "kind": "formula",
+       "formula_row_1": "=IF(A28=\"\",\"\",SUMIFS('الطلاب'!$D$6:$D$205,'الطلاب'!$B$6:$B$205,A28))"
+      },
+      {
+       "column": "E",
+       "header": "متأخرون",
+       "kind": "formula",
+       "formula_row_1": "=IF(A28=\"\",\"\",COUNTIFS('الطلاب'!$B$6:$B$205,A28,'الطلاب'!$I$6:$I$205,\"تأخر مراجعة\"))"
+      }
+     ]
+    }
+   ],
+   "settings": [
+    {
+     "label": "التقدير",
+     "cell": "B19",
+     "value": "عدد الجلسات"
+    }
+   ],
+   "results": [
+    {
+     "label": "عدد الطلاب",
+     "cell": "B5",
+     "formula": "=COUNTIF('الطلاب'!$A$6:$A$205,\"?*\")"
+    },
+    {
+     "label": "عدد الجلسات المسجلة",
+     "cell": "B6",
+     "formula": "=COUNTIF('التسميع'!$B$6:$B$2005,\"?*\")"
+    },
+    {
+     "label": "إجمالي المحفوظ (أوجه)",
+     "cell": "B7",
+     "formula": "=SUM('الطلاب'!$C$6:$C$205)"
+    },
+    {
+     "label": "ما يعادله من صفحات",
+     "cell": "B8",
+     "formula": "=IF('الإعدادات'!$B$6>0,B7/'الإعدادات'!$B$6,\"\")"
+    },
+    {
+     "label": "إجمالي المراجعة (أوجه)",
+     "cell": "B9",
+     "formula": "=SUM('الطلاب'!$D$6:$D$205)"
+    },
+    {
+     "label": "جلسات آخر 7 أيام",
+     "cell": "B10",
+     "formula": "=COUNTIFS('التسميع'!$A$6:$A$2005,\">\"&('الإعدادات'!$B$4-7),'التسميع'!$A$6:$A$2005,\"<=\"&'الإعدادات'!$B$4)"
+    },
+    {
+     "label": "سطور بها ملاحظة تحقق",
+     "cell": "B11",
+     "formula": "=COUNTIF('التسميع'!$I$6:$I$2005,\"?*\")"
+    },
+    {
+     "label": "تأخر مراجعة",
+     "cell": "B14",
+     "formula": "=COUNTIF('الطلاب'!$I$6:$I$205,\"تأخر مراجعة\")"
+    },
+    {
+     "label": "لم تُسجَّل مراجعة",
+     "cell": "B15",
+     "formula": "=COUNTIF('الطلاب'!$I$6:$I$205,\"لم تُسجَّل مراجعة\")"
+    },
+    {
+     "label": "جلسات تقديرها «يعاد»",
+     "cell": "B16",
+     "formula": "=COUNTIF('التسميع'!$G$6:$G$2005,\"يعاد\")"
+    },
+    {
+     "label": "ممتاز",
+     "cell": "B20",
+     "formula": "=COUNTIF('التسميع'!$G$6:$G$2005,A20)"
+    },
+    {
+     "label": "جيد جدًا",
+     "cell": "B21",
+     "formula": "=COUNTIF('التسميع'!$G$6:$G$2005,A21)"
+    },
+    {
+     "label": "جيد",
+     "cell": "B22",
+     "formula": "=COUNTIF('التسميع'!$G$6:$G$2005,A22)"
+    },
+    {
+     "label": "مقبول",
+     "cell": "B23",
+     "formula": "=COUNTIF('التسميع'!$G$6:$G$2005,A23)"
+    },
+    {
+     "label": "يعاد",
+     "cell": "B24",
+     "formula": "=COUNTIF('التسميع'!$G$6:$G$2005,A24)"
+    }
+   ]
+  },
+  {
+   "name": "لماذا ما زلت على إكسل؟",
+   "formula_cells": 0
+  }
+ ]
+}

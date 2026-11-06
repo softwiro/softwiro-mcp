@@ -1,0 +1,283 @@
+{
+ "id": "cash-book",
+ "file": "softwiro-cash-book.xlsx",
+ "title": "شيت الخزنة والمصروفات اليومية",
+ "language": "ar",
+ "direction": "rtl",
+ "how_it_works": "White cells are typed input; cells whose kind is \"formula\" are calculated and must not be overwritten. Add one record per row under the header row of a record table, keeping the columns in order.",
+ "sheets": [
+  {
+   "name": "ابدأ هنا",
+   "formula_cells": 0
+  },
+  {
+   "name": "ملخص شهري",
+   "formula_cells": 640,
+   "record_tables": [
+    {
+     "header_row": 6,
+     "first_record_row": 7,
+     "sample_rows_filled": 43,
+     "capacity_last_row": 49,
+     "columns": [
+      {
+       "column": "A",
+       "header": "التصنيف",
+       "kind": "input",
+       "examples": [
+        "إجمالي الإيرادات",
+        "إجمالي المصروفات",
+        "الصافي"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "النوع",
+       "kind": "input",
+       "examples": [
+        "=IF('التصنيفات'!A5&\"\"=\"\",\"\",'التصنيفات'!B5&\"\")",
+        "=IF('التصنيفات'!A6&\"\"=\"\",\"\",'التصنيفات'!B6&\"\")",
+        "=IF('التصنيفات'!A7&\"\"=\"\",\"\",'التصنيفات'!B7&\"\")"
+       ]
+      },
+      {
+       "column": "C",
+       "header": "يناير",
+       "kind": "formula",
+       "formula_row_1": "=SUMIFS(C$10:C$49,$B$10:$B$49,\"إيراد\")"
+      },
+      {
+       "column": "D",
+       "header": "فبراير",
+       "kind": "formula",
+       "formula_row_1": "=SUMIFS(D$10:D$49,$B$10:$B$49,\"إيراد\")"
+      },
+      {
+       "column": "E",
+       "header": "مارس",
+       "kind": "formula",
+       "formula_row_1": "=SUMIFS(E$10:E$49,$B$10:$B$49,\"إيراد\")"
+      },
+      {
+       "column": "F",
+       "header": "أبريل",
+       "kind": "formula",
+       "formula_row_1": "=SUMIFS(F$10:F$49,$B$10:$B$49,\"إيراد\")"
+      },
+      {
+       "column": "G",
+       "header": "مايو",
+       "kind": "formula",
+       "formula_row_1": "=SUMIFS(G$10:G$49,$B$10:$B$49,\"إيراد\")"
+      },
+      {
+       "column": "H",
+       "header": "يونيو",
+       "kind": "formula",
+       "formula_row_1": "=SUMIFS(H$10:H$49,$B$10:$B$49,\"إيراد\")"
+      },
+      {
+       "column": "I",
+       "header": "يوليو",
+       "kind": "formula",
+       "formula_row_1": "=SUMIFS(I$10:I$49,$B$10:$B$49,\"إيراد\")"
+      },
+      {
+       "column": "J",
+       "header": "أغسطس",
+       "kind": "formula",
+       "formula_row_1": "=SUMIFS(J$10:J$49,$B$10:$B$49,\"إيراد\")"
+      },
+      {
+       "column": "K",
+       "header": "سبتمبر",
+       "kind": "formula",
+       "formula_row_1": "=SUMIFS(K$10:K$49,$B$10:$B$49,\"إيراد\")"
+      },
+      {
+       "column": "L",
+       "header": "أكتوبر",
+       "kind": "formula",
+       "formula_row_1": "=SUMIFS(L$10:L$49,$B$10:$B$49,\"إيراد\")"
+      },
+      {
+       "column": "M",
+       "header": "نوفمبر",
+       "kind": "formula",
+       "formula_row_1": "=SUMIFS(M$10:M$49,$B$10:$B$49,\"إيراد\")"
+      },
+      {
+       "column": "N",
+       "header": "ديسمبر",
+       "kind": "formula",
+       "formula_row_1": "=SUMIFS(N$10:N$49,$B$10:$B$49,\"إيراد\")"
+      },
+      {
+       "column": "O",
+       "header": "الإجمالي",
+       "kind": "formula",
+       "formula_row_1": "=SUMIFS(O$10:O$49,$B$10:$B$49,\"إيراد\")"
+      }
+     ]
+    }
+   ],
+   "results": [
+    {
+     "label": "السنة",
+     "cell": "B4",
+     "formula": "='الإعدادات'!$B$4"
+    }
+   ]
+  },
+  {
+   "name": "اليومية",
+   "formula_cells": 4000,
+   "record_tables": [
+    {
+     "header_row": 4,
+     "first_record_row": 5,
+     "sample_rows_filled": 26,
+     "capacity_last_row": 2004,
+     "columns": [
+      {
+       "column": "A",
+       "header": "التاريخ",
+       "kind": "input",
+       "examples": [
+        "2025-12-28",
+        "2026-09-01",
+        "2026-09-02"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "البيان",
+       "kind": "input",
+       "examples": [
+        "مبيعات نهاية السنة",
+        "إيجار المحل",
+        "مبيعات اليوم"
+       ]
+      },
+      {
+       "column": "C",
+       "header": "التصنيف",
+       "kind": "input",
+       "examples": [
+        "مبيعات نقدية",
+        "إيجار",
+        "مبيعات نقدية"
+       ],
+       "allowed_values": {
+        "from_range": "'التصنيفات'!$A$5:$A$44"
+       }
+      },
+      {
+       "column": "D",
+       "header": "وارد",
+       "kind": "input",
+       "examples": [
+        4000,
+        2800,
+        3150
+       ]
+      },
+      {
+       "column": "E",
+       "header": "منصرف",
+       "kind": "input",
+       "examples": [
+        3500,
+        640,
+        4200
+       ]
+      },
+      {
+       "column": "F",
+       "header": "الرصيد",
+       "kind": "formula",
+       "formula_row_1": "=IF(AND(D5&\"\"=\"\",E5&\"\"=\"\"),\"\",'الإعدادات'!$B$5+SUM($D$5:D5)-SUM($E$5:E5))"
+      },
+      {
+       "column": "G",
+       "header": "النوع",
+       "kind": "formula",
+       "formula_row_1": "=IF(C5&\"\"=\"\",\"\",IFERROR(INDEX('التصنيفات'!$B$5:$B$44,MATCH(C5&\"\",'التصنيفات'!$A$5:$A$44,0)),\"غير مصنّف\"))"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "التصنيفات",
+   "formula_cells": 0,
+   "settings": [
+    {
+     "label": "التصنيف",
+     "cell": "B4",
+     "value": "النوع"
+    },
+    {
+     "label": "مبيعات نقدية",
+     "cell": "B5",
+     "value": "إيراد"
+    },
+    {
+     "label": "تحصيل من عملاء",
+     "cell": "B6",
+     "value": "إيراد"
+    },
+    {
+     "label": "إيجار",
+     "cell": "B7",
+     "value": "مصروف"
+    },
+    {
+     "label": "كهرباء ومياه",
+     "cell": "B8",
+     "value": "مصروف"
+    },
+    {
+     "label": "مرتبات",
+     "cell": "B9",
+     "value": "مصروف"
+    },
+    {
+     "label": "مشتريات بضاعة",
+     "cell": "B10",
+     "value": "مصروف"
+    },
+    {
+     "label": "نقل ومواصلات",
+     "cell": "B11",
+     "value": "مصروف"
+    },
+    {
+     "label": "مصروفات أخرى",
+     "cell": "B12",
+     "value": "مصروف"
+    }
+   ]
+  },
+  {
+   "name": "الإعدادات",
+   "formula_cells": 0,
+   "settings": [
+    {
+     "label": "السنة",
+     "cell": "B4",
+     "value": 2026
+    },
+    {
+     "label": "الرصيد الافتتاحي للخزنة",
+     "cell": "B5",
+     "value": 10000
+    }
+   ]
+  },
+  {
+   "name": "لماذا ما زلت على إكسل؟",
+   "formula_cells": 0
+  }
+ ]
+}

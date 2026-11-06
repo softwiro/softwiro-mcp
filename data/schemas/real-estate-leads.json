@@ -1,0 +1,453 @@
+{
+ "id": "real-estate-leads",
+ "file": "softwiro-real-estate-leads.xlsx",
+ "title": "شيت متابعة عملاء ووحدات العقارات",
+ "language": "ar",
+ "direction": "rtl",
+ "how_it_works": "White cells are typed input; cells whose kind is \"formula\" are calculated and must not be overwritten. Add one record per row under the header row of a record table, keeping the columns in order.",
+ "sheets": [
+  {
+   "name": "ابدأ هنا",
+   "formula_cells": 0
+  },
+  {
+   "name": "الإعدادات",
+   "formula_cells": 1,
+   "settings": [
+    {
+     "label": "نسبة العمولة الافتراضية (%)",
+     "cell": "B5",
+     "value": 2.5
+    }
+   ],
+   "results": [
+    {
+     "label": "تاريخ اليوم",
+     "cell": "B4",
+     "formula": "=TODAY()"
+    }
+   ]
+  },
+  {
+   "name": "الوحدات",
+   "formula_cells": 1200,
+   "record_tables": [
+    {
+     "header_row": 5,
+     "first_record_row": 6,
+     "sample_rows_filled": 15,
+     "capacity_last_row": 305,
+     "columns": [
+      {
+       "column": "A",
+       "header": "الكود",
+       "kind": "input",
+       "examples": [
+        "U01",
+        "U02",
+        "U03"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "المشروع أو المنطقة",
+       "kind": "input",
+       "examples": [
+        "حي الياسمين",
+        "حي الياسمين",
+        "حي الياسمين"
+       ]
+      },
+      {
+       "column": "C",
+       "header": "النوع",
+       "kind": "input",
+       "examples": [
+        "شقة",
+        "شقة",
+        "شقة"
+       ],
+       "allowed_values": [
+        "شقة",
+        "فيلا",
+        "دوبلكس",
+        "محل",
+        "مكتب",
+        "أرض"
+       ]
+      },
+      {
+       "column": "D",
+       "header": "المساحة (م²)",
+       "kind": "input",
+       "examples": [
+        120,
+        150,
+        95
+       ]
+      },
+      {
+       "column": "E",
+       "header": "الغرض",
+       "kind": "input",
+       "examples": [
+        "بيع",
+        "بيع",
+        "بيع"
+       ],
+       "allowed_values": [
+        "بيع",
+        "إيجار"
+       ]
+      },
+      {
+       "column": "F",
+       "header": "السعر أو الإيجار الشهري",
+       "kind": "input",
+       "examples": [
+        1800000,
+        2250000,
+        1330000
+       ]
+      },
+      {
+       "column": "G",
+       "header": "الحالة",
+       "kind": "input",
+       "examples": [
+        "متاحة",
+        "محجوزة",
+        "مباعة"
+       ],
+       "allowed_values": [
+        "متاحة",
+        "محجوزة",
+        "مباعة",
+        "مؤجرة"
+       ]
+      },
+      {
+       "column": "H",
+       "header": "سعر المتر",
+       "kind": "formula",
+       "formula_row_1": "=IF(OR(A6&\"\"=\"\",E6<>\"بيع\",NOT(ISNUMBER(D6)),NOT(ISNUMBER(F6))),\"\",IF(D6>0,ROUND(F6/D6,2),\"\"))"
+      },
+      {
+       "column": "I",
+       "header": "عدد المهتمين",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",COUNTIF('العملاء'!$H$6:$H$2005,A6&\"\"))"
+      },
+      {
+       "column": "J",
+       "header": "عدد المعاينات",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",COUNTIFS('العملاء'!$H$6:$H$2005,A6&\"\",'العملاء'!$I$6:$I$2005,\"معاينة\")+COUNTIFS('العملاء'!$H$6:$H$2005,A6&\"\",'العملاء'!$I$6:$I$2005,\"تفاوض\")+COUNTIFS('العملاء'!$H$6:$H$2005,A6&\"\",'العملاء'!$I$6:$I$2005,\"تم التعاقد\"))"
+      },
+      {
+       "column": "K",
+       "header": "تنبيه",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",IF(AND(E6=\"بيع\",G6=\"مؤجرة\"),\"راجع الحالة: مؤجرة لوحدة بيع\",IF(AND(E6=\"إيجار\",G6=\"مباعة\"),\"راجع الحالة: مباعة لوحدة إيجار\",\"\")))"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "العملاء",
+   "formula_cells": 10000,
+   "record_tables": [
+    {
+     "header_row": 5,
+     "first_record_row": 6,
+     "sample_rows_filled": 30,
+     "capacity_last_row": 2005,
+     "columns": [
+      {
+       "column": "A",
+       "header": "تاريخ الإضافة",
+       "kind": "input",
+       "examples": [
+        "2026-09-24",
+        "2026-09-26",
+        "2026-09-29"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "الاسم",
+       "kind": "input",
+       "examples": [
+        "أحمد سالم",
+        "منى حسن",
+        "خالد عمر"
+       ]
+      },
+      {
+       "column": "C",
+       "header": "الجوال",
+       "kind": "input",
+       "examples": [
+        "01010000001",
+        "01010000002",
+        "01010000003"
+       ]
+      },
+      {
+       "column": "D",
+       "header": "المصدر",
+       "kind": "input",
+       "examples": [
+        "واتساب",
+        "إحالة من عميل",
+        "لافتة"
+       ],
+       "allowed_values": [
+        "فيسبوك",
+        "واتساب",
+        "إحالة من عميل",
+        "لافتة",
+        "موقع إلكتروني",
+        "اتصال مباشر",
+        "أخرى"
+       ]
+      },
+      {
+       "column": "E",
+       "header": "الميزانية",
+       "kind": "input",
+       "examples": [
+        1400000,
+        3600000,
+        12000
+       ]
+      },
+      {
+       "column": "F",
+       "header": "الغرض",
+       "kind": "input",
+       "examples": [
+        "بيع",
+        "بيع",
+        "إيجار"
+       ],
+       "allowed_values": [
+        "بيع",
+        "إيجار"
+       ]
+      },
+      {
+       "column": "G",
+       "header": "النوع المطلوب",
+       "kind": "input",
+       "examples": [
+        "شقة",
+        "دوبلكس",
+        "مكتب"
+       ],
+       "allowed_values": [
+        "شقة",
+        "فيلا",
+        "دوبلكس",
+        "محل",
+        "مكتب",
+        "أرض"
+       ]
+      },
+      {
+       "column": "H",
+       "header": "كود الوحدة",
+       "kind": "input",
+       "examples": [
+        "U03",
+        "U06",
+        "U08"
+       ],
+       "allowed_values": {
+        "from_range": "'الوحدات'!$A$6:$A$305"
+       }
+      },
+      {
+       "column": "I",
+       "header": "المرحلة",
+       "kind": "input",
+       "examples": [
+        "تم التعاقد",
+        "تم التعاقد",
+        "تم التعاقد"
+       ],
+       "allowed_values": [
+        "جديد",
+        "تم التواصل",
+        "معاينة",
+        "تفاوض",
+        "تم التعاقد",
+        "غير مهتم"
+       ]
+      },
+      {
+       "column": "J",
+       "header": "موعد المتابعة",
+       "kind": "input",
+       "examples": [
+        "2026-10-14",
+        "2026-10-24",
+        "2026-10-29"
+       ]
+      },
+      {
+       "column": "K",
+       "header": "ملاحظات",
+       "kind": "input",
+       "examples": [
+        "تم توقيع العقد",
+        "اشترى وحدة خارج القائمة",
+        "تطلب خصمًا"
+       ]
+      },
+      {
+       "column": "L",
+       "header": "أيام منذ الإضافة",
+       "kind": "formula",
+       "formula_row_1": "=IF(OR(B6&\"\"=\"\",NOT(ISNUMBER(A6))),\"\",'الإعدادات'!$B$4-A6)"
+      },
+      {
+       "column": "M",
+       "header": "حالة المتابعة",
+       "kind": "formula",
+       "formula_row_1": "=IF(OR(B6&\"\"=\"\",NOT(ISNUMBER(J6)),I6=\"تم التعاقد\",I6=\"غير مهتم\"),\"\",IF(J6<'الإعدادات'!$B$4,\"متأخرة\",IF(J6='الإعدادات'!$B$4,\"اليوم\",IF(J6<='الإعدادات'!$B$4+3,\"خلال 3 أيام\",\"\"))))"
+      },
+      {
+       "column": "N",
+       "header": "مناسبة الميزانية",
+       "kind": "formula",
+       "formula_row_1": "=IF(OR(B6&\"\"=\"\",H6&\"\"=\"\",NOT(ISNUMBER(E6))),\"\",IFERROR(IF(E6<INDEX('الوحدات'!$F$6:$F$305,MATCH(H6,'الوحدات'!$A$6:$A$305,0)),\"أقل من السعر\",\"مناسب\"),\"كود غير موجود\"))"
+      },
+      {
+       "column": "O",
+       "header": "العمولة",
+       "kind": "formula",
+       "formula_row_1": "=IF(OR(B6&\"\"=\"\",I6<>\"تم التعاقد\",H6&\"\"=\"\"),\"\",IFERROR(IF(INDEX('الوحدات'!$E$6:$E$305,MATCH(H6,'الوحدات'!$A$6:$A$305,0))=\"بيع\",ROUND(INDEX('الوحدات'!$F$6:$F$305,MATCH(H6,'الوحدات'!$A$6:$A$305,0))*'الإعدادات'!$B$5/100,2),\"\"),\"\"))"
+      },
+      {
+       "column": "P",
+       "header": "ترتيب المتابعة",
+       "kind": "formula",
+       "formula_row_1": "=IF(OR(M6=\"متأخرة\",M6=\"اليوم\"),COUNTIFS($M$6:$M$2005,\"متأخرة\",$J$6:$J$2005,\"<\"&J6)+COUNTIFS($M$6:$M$2005,\"اليوم\",$J$6:$J$2005,\"<\"&J6)+COUNTIFS($M$6:M6,\"متأخرة\",$J$6:J6,J6&\"\")+COUNTIFS($M$6:M6,\"اليوم\",$J$6:J6,J6&\"\"),\"\")"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "متابعات اليوم",
+   "formula_cells": 351,
+   "record_tables": [
+    {
+     "header_row": 6,
+     "first_record_row": 7,
+     "sample_rows_filled": 0,
+     "capacity_last_row": 56,
+     "columns": [
+      {
+       "column": "A",
+       "header": "م",
+       "kind": "formula",
+       "formula_row_1": "=IF(1<=$B$4,1,\"\")"
+      },
+      {
+       "column": "B",
+       "header": "الاسم",
+       "kind": "formula",
+       "formula_row_1": "=IF($A7=\"\",\"\",INDEX('العملاء'!$B$6:$B$2005,MATCH($A7,'العملاء'!$P$6:$P$2005,0))&\"\")"
+      },
+      {
+       "column": "C",
+       "header": "الجوال",
+       "kind": "formula",
+       "formula_row_1": "=IF($A7=\"\",\"\",INDEX('العملاء'!$C$6:$C$2005,MATCH($A7,'العملاء'!$P$6:$P$2005,0))&\"\")"
+      },
+      {
+       "column": "D",
+       "header": "المرحلة",
+       "kind": "formula",
+       "formula_row_1": "=IF($A7=\"\",\"\",INDEX('العملاء'!$I$6:$I$2005,MATCH($A7,'العملاء'!$P$6:$P$2005,0))&\"\")"
+      },
+      {
+       "column": "E",
+       "header": "الوحدة",
+       "kind": "formula",
+       "formula_row_1": "=IF($A7=\"\",\"\",INDEX('العملاء'!$H$6:$H$2005,MATCH($A7,'العملاء'!$P$6:$P$2005,0))&\"\")"
+      },
+      {
+       "column": "F",
+       "header": "موعد المتابعة",
+       "kind": "formula",
+       "formula_row_1": "=IF($A7=\"\",\"\",INDEX('العملاء'!$J$6:$J$2005,MATCH($A7,'العملاء'!$P$6:$P$2005,0)))"
+      },
+      {
+       "column": "G",
+       "header": "الحالة",
+       "kind": "formula",
+       "formula_row_1": "=IF($A7=\"\",\"\",INDEX('العملاء'!$M$6:$M$2005,MATCH($A7,'العملاء'!$P$6:$P$2005,0))&\"\")"
+      }
+     ]
+    }
+   ],
+   "results": [
+    {
+     "label": "عدد المتابعات المطلوبة",
+     "cell": "B4",
+     "formula": "=COUNTIF('العملاء'!$M$6:$M$2005,\"متأخرة\")+COUNTIF('العملاء'!$M$6:$M$2005,\"اليوم\")"
+    }
+   ]
+  },
+  {
+   "name": "الملخص",
+   "formula_cells": 38,
+   "record_tables": [
+    {
+     "header_row": 5,
+     "first_record_row": 6,
+     "sample_rows_filled": 27,
+     "capacity_last_row": 35,
+     "columns": [
+      {
+       "column": "A",
+       "header": "المصدر",
+       "kind": "input",
+       "examples": [
+        "فيسبوك",
+        "واتساب",
+        "إحالة من عميل"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "العملاء",
+       "kind": "formula",
+       "formula_row_1": "=COUNTIFS('العملاء'!$D$6:$D$2005,A6)"
+      },
+      {
+       "column": "C",
+       "header": "التعاقدات",
+       "kind": "formula",
+       "formula_row_1": "=COUNTIFS('العملاء'!$D$6:$D$2005,A6,'العملاء'!$I$6:$I$2005,\"تم التعاقد\")"
+      },
+      {
+       "column": "D",
+       "header": "نسبة التحويل",
+       "kind": "formula",
+       "formula_row_1": "=IF(B6=0,\"\",C6/B6)"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "لماذا ما زلت على إكسل؟",
+   "formula_cells": 0
+  }
+ ]
+}

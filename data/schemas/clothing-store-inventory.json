@@ -1,0 +1,314 @@
+{
+ "id": "clothing-store-inventory",
+ "file": "softwiro-clothing-store-inventory.xlsx",
+ "title": "شيت مخزون محل ملابس باللون والمقاس",
+ "language": "ar",
+ "direction": "rtl",
+ "how_it_works": "White cells are typed input; cells whose kind is \"formula\" are calculated and must not be overwritten. Add one record per row under the header row of a record table, keeping the columns in order.",
+ "sheets": [
+  {
+   "name": "ابدأ هنا",
+   "formula_cells": 0
+  },
+  {
+   "name": "الأصناف",
+   "formula_cells": 4500,
+   "record_tables": [
+    {
+     "header_row": 4,
+     "first_record_row": 5,
+     "sample_rows_filled": 12,
+     "capacity_last_row": 504,
+     "columns": [
+      {
+       "column": "A",
+       "header": "الكود",
+       "kind": "input",
+       "examples": [
+        "TS-RED-S",
+        "TS-RED-M",
+        "TS-RED-L"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "الموديل",
+       "kind": "input",
+       "examples": [
+        "تيشيرت قطن",
+        "تيشيرت قطن",
+        "تيشيرت قطن"
+       ]
+      },
+      {
+       "column": "C",
+       "header": "اللون",
+       "kind": "input",
+       "examples": [
+        "أحمر",
+        "أحمر",
+        "أحمر"
+       ]
+      },
+      {
+       "column": "D",
+       "header": "المقاس",
+       "kind": "input",
+       "examples": [
+        "S",
+        "M",
+        "L"
+       ]
+      },
+      {
+       "column": "E",
+       "header": "سعر الشراء",
+       "kind": "input",
+       "examples": [
+        120,
+        120,
+        120
+       ]
+      },
+      {
+       "column": "F",
+       "header": "سعر البيع",
+       "kind": "input",
+       "examples": [
+        220,
+        220,
+        220
+       ]
+      },
+      {
+       "column": "G",
+       "header": "حد الطلب",
+       "kind": "input",
+       "examples": [
+        4,
+        4,
+        4
+       ]
+      },
+      {
+       "column": "H",
+       "header": "الرصيد الافتتاحي",
+       "kind": "input",
+       "examples": [
+        10,
+        12,
+        8
+       ]
+      },
+      {
+       "column": "I",
+       "header": "الوارد",
+       "kind": "formula",
+       "formula_row_1": "=IF($A5=\"\",\"\",SUMIFS('الحركة'!$D$5:$D$1504,'الحركة'!$B$5:$B$1504,$A5&\"\",'الحركة'!$C$5:$C$1504,\"وارد\"))"
+      },
+      {
+       "column": "J",
+       "header": "المبيعات",
+       "kind": "formula",
+       "formula_row_1": "=IF($A5=\"\",\"\",SUMIFS('الحركة'!$D$5:$D$1504,'الحركة'!$B$5:$B$1504,$A5&\"\",'الحركة'!$C$5:$C$1504,\"مبيعات\"))"
+      },
+      {
+       "column": "K",
+       "header": "مرتجع العملاء",
+       "kind": "formula",
+       "formula_row_1": "=IF($A5=\"\",\"\",SUMIFS('الحركة'!$D$5:$D$1504,'الحركة'!$B$5:$B$1504,$A5&\"\",'الحركة'!$C$5:$C$1504,\"مرتجع عميل\"))"
+      },
+      {
+       "column": "L",
+       "header": "مرتجع للمورد",
+       "kind": "formula",
+       "formula_row_1": "=IF($A5=\"\",\"\",SUMIFS('الحركة'!$D$5:$D$1504,'الحركة'!$B$5:$B$1504,$A5&\"\",'الحركة'!$C$5:$C$1504,\"مرتجع للمورد\"))"
+      },
+      {
+       "column": "M",
+       "header": "التسوية (+/-)",
+       "kind": "formula",
+       "formula_row_1": "=IF($A5=\"\",\"\",SUMIFS('الحركة'!$D$5:$D$1504,'الحركة'!$B$5:$B$1504,$A5&\"\",'الحركة'!$C$5:$C$1504,\"تسوية\"))"
+      },
+      {
+       "column": "N",
+       "header": "الرصيد الحالي",
+       "kind": "formula",
+       "formula_row_1": "=IF(A5=\"\",\"\",SUM(H5,I5,K5,M5)-SUM(J5,L5))"
+      },
+      {
+       "column": "O",
+       "header": "قيمة المخزون بسعر الشراء",
+       "kind": "formula",
+       "formula_row_1": "=IF(A5=\"\",\"\",N5*E5)"
+      },
+      {
+       "column": "P",
+       "header": "الحالة",
+       "kind": "formula",
+       "formula_row_1": "=IF(A5=\"\",\"\",IF(N5<=0,\"نفد\",IF(N5<=G5,\"اطلب\",\"متوفر\")))"
+      },
+      {
+       "column": "Q",
+       "header": "قيمة المخزون بسعر البيع",
+       "kind": "formula",
+       "formula_row_1": "=IF(A5=\"\",\"\",N5*F5)"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "الحركة",
+   "formula_cells": 4500,
+   "record_tables": [
+    {
+     "header_row": 4,
+     "first_record_row": 5,
+     "sample_rows_filled": 25,
+     "capacity_last_row": 1504,
+     "columns": [
+      {
+       "column": "A",
+       "header": "التاريخ",
+       "kind": "input",
+       "examples": [
+        "2026-09-01",
+        "2026-09-02",
+        "2026-09-03"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "الكود",
+       "kind": "input",
+       "examples": [
+        "TS-RED-S",
+        "TS-RED-S",
+        "TS-RED-M"
+       ],
+       "allowed_values": {
+        "from_range": "'الأصناف'!$A$5:$A$504"
+       }
+      },
+      {
+       "column": "C",
+       "header": "نوع الحركة",
+       "kind": "input",
+       "examples": [
+        "مبيعات",
+        "مبيعات",
+        "مبيعات"
+       ],
+       "allowed_values": [
+        "وارد",
+        "مبيعات",
+        "مرتجع عميل",
+        "مرتجع للمورد",
+        "تسوية"
+       ]
+      },
+      {
+       "column": "D",
+       "header": "الكمية",
+       "kind": "input",
+       "examples": [
+        4,
+        3,
+        2
+       ]
+      },
+      {
+       "column": "E",
+       "header": "ملاحظة",
+       "kind": "input",
+       "examples": [
+        "فاتورة المورد 5521",
+        "فاتورة المورد 5521",
+        "مقاس غير مناسب"
+       ]
+      },
+      {
+       "column": "F",
+       "header": "الموديل",
+       "kind": "formula",
+       "formula_row_1": "=IF(B5=\"\",\"\",IFERROR(INDEX('الأصناف'!$B$5:$B$504,MATCH(B5,'الأصناف'!$A$5:$A$504,0)),\"\"))"
+      },
+      {
+       "column": "G",
+       "header": "اللون",
+       "kind": "formula",
+       "formula_row_1": "=IF(B5=\"\",\"\",IFERROR(INDEX('الأصناف'!$C$5:$C$504,MATCH(B5,'الأصناف'!$A$5:$A$504,0)),\"\"))"
+      },
+      {
+       "column": "H",
+       "header": "المقاس",
+       "kind": "formula",
+       "formula_row_1": "=IF(B5=\"\",\"\",IFERROR(INDEX('الأصناف'!$D$5:$D$504,MATCH(B5,'الأصناف'!$A$5:$A$504,0)),\"\"))"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "ملخص",
+   "formula_cells": 10,
+   "results": [
+    {
+     "label": "عدد الأكواد",
+     "cell": "B4",
+     "formula": "=COUNTIF('الأصناف'!$A$5:$A$504,\"?*\")"
+    },
+    {
+     "label": "إجمالي الرصيد الحالي (قطعة)",
+     "cell": "B5",
+     "formula": "=SUM('الأصناف'!$N$5:$N$504)"
+    },
+    {
+     "label": "قيمة المخزون بسعر الشراء",
+     "cell": "B6",
+     "formula": "=SUM('الأصناف'!$O$5:$O$504)"
+    },
+    {
+     "label": "قيمة المخزون بسعر البيع (مبيعات محتملة)",
+     "cell": "B7",
+     "formula": "=SUM('الأصناف'!$Q$5:$Q$504)"
+    },
+    {
+     "label": "عدد الأكواد التي تحتاج إلى طلب",
+     "cell": "B8",
+     "formula": "=COUNTIF('الأصناف'!$P$5:$P$504,\"اطلب\")"
+    },
+    {
+     "label": "عدد الأكواد التي نفدت",
+     "cell": "B9",
+     "formula": "=COUNTIF('الأصناف'!$P$5:$P$504,\"نفد\")"
+    },
+    {
+     "label": "إجمالي الوارد (قطعة)",
+     "cell": "B10",
+     "formula": "=SUM('الأصناف'!$I$5:$I$504)"
+    },
+    {
+     "label": "إجمالي المبيعات (قطعة)",
+     "cell": "B11",
+     "formula": "=SUM('الأصناف'!$J$5:$J$504)"
+    },
+    {
+     "label": "إجمالي مرتجع العملاء (قطعة)",
+     "cell": "B12",
+     "formula": "=SUM('الأصناف'!$K$5:$K$504)"
+    },
+    {
+     "label": "إجمالي المرتجع للمورد (قطعة)",
+     "cell": "B13",
+     "formula": "=SUM('الأصناف'!$L$5:$L$504)"
+    }
+   ]
+  },
+  {
+   "name": "لماذا ما زلت على إكسل؟",
+   "formula_cells": 0
+  }
+ ]
+}

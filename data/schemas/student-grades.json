@@ -1,0 +1,307 @@
+{
+ "id": "student-grades",
+ "file": "softwiro-student-grades.xlsx",
+ "title": "شيت رصد درجات الطلاب",
+ "language": "ar",
+ "direction": "rtl",
+ "how_it_works": "White cells are typed input; cells whose kind is \"formula\" are calculated and must not be overwritten. Add one record per row under the header row of a record table, keeping the columns in order.",
+ "sheets": [
+  {
+   "name": "ابدأ هنا",
+   "formula_cells": 0
+  },
+  {
+   "name": "الإعدادات",
+   "formula_cells": 1,
+   "settings": [
+    {
+     "label": "المدرسة",
+     "cell": "B4",
+     "value": "مدرسة الأمل الابتدائية"
+    },
+    {
+     "label": "المعلم",
+     "cell": "B5",
+     "value": "أ. إبراهيم"
+    },
+    {
+     "label": "الفصل",
+     "cell": "B6",
+     "value": "الصف الخامس - فصل 2"
+    },
+    {
+     "label": "المادة",
+     "cell": "B7",
+     "value": "العلوم"
+    },
+    {
+     "label": "الفصل الدراسي",
+     "cell": "B8",
+     "value": "الفصل الدراسي الأول"
+    },
+    {
+     "label": "نسبة النجاح (%)",
+     "cell": "B9",
+     "value": 50
+    },
+    {
+     "label": "مكونات التقييم",
+     "cell": "B11",
+     "value": "الدرجة العظمى"
+    },
+    {
+     "label": "أعمال السنة",
+     "cell": "B12",
+     "value": 10
+    },
+    {
+     "label": "الواجبات",
+     "cell": "B13",
+     "value": 10
+    },
+    {
+     "label": "المشاركة",
+     "cell": "B14",
+     "value": 5
+    },
+    {
+     "label": "اختبار شهري",
+     "cell": "B15",
+     "value": 15
+    },
+    {
+     "label": "الامتحان النهائي",
+     "cell": "B16",
+     "value": 60
+    }
+   ],
+   "results": [
+    {
+     "label": "مجموع الدرجات العظمى",
+     "cell": "B20",
+     "formula": "=SUM(B12:B19)"
+    }
+   ]
+  },
+  {
+   "name": "الدرجات",
+   "formula_cells": 817,
+   "record_tables": [
+    {
+     "header_row": 5,
+     "first_record_row": 6,
+     "sample_rows_filled": 0,
+     "capacity_last_row": 105,
+     "columns": [
+      {
+       "column": "K",
+       "header": "المجموع",
+       "kind": "formula",
+       "formula_row_1": "=IF(COUNT(C6:J6)=0,\"\",SUMIF($C$3:$J$3,\">0\",C6:J6))"
+      },
+      {
+       "column": "L",
+       "header": "النسبة",
+       "kind": "formula",
+       "formula_row_1": "=IF(K6=\"\",\"\",IF($K$3>0,K6/$K$3,\"\"))"
+      },
+      {
+       "column": "M",
+       "header": "التقدير",
+       "kind": "formula",
+       "formula_row_1": "=IF(L6=\"\",\"\",IFERROR(INDEX('الإعدادات'!$E$12:$E$19,MATCH(SMALL('الإعدادات'!$D$12:$D$19,COUNTIF('الإعدادات'!$D$12:$D$19,\"<=\"&ROUND(L6*100,2))),'الإعدادات'!$D$12:$D$19,0)),\"\"))"
+      },
+      {
+       "column": "N",
+       "header": "الترتيب",
+       "kind": "formula",
+       "formula_row_1": "=IF(K6=\"\",\"\",COUNTIF($K$6:$K$105,\">\"&K6)+1)"
+      },
+      {
+       "column": "O",
+       "header": "النتيجة",
+       "kind": "formula",
+       "formula_row_1": "=IF(L6=\"\",\"\",IF(ROUND(L6*100,2)<'الإعدادات'!$B$9,\"راسب\",\"ناجح\"))"
+      },
+      {
+       "column": "P",
+       "header": "ملاحظة",
+       "kind": "formula",
+       "formula_row_1": "=IF(Q6=\"\",\"\",TRIM(IF(Q6=1,\"درجة غير صحيحة\",\"\")&IF(AND(Q6=1,R6=1),\" · \",\"\")&IF(R6=1,\"درجات ناقصة\",\"\")))"
+      },
+      {
+       "column": "Q",
+       "header": "خطأ",
+       "kind": "formula",
+       "formula_row_1": "=IF(OR($A6&\"\"<>\"\",$B6&\"\"<>\"\"),IF(OR(IF(AND(ISNUMBER(C6),ISNUMBER(C$3)),OR(C6<0,C6>C$3),FALSE),IF(AND(ISNUMBER(D6),ISNUMBER(D$3)),OR(D6<0,D6>D$3),FALSE),IF(AND(ISNUMBER(E6),ISNUMBER(E$3)),OR(E6<0,E6>E$3),FALSE),IF(AND(ISNUMBER(F6),ISNUMBER(F$3)),OR(F6<0,F6>F$3),FALSE),IF(AND(ISNUMBER(G6),ISNUMBER(G$3)),OR(G6<0,G6>G$3),FALSE),IF(AND(ISNUMBER(H6),ISNUMBER(H$3)),OR(H6<0,H6>H$3),FALSE),IF(AND(ISNUMBER(I6),ISNUMBER(I$3)),OR(I6<0,I6>I$3),FALSE),IF(AND(ISNUMBER(J6),ISNUMBER(J$3)),OR(J6<0,J6>J$3),FALSE)),1,0),\"\")"
+      },
+      {
+       "column": "R",
+       "header": "نقص",
+       "kind": "formula",
+       "formula_row_1": "=IF(OR($A6&\"\"<>\"\",$B6&\"\"<>\"\"),IF(OR(AND(ISNUMBER(C$3),NOT(ISNUMBER(C6))),AND(ISNUMBER(D$3),NOT(ISNUMBER(D6))),AND(ISNUMBER(E$3),NOT(ISNUMBER(E6))),AND(ISNUMBER(F$3),NOT(ISNUMBER(F6))),AND(ISNUMBER(G$3),NOT(ISNUMBER(G6))),AND(ISNUMBER(H$3),NOT(ISNUMBER(H6))),AND(ISNUMBER(I$3),NOT(ISNUMBER(I6))),AND(ISNUMBER(J$3),NOT(ISNUMBER(J6)))),1,0),\"\")"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "إحصائيات الفصل",
+   "formula_cells": 74,
+   "record_tables": [
+    {
+     "header_row": 14,
+     "first_record_row": 15,
+     "sample_rows_filled": 0,
+     "capacity_last_row": 35,
+     "columns": [
+      {
+       "column": "A",
+       "header": "التقدير",
+       "kind": "formula",
+       "formula_row_1": "=IF('الإعدادات'!$E$12=\"\",\"\",'الإعدادات'!$E$12)"
+      },
+      {
+       "column": "B",
+       "header": "الحد الأدنى (%)",
+       "kind": "formula",
+       "formula_row_1": "=IF('الإعدادات'!$E$12=\"\",\"\",'الإعدادات'!$D$12)"
+      },
+      {
+       "column": "C",
+       "header": "عدد الطلاب",
+       "kind": "formula",
+       "formula_row_1": "=IF(A15=\"\",\"\",COUNTIF('الدرجات'!$M$6:$M$105,A15))"
+      },
+      {
+       "column": "D",
+       "header": "نسبتهم من الفصل",
+       "kind": "formula",
+       "formula_row_1": "=IF(OR(A15=\"\",$B$4=0),\"\",C15/$B$4)"
+      }
+     ]
+    }
+   ],
+   "results": [
+    {
+     "label": "عدد الطلاب",
+     "cell": "B4",
+     "formula": "=COUNT('الدرجات'!$K$6:$K$105)"
+    },
+    {
+     "label": "متوسط نسبة الفصل",
+     "cell": "B5",
+     "formula": "=IF(B4=0,\"\",SUM('الدرجات'!$L$6:$L$105)/B4)"
+    },
+    {
+     "label": "أعلى نسبة",
+     "cell": "B6",
+     "formula": "=IF(B4=0,\"\",MAX('الدرجات'!$L$6:$L$105))"
+    },
+    {
+     "label": "أدنى نسبة",
+     "cell": "B7",
+     "formula": "=IF(B4=0,\"\",MIN('الدرجات'!$L$6:$L$105))"
+    },
+    {
+     "label": "عدد الناجحين",
+     "cell": "B8",
+     "formula": "=COUNTIF('الدرجات'!$O$6:$O$105,\"ناجح\")"
+    },
+    {
+     "label": "عدد الراسبين",
+     "cell": "B9",
+     "formula": "=COUNTIF('الدرجات'!$O$6:$O$105,\"راسب\")"
+    },
+    {
+     "label": "نسبة النجاح",
+     "cell": "B10",
+     "formula": "=IF(B4=0,\"\",B8/B4)"
+    },
+    {
+     "label": "طلاب بدرجات ناقصة",
+     "cell": "B11",
+     "formula": "=COUNTIF('الدرجات'!$R$6:$R$105,1)"
+    },
+    {
+     "label": "طلاب بدرجات غير صحيحة",
+     "cell": "B12",
+     "formula": "=COUNTIF('الدرجات'!$Q$6:$Q$105,1)"
+    }
+   ]
+  },
+  {
+   "name": "شهادة الطالب",
+   "formula_cells": 37,
+   "record_tables": [
+    {
+     "header_row": 11,
+     "first_record_row": 12,
+     "sample_rows_filled": 0,
+     "capacity_last_row": 27,
+     "columns": [
+      {
+       "column": "A",
+       "header": "المكوّن",
+       "kind": "formula",
+       "formula_row_1": "=IF('الإعدادات'!$B$12<>\"\",IF('الإعدادات'!$A$12=\"\",\"مكوّن 1\",'الإعدادات'!$A$12),\"\")"
+      },
+      {
+       "column": "B",
+       "header": "الدرجة",
+       "kind": "formula",
+       "formula_row_1": "=IF(AND('الإعدادات'!$B$12<>\"\",ISNUMBER(MATCH($B$4,'الدرجات'!$A$6:$A$105,0))),IF(ISNUMBER(INDEX('الدرجات'!$C$6:$C$105,MATCH($B$4,'الدرجات'!$A$6:$A$105,0))),INDEX('الدرجات'!$C$6:$C$105,MATCH($B$4,'الدرجات'!$A$6:$A$105,0)),\"—\"),\"\")",
+       "allowed_values": {
+        "from_range": "'الدرجات'!$A$6:$A$105"
+       }
+      },
+      {
+       "column": "C",
+       "header": "الدرجة العظمى",
+       "kind": "formula",
+       "formula_row_1": "=IF('الإعدادات'!$B$12<>\"\",'الإعدادات'!$B$12,\"\")"
+      }
+     ]
+    }
+   ],
+   "settings": [
+    {
+     "label": "رقم الطالب (اختره من القائمة)",
+     "cell": "B4",
+     "value": 106
+    }
+   ],
+   "results": [
+    {
+     "label": "المدرسة",
+     "cell": "B5",
+     "formula": "='الإعدادات'!B4&\"\""
+    },
+    {
+     "label": "الفصل",
+     "cell": "B6",
+     "formula": "='الإعدادات'!B6&\"\""
+    },
+    {
+     "label": "المادة",
+     "cell": "B7",
+     "formula": "='الإعدادات'!B7&\"\""
+    },
+    {
+     "label": "الفصل الدراسي",
+     "cell": "B8",
+     "formula": "='الإعدادات'!B8&\"\""
+    },
+    {
+     "label": "اسم الطالب",
+     "cell": "B9",
+     "formula": "=IF($B$4=\"\",\"\",IF(ISNUMBER(MATCH($B$4,'الدرجات'!$A$6:$A$105,0)),INDEX('الدرجات'!$B$6:$B$105,MATCH($B$4,'الدرجات'!$A$6:$A$105,0))&\"\",\"رقم غير موجود\"))"
+    }
+   ]
+  },
+  {
+   "name": "لماذا ما زلت على إكسل؟",
+   "formula_cells": 0
+  }
+ ]
+}

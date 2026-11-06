@@ -1,0 +1,482 @@
+{
+ "id": "hoa-residents-vehicles",
+ "file": "softwiro-hoa-residents-vehicles.xlsx",
+ "title": "سجل الوحدات والسكان والسيارات لاتحاد الملاك",
+ "language": "ar",
+ "direction": "rtl",
+ "how_it_works": "White cells are typed input; cells whose kind is \"formula\" are calculated and must not be overwritten. Add one record per row under the header row of a record table, keeping the columns in order.",
+ "sheets": [
+  {
+   "name": "ابدأ هنا",
+   "formula_cells": 0
+  },
+  {
+   "name": "الإعدادات",
+   "formula_cells": 0,
+   "settings": [
+    {
+     "label": "عدد السيارات المسموح لكل وحدة (عام)",
+     "cell": "B4",
+     "value": 2
+    },
+    {
+     "label": "عدد المواقف المتاحة في المبنى أو الكمبوند",
+     "cell": "B5",
+     "value": 15
+    }
+   ]
+  },
+  {
+   "name": "الوحدات",
+   "formula_cells": 1000,
+   "record_tables": [
+    {
+     "header_row": 5,
+     "first_record_row": 6,
+     "sample_rows_filled": 10,
+     "capacity_last_row": 205,
+     "columns": [
+      {
+       "column": "A",
+       "header": "كود الوحدة",
+       "kind": "input",
+       "examples": [
+        "101",
+        "102",
+        "201"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "الدور / المبنى",
+       "kind": "input",
+       "examples": [
+        "مبنى A - الدور 1",
+        "مبنى A - الدور 1",
+        "مبنى A - الدور 2"
+       ]
+      },
+      {
+       "column": "C",
+       "header": "مالك أم مستأجر",
+       "kind": "input",
+       "examples": [
+        "مالك",
+        "مستأجر",
+        "مالك"
+       ],
+       "allowed_values": [
+        "مالك",
+        "مستأجر",
+        "شاغرة"
+       ]
+      },
+      {
+       "column": "D",
+       "header": "اسم الساكن",
+       "kind": "input",
+       "examples": [
+        "أحمد سالم",
+        "مها حسن",
+        "خالد عمر"
+       ]
+      },
+      {
+       "column": "E",
+       "header": "الجوال",
+       "kind": "input",
+       "examples": [
+        "01010000001",
+        "01010000002",
+        "01010000003"
+       ]
+      },
+      {
+       "column": "F",
+       "header": "عدد الأفراد",
+       "kind": "input",
+       "examples": [
+        4,
+        3,
+        2
+       ]
+      },
+      {
+       "column": "G",
+       "header": "جوال الطوارئ",
+       "kind": "input",
+       "examples": [
+        "01010000101",
+        "01010000102",
+        "01010000103"
+       ]
+      },
+      {
+       "column": "H",
+       "header": "سيارات مسموحة للوحدة",
+       "kind": "input",
+       "examples": [
+        3
+       ]
+      },
+      {
+       "column": "I",
+       "header": "عدد السيارات",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",COUNTIF('السيارات'!$A$6:$A$405,A6&\"\"))"
+      },
+      {
+       "column": "J",
+       "header": "المسموح الفعلي",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",IF(ISNUMBER(H6),H6,'الإعدادات'!$B$4))"
+      },
+      {
+       "column": "K",
+       "header": "تنبيه الجوال",
+       "kind": "formula",
+       "formula_row_1": "=IF(OR(A6&\"\"=\"\",C6=\"شاغرة\"),\"\",IF(E6&\"\"=\"\",\"بلا جوال\",\"\"))"
+      },
+      {
+       "column": "L",
+       "header": "تنبيه المواقف",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",IF(I6>J6,\"سيارات تزيد عن المسموح\",\"\"))"
+      },
+      {
+       "column": "M",
+       "header": "ترتيب الاتصال",
+       "kind": "formula",
+       "formula_row_1": "=IF(OR(A6&\"\"=\"\",C6=\"شاغرة\"),\"\",COUNTIFS($A$6:A6,\"?*\",$C$6:C6,\"<>شاغرة\"))"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "السيارات",
+   "formula_cells": 1200,
+   "record_tables": [
+    {
+     "header_row": 5,
+     "first_record_row": 6,
+     "sample_rows_filled": 14,
+     "capacity_last_row": 405,
+     "columns": [
+      {
+       "column": "A",
+       "header": "كود الوحدة",
+       "kind": "input",
+       "examples": [
+        "101",
+        "101",
+        "102"
+       ],
+       "allowed_values": {
+        "from_range": "'الوحدات'!$A$6:$A$205"
+       }
+      },
+      {
+       "column": "B",
+       "header": "رقم اللوحة",
+       "kind": "input",
+       "examples": [
+        "أ ب ج 1234",
+        "ك ل م 5678",
+        "د هـ و 2345"
+       ]
+      },
+      {
+       "column": "C",
+       "header": "النوع",
+       "kind": "input",
+       "examples": [
+        "تويوتا كورولا",
+        "هيونداي إلنترا",
+        "كيا سيراتو"
+       ]
+      },
+      {
+       "column": "D",
+       "header": "اللون",
+       "kind": "input",
+       "examples": [
+        "أبيض",
+        "أسود",
+        "فضي"
+       ]
+      },
+      {
+       "column": "E",
+       "header": "رقم الملصق",
+       "kind": "input",
+       "examples": [
+        "S-001",
+        "S-002",
+        "S-003"
+       ]
+      },
+      {
+       "column": "F",
+       "header": "موقف مخصص",
+       "kind": "input",
+       "examples": [
+        "P-01",
+        "P-02",
+        "P-03"
+       ]
+      },
+      {
+       "column": "G",
+       "header": "الساكن",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",IFERROR(INDEX('الوحدات'!$D$6:$D$205,MATCH(A6&\"\",'الوحدات'!$A$6:$A$205,0))&\"\",\"\"))"
+      },
+      {
+       "column": "H",
+       "header": "تنبيه",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",IF(COUNTIF('الوحدات'!$A$6:$A$205,A6&\"\")=0,\"وحدة غير موجودة\",IF(AND(B6&\"\"<>\"\",COUNTIF($B$6:$B$405,B6&\"\")>1),\"لوحة مكررة\",IF(AND(F6&\"\"<>\"\",COUNTIF($F$6:$F$405,F6&\"\")>1),\"موقف مكرر\",\"\"))))"
+      },
+      {
+       "column": "I",
+       "header": "مفتاح",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",A6&\"#\"&COUNTIF($A$6:A6,A6&\"\"))"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "الملخص",
+   "formula_cells": 22,
+   "record_tables": [
+    {
+     "header_row": 27,
+     "first_record_row": 28,
+     "sample_rows_filled": 3,
+     "capacity_last_row": 30,
+     "columns": [
+      {
+       "column": "A",
+       "header": "الحالة",
+       "kind": "input",
+       "examples": [
+        "مالك",
+        "مستأجر",
+        "شاغرة"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "عدد الوحدات",
+       "kind": "formula",
+       "formula_row_1": "=COUNTIF('الوحدات'!$C$6:$C$205,A28)"
+      },
+      {
+       "column": "C",
+       "header": "عدد الأفراد",
+       "kind": "formula",
+       "formula_row_1": "=SUMIFS('الوحدات'!$F$6:$F$205,'الوحدات'!$C$6:$C$205,A28)"
+      }
+     ]
+    }
+   ],
+   "results": [
+    {
+     "label": "عدد الوحدات",
+     "cell": "B5",
+     "formula": "=COUNTIF('الوحدات'!$A$6:$A$205,\"?*\")"
+    },
+    {
+     "label": "وحدات يقيم فيها مالك",
+     "cell": "B6",
+     "formula": "=COUNTIF('الوحدات'!$C$6:$C$205,\"مالك\")"
+    },
+    {
+     "label": "وحدات مؤجرة",
+     "cell": "B7",
+     "formula": "=COUNTIF('الوحدات'!$C$6:$C$205,\"مستأجر\")"
+    },
+    {
+     "label": "وحدات شاغرة",
+     "cell": "B8",
+     "formula": "=COUNTIF('الوحدات'!$C$6:$C$205,\"شاغرة\")"
+    },
+    {
+     "label": "نسبة المؤجر من الوحدات المأهولة",
+     "cell": "B9",
+     "formula": "=IF(B6+B7=0,\"\",B7/(B6+B7))"
+    },
+    {
+     "label": "إجمالي السكان",
+     "cell": "B10",
+     "formula": "=SUMIFS('الوحدات'!$F$6:$F$205,'الوحدات'!$C$6:$C$205,\"<>شاغرة\")"
+    },
+    {
+     "label": "متوسط الأفراد للوحدة المأهولة",
+     "cell": "B11",
+     "formula": "=IF(B6+B7=0,\"\",B10/(B6+B7))"
+    },
+    {
+     "label": "عدد السيارات المسجلة",
+     "cell": "B14",
+     "formula": "=COUNTIF('السيارات'!$A$6:$A$405,\"?*\")"
+    },
+    {
+     "label": "المواقف المتاحة",
+     "cell": "B15",
+     "formula": "='الإعدادات'!$B$5"
+    },
+    {
+     "label": "المواقف المستخدمة",
+     "cell": "B16",
+     "formula": "=COUNTIF('السيارات'!$F$6:$F$405,\"?*\")"
+    },
+    {
+     "label": "المواقف الشاغرة",
+     "cell": "B17",
+     "formula": "=B15-B16"
+    },
+    {
+     "label": "سيارات بلا موقف مخصص",
+     "cell": "B18",
+     "formula": "=B14-B16"
+    },
+    {
+     "label": "وحدات مأهولة بلا جوال",
+     "cell": "B21",
+     "formula": "=COUNTIF('الوحدات'!$K$6:$K$205,\"بلا جوال\")"
+    },
+    {
+     "label": "وحدات سياراتها تزيد عن المسموح",
+     "cell": "B22",
+     "formula": "=COUNTIF('الوحدات'!$L$6:$L$205,\"سيارات تزيد عن المسموح\")"
+    },
+    {
+     "label": "لوحات أو مواقف مكررة",
+     "cell": "B23",
+     "formula": "=COUNTIF('السيارات'!$H$6:$H$405,\"لوحة مكررة\")+COUNTIF('السيارات'!$H$6:$H$405,\"موقف مكرر\")"
+    },
+    {
+     "label": "سيارات بكود وحدة غير موجود",
+     "cell": "B24",
+     "formula": "=COUNTIF('السيارات'!$H$6:$H$405,\"وحدة غير موجودة\")"
+    }
+   ]
+  },
+  {
+   "name": "اتصال سريع",
+   "formula_cells": 1408,
+   "record_tables": [
+    {
+     "header_row": 14,
+     "first_record_row": 15,
+     "sample_rows_filled": 0,
+     "capacity_last_row": 214,
+     "columns": [
+      {
+       "column": "A",
+       "header": "م",
+       "kind": "formula",
+       "formula_row_1": "=IF(1<=COUNT('الوحدات'!$M$6:$M$205),1,\"\")"
+      },
+      {
+       "column": "B",
+       "header": "الوحدة",
+       "kind": "formula",
+       "formula_row_1": "=IF($A15=\"\",\"\",INDEX('الوحدات'!$A$6:$A$205,MATCH($A15,'الوحدات'!$M$6:$M$205,0))&\"\")",
+       "allowed_values": {
+        "from_range": "'الوحدات'!$A$6:$A$205"
+       }
+      },
+      {
+       "column": "C",
+       "header": "الدور / المبنى",
+       "kind": "formula",
+       "formula_row_1": "=IF($A15=\"\",\"\",INDEX('الوحدات'!$B$6:$B$205,MATCH($A15,'الوحدات'!$M$6:$M$205,0))&\"\")"
+      },
+      {
+       "column": "D",
+       "header": "الساكن",
+       "kind": "formula",
+       "formula_row_1": "=IF($A15=\"\",\"\",INDEX('الوحدات'!$D$6:$D$205,MATCH($A15,'الوحدات'!$M$6:$M$205,0))&\"\")"
+      },
+      {
+       "column": "E",
+       "header": "الحالة",
+       "kind": "formula",
+       "formula_row_1": "=IF($A15=\"\",\"\",INDEX('الوحدات'!$C$6:$C$205,MATCH($A15,'الوحدات'!$M$6:$M$205,0))&\"\")"
+      },
+      {
+       "column": "F",
+       "header": "الجوال",
+       "kind": "formula",
+       "formula_row_1": "=IF($A15=\"\",\"\",INDEX('الوحدات'!$E$6:$E$205,MATCH($A15,'الوحدات'!$M$6:$M$205,0))&\"\")"
+      },
+      {
+       "column": "G",
+       "header": "جوال الطوارئ",
+       "kind": "formula",
+       "formula_row_1": "=IF($A15=\"\",\"\",INDEX('الوحدات'!$G$6:$G$205,MATCH($A15,'الوحدات'!$M$6:$M$205,0))&\"\")"
+      }
+     ]
+    }
+   ],
+   "settings": [
+    {
+     "label": "اختر الوحدة",
+     "cell": "B4",
+     "value": "501"
+    }
+   ],
+   "results": [
+    {
+     "label": "الدور / المبنى",
+     "cell": "B5",
+     "formula": "=IFERROR(INDEX('الوحدات'!$B$6:$B$205,MATCH($B$4&\"\",'الوحدات'!$A$6:$A$205,0))&\"\",\"\")"
+    },
+    {
+     "label": "الحالة",
+     "cell": "B6",
+     "formula": "=IFERROR(INDEX('الوحدات'!$C$6:$C$205,MATCH($B$4&\"\",'الوحدات'!$A$6:$A$205,0))&\"\",\"\")"
+    },
+    {
+     "label": "الساكن",
+     "cell": "B7",
+     "formula": "=IFERROR(INDEX('الوحدات'!$D$6:$D$205,MATCH($B$4&\"\",'الوحدات'!$A$6:$A$205,0))&\"\",\"\")"
+    },
+    {
+     "label": "الجوال",
+     "cell": "B8",
+     "formula": "=IFERROR(INDEX('الوحدات'!$E$6:$E$205,MATCH($B$4&\"\",'الوحدات'!$A$6:$A$205,0))&\"\",\"\")"
+    },
+    {
+     "label": "جوال الطوارئ",
+     "cell": "B9",
+     "formula": "=IFERROR(INDEX('الوحدات'!$G$6:$G$205,MATCH($B$4&\"\",'الوحدات'!$A$6:$A$205,0))&\"\",\"\")"
+    },
+    {
+     "label": "السيارة 1",
+     "cell": "B10",
+     "formula": "=IFERROR(INDEX('السيارات'!$B$6:$B$405,MATCH($B$4&\"#1\",'السيارات'!$I$6:$I$405,0))&\" - \"&INDEX('السيارات'!$C$6:$C$405,MATCH($B$4&\"#1\",'السيارات'!$I$6:$I$405,0))&\" \"&INDEX('السيارات'!$D$6:$D$405,MATCH($B$4&\"#1\",'السيارات'!$I$6:$I$405,0))&\" - ملصق \"&INDEX('السيارات'!$E$6:$E$405,MATCH($B$4&\"#1\",'السيارات'!$I$6:$I$405,0)),\"\")"
+    },
+    {
+     "label": "السيارة 2",
+     "cell": "B11",
+     "formula": "=IFERROR(INDEX('السيارات'!$B$6:$B$405,MATCH($B$4&\"#2\",'السيارات'!$I$6:$I$405,0))&\" - \"&INDEX('السيارات'!$C$6:$C$405,MATCH($B$4&\"#2\",'السيارات'!$I$6:$I$405,0))&\" \"&INDEX('السيارات'!$D$6:$D$405,MATCH($B$4&\"#2\",'السيارات'!$I$6:$I$405,0))&\" - ملصق \"&INDEX('السيارات'!$E$6:$E$405,MATCH($B$4&\"#2\",'السيارات'!$I$6:$I$405,0)),\"\")"
+    },
+    {
+     "label": "السيارة 3",
+     "cell": "B12",
+     "formula": "=IFERROR(INDEX('السيارات'!$B$6:$B$405,MATCH($B$4&\"#3\",'السيارات'!$I$6:$I$405,0))&\" - \"&INDEX('السيارات'!$C$6:$C$405,MATCH($B$4&\"#3\",'السيارات'!$I$6:$I$405,0))&\" \"&INDEX('السيارات'!$D$6:$D$405,MATCH($B$4&\"#3\",'السيارات'!$I$6:$I$405,0))&\" - ملصق \"&INDEX('السيارات'!$E$6:$E$405,MATCH($B$4&\"#3\",'السيارات'!$I$6:$I$405,0)),\"\")"
+    }
+   ]
+  },
+  {
+   "name": "لماذا ما زلت على إكسل؟",
+   "formula_cells": 0
+  }
+ ]
+}

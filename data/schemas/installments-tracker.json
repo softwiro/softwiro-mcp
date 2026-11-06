@@ -1,0 +1,416 @@
+{
+ "id": "installments-tracker",
+ "file": "softwiro-installments-tracker.xlsx",
+ "title": "شيت متابعة الأقساط والتحصيل",
+ "language": "ar",
+ "direction": "rtl",
+ "how_it_works": "White cells are typed input; cells whose kind is \"formula\" are calculated and must not be overwritten. Add one record per row under the header row of a record table, keeping the columns in order.",
+ "sheets": [
+  {
+   "name": "ابدأ هنا",
+   "formula_cells": 0
+  },
+  {
+   "name": "الإعدادات",
+   "formula_cells": 1,
+   "results": [
+    {
+     "label": "تاريخ اليوم",
+     "cell": "B4",
+     "formula": "=TODAY()"
+    }
+   ]
+  },
+  {
+   "name": "العقود",
+   "formula_cells": 2000,
+   "record_tables": [
+    {
+     "header_row": 5,
+     "first_record_row": 6,
+     "sample_rows_filled": 7,
+     "capacity_last_row": 205,
+     "columns": [
+      {
+       "column": "A",
+       "header": "كود العقد",
+       "kind": "input",
+       "examples": [
+        "K001",
+        "K002",
+        "K003"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "العميل",
+       "kind": "input",
+       "examples": [
+        "محمد السيد",
+        "هالة فتحي",
+        "ياسر منصور"
+       ]
+      },
+      {
+       "column": "C",
+       "header": "الجوال",
+       "kind": "input",
+       "examples": [
+        "01011110001",
+        "01011110002",
+        "01011110003"
+       ]
+      },
+      {
+       "column": "D",
+       "header": "السلعة",
+       "kind": "input",
+       "examples": [
+        "ثلاجة",
+        "غسالة أوتوماتيك",
+        "تلفزيون 55 بوصة"
+       ]
+      },
+      {
+       "column": "E",
+       "header": "السعر",
+       "kind": "input",
+       "examples": [
+        36000,
+        12000,
+        14000
+       ]
+      },
+      {
+       "column": "F",
+       "header": "المقدم",
+       "kind": "input",
+       "examples": [
+        6000,
+        3000,
+        4000
+       ]
+      },
+      {
+       "column": "G",
+       "header": "عدد الأقساط",
+       "kind": "input",
+       "examples": [
+        12,
+        6,
+        4
+       ]
+      },
+      {
+       "column": "H",
+       "header": "تاريخ أول قسط",
+       "kind": "input",
+       "examples": [
+        "2026-07-26",
+        "2026-06-26",
+        "2026-04-17"
+       ]
+      },
+      {
+       "column": "I",
+       "header": "حالة التحصيل",
+       "kind": "input",
+       "examples": [
+        "وعد بالسداد",
+        "لم يتم التواصل",
+        "تم التواصل"
+       ],
+       "allowed_values": [
+        "لم يتم التواصل",
+        "تم التواصل",
+        "وعد بالسداد",
+        "طلب تأجيل",
+        "لا يرد"
+       ]
+      },
+      {
+       "column": "J",
+       "header": "ملاحظات",
+       "kind": "input",
+       "examples": [
+        "وعدت بالسداد نهاية الأسبوع",
+        "سدد كل الأقساط",
+        "سدد جزءًا من القسط"
+       ]
+      },
+      {
+       "column": "K",
+       "header": "المبلغ المقسّط",
+       "kind": "formula",
+       "formula_row_1": "=IF(AND(A6&\"\"<>\"\",ISNUMBER(E6),ISNUMBER(G6),G6>0,ISNUMBER(H6)),ROUND(E6-IF(ISNUMBER(F6),F6,0),2),\"\")"
+      },
+      {
+       "column": "L",
+       "header": "القسط الشهري",
+       "kind": "formula",
+       "formula_row_1": "=IF(K6=\"\",\"\",ROUND(K6/G6,2))"
+      },
+      {
+       "column": "M",
+       "header": "المدفوع",
+       "kind": "formula",
+       "formula_row_1": "=IF(K6=\"\",\"\",ROUND(SUMIFS('الدفعات'!$C$6:$C$2005,'الدفعات'!$B$6:$B$2005,A6&\"\"),2))"
+      },
+      {
+       "column": "N",
+       "header": "المتبقي",
+       "kind": "formula",
+       "formula_row_1": "=IF(K6=\"\",\"\",ROUND(K6-M6,2))"
+      },
+      {
+       "column": "O",
+       "header": "أقساط مستحقة حتى اليوم",
+       "kind": "formula",
+       "formula_row_1": "=IF(K6=\"\",\"\",MAX(0,MIN(G6,(YEAR('الإعدادات'!$B$4)-YEAR(H6))*12+MONTH('الإعدادات'!$B$4)-MONTH(H6)+IF(DAY('الإعدادات'!$B$4)>=MIN(DAY(H6),28),1,0))))"
+      },
+      {
+       "column": "P",
+       "header": "المتأخر",
+       "kind": "formula",
+       "formula_row_1": "=IF(K6=\"\",\"\",IF(N6<=0,0,MAX(0,ROUND(IF(O6>=G6,K6,O6*L6)-M6,2))))"
+      },
+      {
+       "column": "Q",
+       "header": "تاريخ أقدم قسط غير مسدد",
+       "kind": "formula",
+       "formula_row_1": "=IF(K6=\"\",\"\",IF(N6<=0,\"\",DATE(YEAR(H6),MONTH(H6)+MIN(G6-1,INT((M6+0.005)/L6)),MIN(DAY(H6),28))))"
+      },
+      {
+       "column": "R",
+       "header": "أيام التأخير",
+       "kind": "formula",
+       "formula_row_1": "=IF(K6=\"\",\"\",IF(P6>0,MAX(0,'الإعدادات'!$B$4-Q6),\"\"))"
+      },
+      {
+       "column": "S",
+       "header": "الحالة",
+       "kind": "formula",
+       "formula_row_1": "=IF(K6=\"\",\"\",IF(N6<=0,\"مسدد بالكامل\",IF(P6>0,IF(R6>0,\"متأخر\",\"مستحق اليوم\"),\"منتظم\")))"
+      },
+      {
+       "column": "T",
+       "header": "ترتيب المتابعة",
+       "kind": "formula",
+       "formula_row_1": "=IF(OR(S6=\"متأخر\",S6=\"مستحق اليوم\"),COUNTIF($R$6:$R$205,\">\"&R6)+COUNTIF($R$6:R6,R6&\"\"),\"\")"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "الدفعات",
+   "formula_cells": 2000,
+   "record_tables": [
+    {
+     "header_row": 5,
+     "first_record_row": 6,
+     "sample_rows_filled": 17,
+     "capacity_last_row": 2005,
+     "columns": [
+      {
+       "column": "A",
+       "header": "التاريخ",
+       "kind": "input",
+       "examples": [
+        "2026-02-16",
+        "2026-04-17",
+        "2026-05-17"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "كود العقد",
+       "kind": "input",
+       "examples": [
+        "K006",
+        "K003",
+        "K003"
+       ],
+       "allowed_values": {
+        "from_range": "'العقود'!$A$6:$A$205"
+       }
+      },
+      {
+       "column": "C",
+       "header": "المبلغ",
+       "kind": "input",
+       "examples": [
+        1500,
+        2500,
+        2500
+       ]
+      },
+      {
+       "column": "D",
+       "header": "رقم الإيصال",
+       "kind": "input",
+       "examples": [
+        "REC-301",
+        "REC-302",
+        "REC-303"
+       ]
+      },
+      {
+       "column": "E",
+       "header": "ملاحظة",
+       "kind": "input"
+      },
+      {
+       "column": "F",
+       "header": "اسم العميل",
+       "kind": "formula",
+       "formula_row_1": "=IF(B6&\"\"=\"\",\"\",IFERROR(INDEX('العقود'!$B$6:$B$205,MATCH(B6,'العقود'!$A$6:$A$205,0)),\"كود غير موجود\"))"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "متابعة اليوم",
+   "formula_cells": 451,
+   "record_tables": [
+    {
+     "header_row": 6,
+     "first_record_row": 7,
+     "sample_rows_filled": 0,
+     "capacity_last_row": 56,
+     "columns": [
+      {
+       "column": "A",
+       "header": "م",
+       "kind": "formula",
+       "formula_row_1": "=IF(1<=$B$4,1,\"\")"
+      },
+      {
+       "column": "B",
+       "header": "كود العقد",
+       "kind": "formula",
+       "formula_row_1": "=IF($A7=\"\",\"\",INDEX('العقود'!$A$6:$A$205,MATCH($A7,'العقود'!$T$6:$T$205,0))&\"\")"
+      },
+      {
+       "column": "C",
+       "header": "العميل",
+       "kind": "formula",
+       "formula_row_1": "=IF($A7=\"\",\"\",INDEX('العقود'!$B$6:$B$205,MATCH($A7,'العقود'!$T$6:$T$205,0))&\"\")"
+      },
+      {
+       "column": "D",
+       "header": "الجوال",
+       "kind": "formula",
+       "formula_row_1": "=IF($A7=\"\",\"\",INDEX('العقود'!$C$6:$C$205,MATCH($A7,'العقود'!$T$6:$T$205,0))&\"\")"
+      },
+      {
+       "column": "E",
+       "header": "المتأخر",
+       "kind": "formula",
+       "formula_row_1": "=IF($A7=\"\",\"\",INDEX('العقود'!$P$6:$P$205,MATCH($A7,'العقود'!$T$6:$T$205,0)))"
+      },
+      {
+       "column": "F",
+       "header": "أقدم قسط غير مسدد",
+       "kind": "formula",
+       "formula_row_1": "=IF($A7=\"\",\"\",INDEX('العقود'!$Q$6:$Q$205,MATCH($A7,'العقود'!$T$6:$T$205,0)))"
+      },
+      {
+       "column": "G",
+       "header": "أيام التأخير",
+       "kind": "formula",
+       "formula_row_1": "=IF($A7=\"\",\"\",INDEX('العقود'!$R$6:$R$205,MATCH($A7,'العقود'!$T$6:$T$205,0)))"
+      },
+      {
+       "column": "H",
+       "header": "الحالة",
+       "kind": "formula",
+       "formula_row_1": "=IF($A7=\"\",\"\",INDEX('العقود'!$S$6:$S$205,MATCH($A7,'العقود'!$T$6:$T$205,0))&\"\")"
+      },
+      {
+       "column": "I",
+       "header": "حالة التحصيل",
+       "kind": "formula",
+       "formula_row_1": "=IF($A7=\"\",\"\",INDEX('العقود'!$I$6:$I$205,MATCH($A7,'العقود'!$T$6:$T$205,0))&\"\")"
+      }
+     ]
+    }
+   ],
+   "results": [
+    {
+     "label": "عدد العقود المطلوب تحصيلها",
+     "cell": "B4",
+     "formula": "=COUNTIF('العقود'!$S$6:$S$205,\"متأخر\")+COUNTIF('العقود'!$S$6:$S$205,\"مستحق اليوم\")"
+    }
+   ]
+  },
+  {
+   "name": "الملخص",
+   "formula_cells": 29,
+   "record_tables": [
+    {
+     "header_row": 12,
+     "first_record_row": 13,
+     "sample_rows_filled": 19,
+     "capacity_last_row": 33,
+     "columns": [
+      {
+       "column": "A",
+       "header": "الحالة",
+       "kind": "input",
+       "examples": [
+        "منتظم",
+        "مستحق اليوم",
+        "متأخر"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "عدد العقود",
+       "kind": "formula",
+       "formula_row_1": "=COUNTIF('العقود'!$S$6:$S$205,A13)"
+      },
+      {
+       "column": "C",
+       "header": "المتبقي",
+       "kind": "formula",
+       "formula_row_1": "=SUMIFS('العقود'!$N$6:$N$205,'العقود'!$S$6:$S$205,A13,'العقود'!$N$6:$N$205,\">0\")"
+      }
+     ]
+    }
+   ],
+   "results": [
+    {
+     "label": "إجمالي المقدمات",
+     "cell": "B5",
+     "formula": "=SUMIFS('العقود'!$F$6:$F$205,'العقود'!$K$6:$K$205,\">=0\")"
+    },
+    {
+     "label": "إجمالي المبالغ المقسّطة",
+     "cell": "B6",
+     "formula": "=SUM('العقود'!$K$6:$K$205)"
+    },
+    {
+     "label": "إجمالي المحصّل من الأقساط",
+     "cell": "B7",
+     "formula": "=SUM('العقود'!$M$6:$M$205)"
+    },
+    {
+     "label": "إجمالي المتبقي على العملاء",
+     "cell": "B8",
+     "formula": "=SUMIFS('العقود'!$N$6:$N$205,'العقود'!$N$6:$N$205,\">0\")"
+    },
+    {
+     "label": "إجمالي المتأخر الآن",
+     "cell": "B9",
+     "formula": "=SUM('العقود'!$P$6:$P$205)"
+    }
+   ]
+  },
+  {
+   "name": "لماذا ما زلت على إكسل؟",
+   "formula_cells": 0
+  }
+ ]
+}

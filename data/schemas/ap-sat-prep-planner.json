@@ -1,0 +1,467 @@
+{
+ "id": "ap-sat-prep-planner",
+ "file": "softwiro-ap-sat-prep-planner.xlsx",
+ "title": "شيت تحضير AP وSAT وخطة المراجعة الأسبوعية",
+ "language": "ar",
+ "direction": "rtl",
+ "how_it_works": "White cells are typed input; cells whose kind is \"formula\" are calculated and must not be overwritten. Add one record per row under the header row of a record table, keeping the columns in order.",
+ "sheets": [
+  {
+   "name": "ابدأ هنا",
+   "formula_cells": 0
+  },
+  {
+   "name": "الإعدادات",
+   "formula_cells": 0,
+   "settings": [
+    {
+     "label": "تاريخ اليوم",
+     "cell": "B4",
+     "value": "2026-11-01"
+    },
+    {
+     "label": "يُعدّ الامتحان «قريبًا» قبل (يوم)",
+     "cell": "B5",
+     "value": 30
+    }
+   ]
+  },
+  {
+   "name": "المواعيد",
+   "formula_cells": 1000,
+   "record_tables": [
+    {
+     "header_row": 5,
+     "first_record_row": 6,
+     "sample_rows_filled": 5,
+     "capacity_last_row": 105,
+     "columns": [
+      {
+       "column": "A",
+       "header": "الامتحان",
+       "kind": "input",
+       "examples": [
+        "SAT (المحاولة الأولى)",
+        "SAT (المحاولة الثانية)",
+        "AP Calculus AB (التفاضل والتكامل)"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "النوع",
+       "kind": "input",
+       "examples": [
+        "SAT",
+        "SAT",
+        "AP"
+       ],
+       "allowed_values": [
+        "AP",
+        "SAT",
+        "ACT",
+        "أخرى"
+       ]
+      },
+      {
+       "column": "C",
+       "header": "تاريخ الامتحان",
+       "kind": "input",
+       "examples": [
+        "2026-10-17",
+        "2026-11-21",
+        "2026-12-15"
+       ]
+      },
+      {
+       "column": "D",
+       "header": "الدرجة الهدف",
+       "kind": "input",
+       "examples": [
+        75,
+        80,
+        85
+       ]
+      },
+      {
+       "column": "E",
+       "header": "الدرجة الكاملة",
+       "kind": "input",
+       "examples": [
+        100,
+        100,
+        100
+       ]
+      },
+      {
+       "column": "F",
+       "header": "ملاحظة",
+       "kind": "input",
+       "examples": [
+        "مضى",
+        "موعد افتراضي للمثال",
+        "لم أحدد الهدف بعد"
+       ]
+      },
+      {
+       "column": "G",
+       "header": "الأيام المتبقية",
+       "kind": "formula",
+       "formula_row_1": "=IF(OR(A6&\"\"=\"\",NOT(ISNUMBER(C6))),\"\",C6-'الإعدادات'!$B$4)"
+      },
+      {
+       "column": "H",
+       "header": "الحالة",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",IF(G6=\"\",\"بدون موعد\",IF(G6<0,\"انتهى\",IF(G6=0,\"اليوم\",IF(G6<='الإعدادات'!$B$5,\"قريب\",\"قادم\")))))"
+      },
+      {
+       "column": "I",
+       "header": "عدد الاختبارات التدريبية",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",COUNTIFS('الاختبارات'!$B$6:$B$505,A6&\"\",'الاختبارات'!$J$6:$J$505,\">=1\"))"
+      },
+      {
+       "column": "J",
+       "header": "أول درجة",
+       "kind": "formula",
+       "formula_row_1": "=IF(OR(A6&\"\"=\"\",I6=0),\"\",SUMIFS('الاختبارات'!$D$6:$D$505,'الاختبارات'!$B$6:$B$505,A6&\"\",'الاختبارات'!$J$6:$J$505,1))"
+      },
+      {
+       "column": "K",
+       "header": "آخر درجة",
+       "kind": "formula",
+       "formula_row_1": "=IF(OR(A6&\"\"=\"\",I6=0),\"\",SUMIFS('الاختبارات'!$D$6:$D$505,'الاختبارات'!$B$6:$B$505,A6&\"\",'الاختبارات'!$J$6:$J$505,I6))"
+      },
+      {
+       "column": "L",
+       "header": "الفرق عن الهدف",
+       "kind": "formula",
+       "formula_row_1": "=IF(OR(K6=\"\",D6=\"\"),\"\",K6-D6)"
+      },
+      {
+       "column": "M",
+       "header": "التحسن منذ الأول",
+       "kind": "formula",
+       "formula_row_1": "=IF(OR(K6=\"\",I6<2),\"\",K6-J6)"
+      },
+      {
+       "column": "N",
+       "header": "الاستعداد",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",IF(I6=0,\"لا اختبارات\",IF(D6=\"\",\"بدون هدف\",IF(L6>=0,\"وصلت للهدف\",\"تحت الهدف\"))))"
+      },
+      {
+       "column": "O",
+       "header": "ساعات مخططة",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",SUMIFS('الخطة'!$D$6:$D$205,'الخطة'!$B$6:$B$205,A6&\"\"))"
+      },
+      {
+       "column": "P",
+       "header": "ساعات فعلية",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",SUMIFS('الخطة'!$E$6:$E$205,'الخطة'!$B$6:$B$205,A6&\"\"))"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "الاختبارات",
+   "formula_cells": 3000,
+   "record_tables": [
+    {
+     "header_row": 5,
+     "first_record_row": 6,
+     "sample_rows_filled": 14,
+     "capacity_last_row": 505,
+     "columns": [
+      {
+       "column": "A",
+       "header": "التاريخ",
+       "kind": "input",
+       "examples": [
+        "2026-08-29",
+        "2026-09-05",
+        "2026-09-12"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "الامتحان",
+       "kind": "input",
+       "examples": [
+        "SAT (المحاولة الأولى)",
+        "SAT (المحاولة الثانية)",
+        "SAT (المحاولة الأولى)"
+       ],
+       "allowed_values": {
+        "from_range": "'المواعيد'!$A$6:$A$105"
+       }
+      },
+      {
+       "column": "C",
+       "header": "الاختبار التدريبي",
+       "kind": "input",
+       "examples": [
+        "Practice test A",
+        "Practice test 1",
+        "Practice test B"
+       ]
+      },
+      {
+       "column": "D",
+       "header": "الدرجة",
+       "kind": "input",
+       "examples": [
+        66,
+        62,
+        70
+       ]
+      },
+      {
+       "column": "E",
+       "header": "ملاحظة",
+       "kind": "input",
+       "examples": [
+        "غير موجود في المواعيد"
+       ]
+      },
+      {
+       "column": "F",
+       "header": "الدرجة الهدف",
+       "kind": "formula",
+       "formula_row_1": "=IF(OR(B6&\"\"=\"\",NOT(ISNUMBER(D6))),\"\",IFERROR(IF(INDEX('المواعيد'!$D$6:$D$105,MATCH(B6&\"\",'المواعيد'!$A$6:$A$105,0))=\"\",\"\",INDEX('المواعيد'!$D$6:$D$105,MATCH(B6&\"\",'المواعيد'!$A$6:$A$105,0))),\"\"))"
+      },
+      {
+       "column": "G",
+       "header": "الفرق عن الهدف",
+       "kind": "formula",
+       "formula_row_1": "=IF(OR(F6=\"\",NOT(ISNUMBER(D6))),\"\",D6-F6)"
+      },
+      {
+       "column": "H",
+       "header": "النسبة من الكاملة",
+       "kind": "formula",
+       "formula_row_1": "=IF(OR(B6&\"\"=\"\",NOT(ISNUMBER(D6))),\"\",IFERROR(IF(INDEX('المواعيد'!$E$6:$E$105,MATCH(B6&\"\",'المواعيد'!$A$6:$A$105,0))>0,D6/INDEX('المواعيد'!$E$6:$E$105,MATCH(B6&\"\",'المواعيد'!$A$6:$A$105,0)),\"\"),\"\"))"
+      },
+      {
+       "column": "I",
+       "header": "الحالة",
+       "kind": "formula",
+       "formula_row_1": "=IF(OR(B6&\"\"=\"\",NOT(ISNUMBER(D6))),\"\",IF(COUNTIF('المواعيد'!$A$6:$A$105,B6&\"\")=0,\"الامتحان غير موجود\",IF(F6=\"\",\"بدون هدف\",IF(D6>F6,\"فوق الهدف\",IF(D6=F6,\"على الهدف\",\"تحت الهدف\")))))"
+      },
+      {
+       "column": "J",
+       "header": "رقم المحاولة",
+       "kind": "formula",
+       "formula_row_1": "=IF(OR(B6&\"\"=\"\",NOT(ISNUMBER(D6)),NOT(ISNUMBER(A6))),\"\",COUNTIFS($B$6:$B$505,B6&\"\",$A$6:$A$505,\"<\"&A6,$D$6:$D$505,\">=0\")+COUNTIFS($B$6:B6,B6&\"\",$A$6:A6,A6&\"\",$D$6:D6,\">=0\"))"
+      },
+      {
+       "column": "K",
+       "header": "الفحص",
+       "kind": "formula",
+       "formula_row_1": "=IF(AND(B6&\"\"=\"\",D6&\"\"=\"\"),\"\",IF(OR(B6&\"\"=\"\",NOT(ISNUMBER(D6)),NOT(ISNUMBER(A6))),\"راجع البيانات\",\"سليم\"))"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "الخطة",
+   "formula_cells": 800,
+   "record_tables": [
+    {
+     "header_row": 5,
+     "first_record_row": 6,
+     "sample_rows_filled": 7,
+     "capacity_last_row": 205,
+     "columns": [
+      {
+       "column": "A",
+       "header": "بداية الأسبوع",
+       "kind": "input",
+       "examples": [
+        "2026-09-28",
+        "2026-10-05",
+        "2026-10-12"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "الامتحان",
+       "kind": "input",
+       "examples": [
+        "SAT (المحاولة الثانية)",
+        "SAT (المحاولة الثانية)",
+        "SAT (المحاولة الثانية)"
+       ],
+       "allowed_values": {
+        "from_range": "'المواعيد'!$A$6:$A$105"
+       }
+      },
+      {
+       "column": "C",
+       "header": "ما سأراجعه",
+       "kind": "input",
+       "examples": [
+        "Reading و Writing",
+        "Math: الجبر",
+        "اختبار كامل ومراجعة أخطائه"
+       ]
+      },
+      {
+       "column": "D",
+       "header": "ساعات مخططة",
+       "kind": "input",
+       "examples": [
+        6,
+        8,
+        8
+       ]
+      },
+      {
+       "column": "E",
+       "header": "ساعات فعلية",
+       "kind": "input",
+       "examples": [
+        7,
+        9,
+        10
+       ]
+      },
+      {
+       "column": "F",
+       "header": "الفرق",
+       "kind": "formula",
+       "formula_row_1": "=IF(OR(NOT(ISNUMBER(D6)),NOT(ISNUMBER(E6))),\"\",E6-D6)"
+      },
+      {
+       "column": "G",
+       "header": "نسبة الإنجاز",
+       "kind": "formula",
+       "formula_row_1": "=IF(OR(NOT(ISNUMBER(E6)),N(D6)<=0),\"\",E6/D6)"
+      },
+      {
+       "column": "H",
+       "header": "الحالة",
+       "kind": "formula",
+       "formula_row_1": "=IF(OR(NOT(ISNUMBER(A6)),NOT(ISNUMBER(D6))),\"\",IF(NOT(ISNUMBER(E6)),IF(A6+6<'الإعدادات'!$B$4,\"لم تسجل الفعلي\",\"قادم أو جارٍ\"),IF(E6=D6,\"حققت الخطة\",IF(E6<D6,\"أقل من الخطة\",\"أكثر من الخطة\"))))"
+      },
+      {
+       "column": "I",
+       "header": "أيام للامتحان من بداية الأسبوع",
+       "kind": "formula",
+       "formula_row_1": "=IF(OR(NOT(ISNUMBER(A6)),B6&\"\"=\"\"),\"\",IFERROR(IF(ISNUMBER(INDEX('المواعيد'!$C$6:$C$105,MATCH(B6&\"\",'المواعيد'!$A$6:$A$105,0))),INDEX('المواعيد'!$C$6:$C$105,MATCH(B6&\"\",'المواعيد'!$A$6:$A$105,0))-A6,\"\"),\"\"))"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "الملخص",
+   "formula_cells": 19,
+   "results": [
+    {
+     "label": "امتحانات مسجلة",
+     "cell": "B5",
+     "formula": "=COUNTIF('المواعيد'!$A$6:$A$105,\"?*\")"
+    },
+    {
+     "label": "امتحانات قادمة (اليوم أو بعده)",
+     "cell": "B6",
+     "formula": "=COUNTIF('المواعيد'!$G$6:$G$105,\">=0\")"
+    },
+    {
+     "label": "امتحانات انتهت",
+     "cell": "B7",
+     "formula": "=COUNTIF('المواعيد'!$G$6:$G$105,\"<0\")"
+    },
+    {
+     "label": "امتحانات قريبة",
+     "cell": "B8",
+     "formula": "=COUNTIF('المواعيد'!$H$6:$H$105,\"قريب\")+COUNTIF('المواعيد'!$H$6:$H$105,\"اليوم\")"
+    },
+    {
+     "label": "الأيام لأقرب امتحان قادم",
+     "cell": "B9",
+     "formula": "=IF(B6=0,\"\",SMALL('المواعيد'!$G$6:$G$105,COUNTIF('المواعيد'!$G$6:$G$105,\"<0\")+1))"
+    },
+    {
+     "label": "أقرب امتحان قادم",
+     "cell": "B10",
+     "formula": "=IF(B6=0,\"\",INDEX('المواعيد'!$A$6:$A$105,MATCH(B9,'المواعيد'!$G$6:$G$105,0)))"
+    },
+    {
+     "label": "اختبارات محتسبة",
+     "cell": "B13",
+     "formula": "=COUNT('الاختبارات'!$J$6:$J$505)"
+    },
+    {
+     "label": "اختبارات لامتحان غير موجود",
+     "cell": "B14",
+     "formula": "=COUNTIF('الاختبارات'!$I$6:$I$505,\"الامتحان غير موجود\")"
+    },
+    {
+     "label": "سطور تحتاج مراجعة",
+     "cell": "B15",
+     "formula": "=COUNTIF('الاختبارات'!$K$6:$K$505,\"راجع البيانات\")"
+    },
+    {
+     "label": "امتحانات وصلت آخر درجة فيها للهدف",
+     "cell": "B16",
+     "formula": "=COUNTIF('المواعيد'!$N$6:$N$105,\"وصلت للهدف\")"
+    },
+    {
+     "label": "امتحانات آخر درجة فيها تحت الهدف",
+     "cell": "B17",
+     "formula": "=COUNTIF('المواعيد'!$N$6:$N$105,\"تحت الهدف\")"
+    },
+    {
+     "label": "امتحانات بلا هدف مكتوب",
+     "cell": "B18",
+     "formula": "=COUNTIF('المواعيد'!$N$6:$N$105,\"بدون هدف\")"
+    },
+    {
+     "label": "امتحانات بلا اختبارات تدريبية",
+     "cell": "B19",
+     "formula": "=COUNTIF('المواعيد'!$N$6:$N$105,\"لا اختبارات\")"
+    },
+    {
+     "label": "أسابيع في الخطة",
+     "cell": "B22",
+     "formula": "=COUNT('الخطة'!$D$6:$D$205)"
+    },
+    {
+     "label": "ساعات مخططة (كل الأسابيع)",
+     "cell": "B23",
+     "formula": "=SUM('الخطة'!$D$6:$D$205)"
+    },
+    {
+     "label": "ساعات مخططة للأسابيع المسجل فعلها",
+     "cell": "B24",
+     "formula": "=SUMIFS('الخطة'!$D$6:$D$205,'الخطة'!$E$6:$E$205,\">=0\")"
+    },
+    {
+     "label": "ساعات فعلية",
+     "cell": "B25",
+     "formula": "=SUM('الخطة'!$E$6:$E$205)"
+    },
+    {
+     "label": "نسبة الإنجاز",
+     "cell": "B26",
+     "formula": "=IF(B24=0,\"\",B25/B24)"
+    },
+    {
+     "label": "أسابيع مضت بلا ساعات فعلية",
+     "cell": "B27",
+     "formula": "=COUNTIF('الخطة'!$H$6:$H$205,\"لم تسجل الفعلي\")"
+    }
+   ]
+  },
+  {
+   "name": "لماذا ما زلت على إكسل؟",
+   "formula_cells": 0
+  }
+ ]
+}

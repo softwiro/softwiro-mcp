@@ -1,0 +1,490 @@
+{
+ "id": "rent-collection",
+ "file": "softwiro-rent-collection.xlsx",
+ "title": "شيت تحصيل إيجارات العقارات",
+ "language": "ar",
+ "direction": "rtl",
+ "how_it_works": "White cells are typed input; cells whose kind is \"formula\" are calculated and must not be overwritten. Add one record per row under the header row of a record table, keeping the columns in order.",
+ "sheets": [
+  {
+   "name": "ابدأ هنا",
+   "formula_cells": 0
+  },
+  {
+   "name": "الإعدادات",
+   "formula_cells": 0,
+   "settings": [
+    {
+     "label": "تاريخ اليوم",
+     "cell": "B4",
+     "value": "2026-11-01"
+    },
+    {
+     "label": "تنبيه انتهاء العقد قبل (يوم)",
+     "cell": "B5",
+     "value": 60
+    }
+   ]
+  },
+  {
+   "name": "المستأجرون",
+   "formula_cells": 2200,
+   "record_tables": [
+    {
+     "header_row": 5,
+     "first_record_row": 6,
+     "sample_rows_filled": 8,
+     "capacity_last_row": 205,
+     "columns": [
+      {
+       "column": "A",
+       "header": "كود الوحدة",
+       "kind": "input",
+       "examples": [
+        "U01",
+        "U02",
+        "U03"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "وصف الوحدة",
+       "kind": "input",
+       "examples": [
+        "شقة 1 - الدور الأول",
+        "شقة 2 - الدور الأول",
+        "شقة 3 - الدور الثاني"
+       ]
+      },
+      {
+       "column": "C",
+       "header": "المستأجر",
+       "kind": "input",
+       "examples": [
+        "أحمد سالم",
+        "مها حسن",
+        "خالد عمر"
+       ]
+      },
+      {
+       "column": "D",
+       "header": "الجوال",
+       "kind": "input",
+       "examples": [
+        "01010000001",
+        "01010000002",
+        "01010000003"
+       ]
+      },
+      {
+       "column": "E",
+       "header": "الإيجار الشهري",
+       "kind": "input",
+       "examples": [
+        5000,
+        6000,
+        4500
+       ]
+      },
+      {
+       "column": "F",
+       "header": "بداية العقد",
+       "kind": "input",
+       "examples": [
+        "2026-01-01",
+        "2026-01-01",
+        "2026-03-01"
+       ]
+      },
+      {
+       "column": "G",
+       "header": "نهاية العقد",
+       "kind": "input",
+       "examples": [
+        "2027-01-01",
+        "2026-12-31",
+        "2027-02-28"
+       ]
+      },
+      {
+       "column": "H",
+       "header": "يوم الاستحقاق",
+       "kind": "input",
+       "examples": [
+        1,
+        5,
+        1
+       ],
+       "allowed_values": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "10",
+        "11",
+        "12",
+        "13",
+        "14",
+        "15",
+        "16",
+        "17",
+        "18",
+        "19",
+        "20",
+        "21",
+        "22",
+        "23",
+        "24",
+        "25",
+        "26",
+        "27",
+        "28"
+       ]
+      },
+      {
+       "column": "I",
+       "header": "الأشهر المستحقة",
+       "kind": "formula",
+       "formula_row_1": "=IF(OR(C6&\"\"=\"\",NOT(ISNUMBER(F6)),NOT(ISNUMBER(H6))),\"\",MAX(0,(YEAR(IF(ISNUMBER(G6),MIN('الإعدادات'!$B$4,G6),'الإعدادات'!$B$4))-YEAR(F6))*12+MONTH(IF(ISNUMBER(G6),MIN('الإعدادات'!$B$4,G6),'الإعدادات'!$B$4))-MONTH(F6)+IF(DAY(IF(ISNUMBER(G6),MIN('الإعدادات'!$B$4,G6),'الإعدادات'!$B$4))>=H6,1,0)-IF(DAY(F6)>H6,1,0)))"
+      },
+      {
+       "column": "J",
+       "header": "إجمالي المستحق",
+       "kind": "formula",
+       "formula_row_1": "=IF(I6=\"\",\"\",ROUND(I6*N(E6),2))"
+      },
+      {
+       "column": "K",
+       "header": "المدفوع",
+       "kind": "formula",
+       "formula_row_1": "=IF(C6&\"\"=\"\",\"\",SUMIFS('الدفعات'!$C$6:$C$2005,'الدفعات'!$B$6:$B$2005,A6&\"\"))"
+      },
+      {
+       "column": "L",
+       "header": "الرصيد المستحق",
+       "kind": "formula",
+       "formula_row_1": "=IF(J6=\"\",\"\",ROUND(J6-K6,2))"
+      },
+      {
+       "column": "M",
+       "header": "الأشهر المتأخرة",
+       "kind": "formula",
+       "formula_row_1": "=IF(L6=\"\",\"\",IF(AND(L6>0,N(E6)>0),ROUNDUP(ROUND(L6/E6,4),0),0))"
+      },
+      {
+       "column": "N",
+       "header": "آخر دفعة",
+       "kind": "formula",
+       "formula_row_1": "=IF(C6&\"\"=\"\",\"\",IFERROR(SUMIFS('الدفعات'!$A$6:$A$2005,'الدفعات'!$B$6:$B$2005,A6&\"\",'الدفعات'!$G$6:$G$2005,1)/COUNTIFS('الدفعات'!$B$6:$B$2005,A6&\"\",'الدفعات'!$G$6:$G$2005,1),\"\"))"
+      },
+      {
+       "column": "O",
+       "header": "نسبة التحصيل",
+       "kind": "formula",
+       "formula_row_1": "=IF(OR(J6=\"\",J6=0),\"\",MIN(1,K6/J6))"
+      },
+      {
+       "column": "P",
+       "header": "الحالة",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",IF(C6&\"\"=\"\",\"شاغرة\",IF(L6=\"\",\"بيانات ناقصة\",IF(L6>0,\"متأخر\",IF(L6<0,\"دفع مقدمًا\",\"مسدد\")))))"
+      },
+      {
+       "column": "Q",
+       "header": "أيام حتى نهاية العقد",
+       "kind": "formula",
+       "formula_row_1": "=IF(OR(C6&\"\"=\"\",NOT(ISNUMBER(G6))),\"\",G6-'الإعدادات'!$B$4)"
+      },
+      {
+       "column": "R",
+       "header": "تنبيه العقد",
+       "kind": "formula",
+       "formula_row_1": "=IF(Q6=\"\",\"\",IF(Q6<0,\"منتهي\",IF(Q6<='الإعدادات'!$B$5,\"ينتهي قريبًا\",\"\")))"
+      },
+      {
+       "column": "S",
+       "header": "ترتيب المتابعة",
+       "kind": "formula",
+       "formula_row_1": "=IF(ISNUMBER(L6),IF(L6>0,COUNTIFS($L$6:$L$205,\">\"&L6)+COUNTIFS($L$6:L6,L6),\"\"),\"\")"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "الدفعات",
+   "formula_cells": 4000,
+   "record_tables": [
+    {
+     "header_row": 5,
+     "first_record_row": 6,
+     "sample_rows_filled": 57,
+     "capacity_last_row": 2005,
+     "columns": [
+      {
+       "column": "A",
+       "header": "التاريخ",
+       "kind": "input",
+       "examples": [
+        "2025-11-01",
+        "2025-12-01",
+        "2025-12-01"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "كود الوحدة",
+       "kind": "input",
+       "examples": [
+        "U08",
+        "U05",
+        "U08"
+       ],
+       "allowed_values": {
+        "from_range": "'المستأجرون'!$A$6:$A$205"
+       }
+      },
+      {
+       "column": "C",
+       "header": "المبلغ",
+       "kind": "input",
+       "examples": [
+        4000,
+        12000,
+        4000
+       ]
+      },
+      {
+       "column": "D",
+       "header": "طريقة الدفع",
+       "kind": "input",
+       "examples": [
+        "تحويل بنكي",
+        "نقدًا",
+        "نقدًا"
+       ],
+       "allowed_values": [
+        "نقدًا",
+        "تحويل بنكي",
+        "شيك"
+       ]
+      },
+      {
+       "column": "E",
+       "header": "ملاحظة",
+       "kind": "input"
+      },
+      {
+       "column": "F",
+       "header": "المستأجر",
+       "kind": "formula",
+       "formula_row_1": "=IF(B6&\"\"=\"\",\"\",IFERROR(INDEX('المستأجرون'!$C$6:$C$205,MATCH(B6&\"\",'المستأجرون'!$A$6:$A$205,0))&\"\",\"كود غير موجود\"))"
+      },
+      {
+       "column": "G",
+       "header": "آخر دفعة للوحدة",
+       "kind": "formula",
+       "formula_row_1": "=IF(OR(B6&\"\"=\"\",NOT(ISNUMBER(A6))),\"\",IF(COUNTIFS($B$6:$B$2005,B6&\"\",$A$6:$A$2005,\">\"&A6)=0,1,0))"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "للمتابعة",
+   "formula_cells": 401,
+   "record_tables": [
+    {
+     "header_row": 6,
+     "first_record_row": 7,
+     "sample_rows_filled": 0,
+     "capacity_last_row": 56,
+     "columns": [
+      {
+       "column": "A",
+       "header": "م",
+       "kind": "formula",
+       "formula_row_1": "=IF(1<=$B$4,1,\"\")"
+      },
+      {
+       "column": "B",
+       "header": "الوحدة",
+       "kind": "formula",
+       "formula_row_1": "=IF($A7=\"\",\"\",INDEX('المستأجرون'!$A$6:$A$205,MATCH($A7,'المستأجرون'!$S$6:$S$205,0))&\"\")"
+      },
+      {
+       "column": "C",
+       "header": "المستأجر",
+       "kind": "formula",
+       "formula_row_1": "=IF($A7=\"\",\"\",INDEX('المستأجرون'!$C$6:$C$205,MATCH($A7,'المستأجرون'!$S$6:$S$205,0))&\"\")"
+      },
+      {
+       "column": "D",
+       "header": "الجوال",
+       "kind": "formula",
+       "formula_row_1": "=IF($A7=\"\",\"\",INDEX('المستأجرون'!$D$6:$D$205,MATCH($A7,'المستأجرون'!$S$6:$S$205,0))&\"\")"
+      },
+      {
+       "column": "E",
+       "header": "الرصيد المستحق",
+       "kind": "formula",
+       "formula_row_1": "=IF($A7=\"\",\"\",INDEX('المستأجرون'!$L$6:$L$205,MATCH($A7,'المستأجرون'!$S$6:$S$205,0)))"
+      },
+      {
+       "column": "F",
+       "header": "الأشهر المتأخرة",
+       "kind": "formula",
+       "formula_row_1": "=IF($A7=\"\",\"\",INDEX('المستأجرون'!$M$6:$M$205,MATCH($A7,'المستأجرون'!$S$6:$S$205,0)))"
+      },
+      {
+       "column": "G",
+       "header": "آخر دفعة",
+       "kind": "formula",
+       "formula_row_1": "=IF($A7=\"\",\"\",INDEX('المستأجرون'!$N$6:$N$205,MATCH($A7,'المستأجرون'!$S$6:$S$205,0)))"
+      },
+      {
+       "column": "H",
+       "header": "تنبيه العقد",
+       "kind": "formula",
+       "formula_row_1": "=IF($A7=\"\",\"\",INDEX('المستأجرون'!$R$6:$R$205,MATCH($A7,'المستأجرون'!$S$6:$S$205,0))&\"\")"
+      }
+     ]
+    }
+   ],
+   "results": [
+    {
+     "label": "عدد المتأخرين",
+     "cell": "B4",
+     "formula": "=COUNTIF('المستأجرون'!$P$6:$P$205,\"متأخر\")"
+    }
+   ]
+  },
+  {
+   "name": "الملخص",
+   "formula_cells": 24,
+   "record_tables": [
+    {
+     "header_row": 27,
+     "first_record_row": 28,
+     "sample_rows_filled": 4,
+     "capacity_last_row": 31,
+     "columns": [
+      {
+       "column": "A",
+       "header": "الحالة",
+       "kind": "input",
+       "examples": [
+        "مسدد",
+        "دفع مقدمًا",
+        "متأخر"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "عدد الوحدات",
+       "kind": "formula",
+       "formula_row_1": "=COUNTIF('المستأجرون'!$P$6:$P$205,A28)"
+      },
+      {
+       "column": "C",
+       "header": "الرصيد",
+       "kind": "formula",
+       "formula_row_1": "=SUMIFS('المستأجرون'!$L$6:$L$205,'المستأجرون'!$P$6:$P$205,A28)"
+      }
+     ]
+    }
+   ],
+   "results": [
+    {
+     "label": "عدد الوحدات",
+     "cell": "B5",
+     "formula": "=COUNTIF('المستأجرون'!$A$6:$A$205,\"?*\")"
+    },
+    {
+     "label": "الوحدات المؤجرة",
+     "cell": "B6",
+     "formula": "=B5-B7"
+    },
+    {
+     "label": "الوحدات الشاغرة",
+     "cell": "B7",
+     "formula": "=COUNTIF('المستأجرون'!$P$6:$P$205,\"شاغرة\")"
+    },
+    {
+     "label": "نسبة الإشغال",
+     "cell": "B8",
+     "formula": "=IF(B5=0,\"\",B6/B5)"
+    },
+    {
+     "label": "الإيجار الشهري المتوقع من الوحدات المؤجرة",
+     "cell": "B9",
+     "formula": "=SUM('المستأجرون'!$E$6:$E$205)-B10"
+    },
+    {
+     "label": "إيجار الوحدات الشاغرة شهريًا",
+     "cell": "B10",
+     "formula": "=SUMIFS('المستأجرون'!$E$6:$E$205,'المستأجرون'!$P$6:$P$205,\"شاغرة\")"
+    },
+    {
+     "label": "إجمالي المستحق حتى اليوم",
+     "cell": "B13",
+     "formula": "=SUM('المستأجرون'!$J$6:$J$205)"
+    },
+    {
+     "label": "إجمالي المدفوع",
+     "cell": "B14",
+     "formula": "=SUM('المستأجرون'!$K$6:$K$205)"
+    },
+    {
+     "label": "إجمالي المتأخرات",
+     "cell": "B15",
+     "formula": "=SUMIF('المستأجرون'!$L$6:$L$205,\">0\")"
+    },
+    {
+     "label": "دفعات مقدمة (رصيد للمستأجرين)",
+     "cell": "B16",
+     "formula": "=-SUMIF('المستأجرون'!$L$6:$L$205,\"<0\")"
+    },
+    {
+     "label": "نسبة التحصيل من المستحق",
+     "cell": "B17",
+     "formula": "=IF(B13=0,\"\",(B13-B15)/B13)"
+    },
+    {
+     "label": "المحصّل في الشهر الحالي",
+     "cell": "B18",
+     "formula": "=SUMIFS('الدفعات'!$C$6:$C$2005,'الدفعات'!$A$6:$A$2005,\">=\"&DATE(YEAR('الإعدادات'!$B$4),MONTH('الإعدادات'!$B$4),1),'الدفعات'!$A$6:$A$2005,\"<=\"&'الإعدادات'!$B$4)"
+    },
+    {
+     "label": "مستأجرون متأخرون",
+     "cell": "B21",
+     "formula": "=COUNTIF('المستأجرون'!$P$6:$P$205,\"متأخر\")"
+    },
+    {
+     "label": "متأخرون شهرين فأكثر",
+     "cell": "B22",
+     "formula": "=COUNTIF('المستأجرون'!$M$6:$M$205,\">=2\")"
+    },
+    {
+     "label": "عقود تنتهي قريبًا",
+     "cell": "B23",
+     "formula": "=COUNTIF('المستأجرون'!$R$6:$R$205,\"ينتهي قريبًا\")"
+    },
+    {
+     "label": "عقود منتهية",
+     "cell": "B24",
+     "formula": "=COUNTIF('المستأجرون'!$R$6:$R$205,\"منتهي\")"
+    }
+   ]
+  },
+  {
+   "name": "لماذا ما زلت على إكسل؟",
+   "formula_cells": 0
+  }
+ ]
+}

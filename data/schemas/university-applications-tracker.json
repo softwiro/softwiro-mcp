@@ -1,0 +1,407 @@
+{
+ "id": "university-applications-tracker",
+ "file": "softwiro-university-applications-tracker.xlsx",
+ "title": "شيت متابعة طلبات الجامعات",
+ "language": "ar",
+ "direction": "rtl",
+ "how_it_works": "White cells are typed input; cells whose kind is \"formula\" are calculated and must not be overwritten. Add one record per row under the header row of a record table, keeping the columns in order.",
+ "sheets": [
+  {
+   "name": "ابدأ هنا",
+   "formula_cells": 0
+  },
+  {
+   "name": "الإعدادات",
+   "formula_cells": 0,
+   "settings": [
+    {
+     "label": "تاريخ اليوم",
+     "cell": "B4",
+     "value": "2026-11-01"
+    },
+    {
+     "label": "تنبيه الموعد القريب قبل (يوم)",
+     "cell": "B5",
+     "value": 14
+    },
+    {
+     "label": "اسم العملة 1 (عدّله)",
+     "cell": "B7",
+     "value": "العملة المحلية"
+    },
+    {
+     "label": "اسم العملة 2 (عدّله)",
+     "cell": "B8",
+     "value": "عملة أجنبية 1"
+    },
+    {
+     "label": "اسم العملة 3 (عدّله)",
+     "cell": "B9",
+     "value": "عملة أجنبية 2"
+    }
+   ]
+  },
+  {
+   "name": "الطلبات",
+   "formula_cells": 1200,
+   "record_tables": [
+    {
+     "header_row": 5,
+     "first_record_row": 6,
+     "sample_rows_filled": 10,
+     "capacity_last_row": 205,
+     "columns": [
+      {
+       "column": "A",
+       "header": "كود الطلب",
+       "kind": "input",
+       "examples": [
+        "A01",
+        "A02",
+        "A03"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "الجامعة",
+       "kind": "input",
+       "examples": [
+        "جامعة النهضة",
+        "جامعة الأفق",
+        "جامعة الشمال"
+       ]
+      },
+      {
+       "column": "C",
+       "header": "البرنامج",
+       "kind": "input",
+       "examples": [
+        "هندسة البرمجيات",
+        "علوم الحاسب",
+        "ماجستير إدارة"
+       ]
+      },
+      {
+       "column": "D",
+       "header": "النوع",
+       "kind": "input",
+       "examples": [
+        "محلي",
+        "محلي",
+        "خارجي"
+       ],
+       "allowed_values": [
+        "محلي",
+        "خارجي"
+       ]
+      },
+      {
+       "column": "E",
+       "header": "موعد التقديم",
+       "kind": "input",
+       "examples": [
+        "2026-11-10",
+        "2026-10-28",
+        "2026-12-15"
+       ]
+      },
+      {
+       "column": "F",
+       "header": "المبلغ",
+       "kind": "input",
+       "examples": [
+        1500,
+        1200,
+        90
+       ]
+      },
+      {
+       "column": "G",
+       "header": "العملة",
+       "kind": "input",
+       "examples": [
+        "العملة المحلية",
+        "العملة المحلية",
+        "عملة أجنبية 1"
+       ],
+       "allowed_values": {
+        "from_range": "'الإعدادات'!$B$7:$B$9"
+       }
+      },
+      {
+       "column": "H",
+       "header": "حالة الرسوم",
+       "kind": "input",
+       "examples": [
+        "غير مدفوعة",
+        "مدفوعة",
+        "غير مدفوعة"
+       ],
+       "allowed_values": [
+        "مدفوعة",
+        "غير مدفوعة"
+       ]
+      },
+      {
+       "column": "I",
+       "header": "حالة الطلب",
+       "kind": "input",
+       "examples": [
+        "قيد التجهيز",
+        "قيد التجهيز",
+        "لم يبدأ"
+       ],
+       "allowed_values": [
+        "لم يبدأ",
+        "قيد التجهيز",
+        "تم التقديم",
+        "تم القبول",
+        "مرفوض"
+       ]
+      },
+      {
+       "column": "J",
+       "header": "المستندات المطلوبة",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",COUNTIFS('المستندات'!$A$6:$A$1005,A6&\"\"))"
+      },
+      {
+       "column": "K",
+       "header": "المستندات الجاهزة",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",COUNTIFS('المستندات'!$A$6:$A$1005,A6&\"\",'المستندات'!$C$6:$C$1005,\"جاهز\"))"
+      },
+      {
+       "column": "L",
+       "header": "المستندات الناقصة",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",J6-K6)"
+      },
+      {
+       "column": "M",
+       "header": "نسبة الجاهزية",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",IF(J6=0,\"\",K6/J6))"
+      },
+      {
+       "column": "N",
+       "header": "أيام متبقية",
+       "kind": "formula",
+       "formula_row_1": "=IF(OR(A6&\"\"=\"\",NOT(ISNUMBER(E6))),\"\",IF(OR(I6=\"لم يبدأ\",I6=\"قيد التجهيز\",I6=\"\"),E6-'الإعدادات'!$B$4,\"\"))"
+      },
+      {
+       "column": "O",
+       "header": "تنبيه",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",IF(NOT(OR(I6=\"لم يبدأ\",I6=\"قيد التجهيز\",I6=\"\")),\"\",IF(NOT(ISNUMBER(E6)),\"أدخل الموعد\",IF(E6-'الإعدادات'!$B$4<0,\"فات الموعد\",IF(E6-'الإعدادات'!$B$4<='الإعدادات'!$B$5,\"موعد قريب\",IF(AND(J6>0,L6=0),\"جاهز للتقديم\",\"\"))))))"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "المستندات",
+   "formula_cells": 1000,
+   "record_tables": [
+    {
+     "header_row": 5,
+     "first_record_row": 6,
+     "sample_rows_filled": 29,
+     "capacity_last_row": 1005,
+     "columns": [
+      {
+       "column": "A",
+       "header": "كود الطلب",
+       "kind": "input",
+       "examples": [
+        "A01",
+        "A01",
+        "A01"
+       ],
+       "allowed_values": {
+        "from_range": "'الطلبات'!$A$6:$A$205"
+       }
+      },
+      {
+       "column": "B",
+       "header": "المستند",
+       "kind": "input",
+       "examples": [
+        "شهادة الثانوية",
+        "صورة البطاقة",
+        "خطاب توصية"
+       ]
+      },
+      {
+       "column": "C",
+       "header": "الحالة",
+       "kind": "input",
+       "examples": [
+        "جاهز",
+        "جاهز",
+        "قيد التجهيز"
+       ],
+       "allowed_values": [
+        "جاهز",
+        "قيد التجهيز",
+        "لم يبدأ"
+       ]
+      },
+      {
+       "column": "D",
+       "header": "ملاحظة",
+       "kind": "input"
+      },
+      {
+       "column": "E",
+       "header": "الجامعة",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",IFERROR(INDEX('الطلبات'!$B$6:$B$205,MATCH(A6&\"\",'الطلبات'!$A$6:$A$205,0))&\"\",\"كود غير موجود\"))"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "الملخص",
+   "formula_cells": 30,
+   "record_tables": [
+    {
+     "header_row": 32,
+     "first_record_row": 33,
+     "sample_rows_filled": 0,
+     "capacity_last_row": 35,
+     "columns": [
+      {
+       "column": "A",
+       "header": "العملة",
+       "kind": "formula",
+       "formula_row_1": "='الإعدادات'!B7"
+      },
+      {
+       "column": "B",
+       "header": "إجمالي المبلغ",
+       "kind": "formula",
+       "formula_row_1": "=SUMIFS('الطلبات'!$F$6:$F$205,'الطلبات'!$G$6:$G$205,A33)"
+      },
+      {
+       "column": "C",
+       "header": "مدفوعة",
+       "kind": "formula",
+       "formula_row_1": "=SUMIFS('الطلبات'!$F$6:$F$205,'الطلبات'!$G$6:$G$205,A33,'الطلبات'!$H$6:$H$205,\"مدفوعة\")"
+      },
+      {
+       "column": "D",
+       "header": "غير مدفوعة",
+       "kind": "formula",
+       "formula_row_1": "=SUMIFS('الطلبات'!$F$6:$F$205,'الطلبات'!$G$6:$G$205,A33,'الطلبات'!$H$6:$H$205,\"غير مدفوعة\")"
+      }
+     ]
+    }
+   ],
+   "settings": [
+    {
+     "label": "حالة الطلب",
+     "cell": "B24",
+     "value": "عدد الطلبات"
+    }
+   ],
+   "results": [
+    {
+     "label": "عدد الطلبات",
+     "cell": "B5",
+     "formula": "=COUNTIF('الطلبات'!$A$6:$A$205,\"?*\")"
+    },
+    {
+     "label": "طلبات محلية",
+     "cell": "B6",
+     "formula": "=COUNTIF('الطلبات'!$D$6:$D$205,\"محلي\")"
+    },
+    {
+     "label": "طلبات خارجية",
+     "cell": "B7",
+     "formula": "=COUNTIF('الطلبات'!$D$6:$D$205,\"خارجي\")"
+    },
+    {
+     "label": "طلبات مفتوحة (لم يبدأ أو قيد التجهيز)",
+     "cell": "B8",
+     "formula": "=COUNTIF('الطلبات'!$I$6:$I$205,\"لم يبدأ\")+COUNTIF('الطلبات'!$I$6:$I$205,\"قيد التجهيز\")"
+    },
+    {
+     "label": "فات موعدها",
+     "cell": "B11",
+     "formula": "=COUNTIF('الطلبات'!$O$6:$O$205,\"فات الموعد\")"
+    },
+    {
+     "label": "مواعيدها قريبة",
+     "cell": "B12",
+     "formula": "=COUNTIF('الطلبات'!$O$6:$O$205,\"موعد قريب\")"
+    },
+    {
+     "label": "بلا موعد",
+     "cell": "B13",
+     "formula": "=COUNTIF('الطلبات'!$O$6:$O$205,\"أدخل الموعد\")"
+    },
+    {
+     "label": "جاهزة للتقديم",
+     "cell": "B14",
+     "formula": "=COUNTIF('الطلبات'!$O$6:$O$205,\"جاهز للتقديم\")"
+    },
+    {
+     "label": "أقرب موعد بين المفتوحة (أيام)",
+     "cell": "B15",
+     "formula": "=IF(COUNT('الطلبات'!$N$6:$N$205)=0,\"\",MIN('الطلبات'!$N$6:$N$205))"
+    },
+    {
+     "label": "إجمالي المستندات المطلوبة",
+     "cell": "B18",
+     "formula": "=COUNTIF('المستندات'!$A$6:$A$1005,\"?*\")"
+    },
+    {
+     "label": "جاهزة",
+     "cell": "B19",
+     "formula": "=COUNTIF('المستندات'!$C$6:$C$1005,\"جاهز\")"
+    },
+    {
+     "label": "ناقصة",
+     "cell": "B20",
+     "formula": "=B18-B19"
+    },
+    {
+     "label": "نسبة الجاهزية",
+     "cell": "B21",
+     "formula": "=IF(B18=0,\"\",B19/B18)"
+    },
+    {
+     "label": "لم يبدأ",
+     "cell": "B25",
+     "formula": "=COUNTIF('الطلبات'!$I$6:$I$205,A25)"
+    },
+    {
+     "label": "قيد التجهيز",
+     "cell": "B26",
+     "formula": "=COUNTIF('الطلبات'!$I$6:$I$205,A26)"
+    },
+    {
+     "label": "تم التقديم",
+     "cell": "B27",
+     "formula": "=COUNTIF('الطلبات'!$I$6:$I$205,A27)"
+    },
+    {
+     "label": "تم القبول",
+     "cell": "B28",
+     "formula": "=COUNTIF('الطلبات'!$I$6:$I$205,A28)"
+    },
+    {
+     "label": "مرفوض",
+     "cell": "B29",
+     "formula": "=COUNTIF('الطلبات'!$I$6:$I$205,A29)"
+    }
+   ]
+  },
+  {
+   "name": "لماذا ما زلت على إكسل؟",
+   "formula_cells": 0
+  }
+ ]
+}

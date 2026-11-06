@@ -1,0 +1,612 @@
+{
+ "id": "car-rental-fleet",
+ "file": "softwiro-car-rental-fleet.xlsx",
+ "title": "شيت تأجير السيارات",
+ "language": "ar",
+ "direction": "rtl",
+ "how_it_works": "White cells are typed input; cells whose kind is \"formula\" are calculated and must not be overwritten. Add one record per row under the header row of a record table, keeping the columns in order.",
+ "sheets": [
+  {
+   "name": "ابدأ هنا",
+   "formula_cells": 0
+  },
+  {
+   "name": "الإعدادات",
+   "formula_cells": 0,
+   "settings": [
+    {
+     "label": "تاريخ اليوم",
+     "cell": "B4",
+     "value": "2026-11-01"
+    },
+    {
+     "label": "تنبيه التأمين والترخيص قبل (يوم)",
+     "cell": "B5",
+     "value": 30
+    }
+   ]
+  },
+  {
+   "name": "السيارات",
+   "formula_cells": 1800,
+   "record_tables": [
+    {
+     "header_row": 5,
+     "first_record_row": 6,
+     "sample_rows_filled": 7,
+     "capacity_last_row": 205,
+     "columns": [
+      {
+       "column": "A",
+       "header": "كود السيارة",
+       "kind": "input",
+       "examples": [
+        "K01",
+        "K02",
+        "K03"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "رقم اللوحة",
+       "kind": "input",
+       "examples": [
+        "س ص ع 1101",
+        "س ص ع 1102",
+        "س ص ع 1103"
+       ]
+      },
+      {
+       "column": "C",
+       "header": "الموديل",
+       "kind": "input",
+       "examples": [
+        "تويوتا كورولا 2022",
+        "هيونداي إلنترا 2021",
+        "كيا سيراتو 2020"
+       ]
+      },
+      {
+       "column": "D",
+       "header": "انتهاء التأمين",
+       "kind": "input",
+       "examples": [
+        "2027-03-15",
+        "2026-11-20",
+        "2026-10-10"
+       ]
+      },
+      {
+       "column": "E",
+       "header": "انتهاء الترخيص",
+       "kind": "input",
+       "examples": [
+        "2027-01-10",
+        "2027-05-01",
+        "2027-02-01"
+       ]
+      },
+      {
+       "column": "F",
+       "header": "عدد الحجوزات",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",COUNTIFS('الحجوزات'!$B$6:$B$1005,A6&\"\"))"
+      },
+      {
+       "column": "G",
+       "header": "أيام التأجير",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",SUMIFS('الحجوزات'!$K$6:$K$1005,'الحجوزات'!$B$6:$B$1005,A6&\"\"))"
+      },
+      {
+       "column": "H",
+       "header": "قيمة الحجوزات",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",SUMIFS('الحجوزات'!$L$6:$L$1005,'الحجوزات'!$B$6:$B$1005,A6&\"\"))"
+      },
+      {
+       "column": "I",
+       "header": "تكلفة الصيانة",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",SUMIFS('الصيانة'!$D$6:$D$1005,'الصيانة'!$B$6:$B$1005,A6&\"\"))"
+      },
+      {
+       "column": "J",
+       "header": "الصافي بعد الصيانة",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",ROUND(H6-I6,2))"
+      },
+      {
+       "column": "K",
+       "header": "الحالة الآن",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",IF(COUNTIFS('الصيانة'!$B$6:$B$1005,A6&\"\",'الصيانة'!$E$6:$E$1005,\"جارية\")>0,\"في الصيانة\",IF(COUNTIFS('الحجوزات'!$B$6:$B$1005,A6&\"\",'الحجوزات'!$N$6:$N$1005,\"جارٍ\")+COUNTIFS('الحجوزات'!$B$6:$B$1005,A6&\"\",'الحجوزات'!$N$6:$N$1005,\"متأخر التسليم\")>0,\"مؤجرة\",\"متاحة\")))"
+      },
+      {
+       "column": "L",
+       "header": "تنبيه التأمين",
+       "kind": "formula",
+       "formula_row_1": "=IF(OR(A6&\"\"=\"\",NOT(ISNUMBER(D6))),\"\",IF(D6<'الإعدادات'!$B$4,\"منتهي\",IF(D6-'الإعدادات'!$B$4<='الإعدادات'!$B$5,\"ينتهي قريبًا\",\"\")))"
+      },
+      {
+       "column": "M",
+       "header": "تنبيه الترخيص",
+       "kind": "formula",
+       "formula_row_1": "=IF(OR(A6&\"\"=\"\",NOT(ISNUMBER(E6))),\"\",IF(E6<'الإعدادات'!$B$4,\"منتهي\",IF(E6-'الإعدادات'!$B$4<='الإعدادات'!$B$5,\"ينتهي قريبًا\",\"\")))"
+      },
+      {
+       "column": "N",
+       "header": "متوسط الإيراد لليوم",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",IF(N(G6)=0,\"\",ROUND(H6/G6,2)))"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "الحجوزات",
+   "formula_cells": 7000,
+   "record_tables": [
+    {
+     "header_row": 5,
+     "first_record_row": 6,
+     "sample_rows_filled": 13,
+     "capacity_last_row": 1005,
+     "columns": [
+      {
+       "column": "A",
+       "header": "رقم الحجز",
+       "kind": "input",
+       "examples": [
+        "B001",
+        "B002",
+        "B003"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "كود السيارة",
+       "kind": "input",
+       "examples": [
+        "K01",
+        "K01",
+        "K02"
+       ],
+       "allowed_values": {
+        "from_range": "'السيارات'!$A$6:$A$205"
+       }
+      },
+      {
+       "column": "C",
+       "header": "العميل",
+       "kind": "input",
+       "examples": [
+        "ياسر منصور",
+        "هبة فؤاد",
+        "تامر سعد"
+       ]
+      },
+      {
+       "column": "D",
+       "header": "الجوال",
+       "kind": "input",
+       "examples": [
+        "01010000011",
+        "01010000012",
+        "01010000013"
+       ]
+      },
+      {
+       "column": "E",
+       "header": "الاستلام",
+       "kind": "input",
+       "examples": [
+        "2026-10-01",
+        "2026-10-10",
+        "2026-10-03"
+       ]
+      },
+      {
+       "column": "F",
+       "header": "التسليم المتفق عليه",
+       "kind": "input",
+       "examples": [
+        "2026-10-05",
+        "2026-10-14",
+        "2026-10-10"
+       ]
+      },
+      {
+       "column": "G",
+       "header": "التسليم الفعلي",
+       "kind": "input",
+       "examples": [
+        "2026-10-05",
+        "2026-10-16",
+        "2026-10-10"
+       ]
+      },
+      {
+       "column": "H",
+       "header": "سعر اليوم",
+       "kind": "input",
+       "examples": [
+        900,
+        900,
+        800
+       ]
+      },
+      {
+       "column": "I",
+       "header": "التأمين (وديعة)",
+       "kind": "input",
+       "examples": [
+        3000,
+        3000,
+        3000
+       ]
+      },
+      {
+       "column": "J",
+       "header": "المدفوع من الإيجار",
+       "kind": "input",
+       "examples": [
+        3600,
+        3600,
+        5600
+       ]
+      },
+      {
+       "column": "K",
+       "header": "الأيام",
+       "kind": "formula",
+       "formula_row_1": "=IF(OR(B6&\"\"=\"\",NOT(ISNUMBER(E6)),NOT(ISNUMBER(IF(ISNUMBER(G6),G6,F6)))),\"\",MAX(1,IF(ISNUMBER(G6),G6,F6)-E6))"
+      },
+      {
+       "column": "L",
+       "header": "قيمة الإيجار",
+       "kind": "formula",
+       "formula_row_1": "=IF(K6=\"\",\"\",ROUND(K6*N(H6),2))"
+      },
+      {
+       "column": "M",
+       "header": "المتبقي",
+       "kind": "formula",
+       "formula_row_1": "=IF(L6=\"\",\"\",ROUND(L6-N(J6),2))"
+      },
+      {
+       "column": "N",
+       "header": "الحالة",
+       "kind": "formula",
+       "formula_row_1": "=IF(B6&\"\"=\"\",\"\",IF(NOT(ISNUMBER(E6)),\"بيانات ناقصة\",IF(ISNUMBER(G6),\"سُلّمت\",IF(E6>'الإعدادات'!$B$4,\"قادم\",IF(AND(ISNUMBER(F6),F6<'الإعدادات'!$B$4),\"متأخر التسليم\",\"جارٍ\")))))"
+      },
+      {
+       "column": "O",
+       "header": "أيام التأخير",
+       "kind": "formula",
+       "formula_row_1": "=IF(N6=\"متأخر التسليم\",'الإعدادات'!$B$4-F6,\"\")"
+      },
+      {
+       "column": "P",
+       "header": "ترتيب المتابعة",
+       "kind": "formula",
+       "formula_row_1": "=IF(ISNUMBER(O6),COUNTIFS($O$6:$O$1005,\">\"&O6)+COUNTIFS($O$6:O6,O6),\"\")"
+      },
+      {
+       "column": "Q",
+       "header": "السيارة",
+       "kind": "formula",
+       "formula_row_1": "=IF(B6&\"\"=\"\",\"\",IFERROR(INDEX('السيارات'!$C$6:$C$205,MATCH(B6&\"\",'السيارات'!$A$6:$A$205,0))&\"\",\"كود غير موجود\"))"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "الصيانة",
+   "formula_cells": 1000,
+   "record_tables": [
+    {
+     "header_row": 5,
+     "first_record_row": 6,
+     "sample_rows_filled": 7,
+     "capacity_last_row": 1005,
+     "columns": [
+      {
+       "column": "A",
+       "header": "التاريخ",
+       "kind": "input",
+       "examples": [
+        "2026-09-20",
+        "2026-10-08",
+        "2026-10-12"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "كود السيارة",
+       "kind": "input",
+       "examples": [
+        "K01",
+        "K01",
+        "K03"
+       ],
+       "allowed_values": {
+        "from_range": "'السيارات'!$A$6:$A$205"
+       }
+      },
+      {
+       "column": "C",
+       "header": "النوع",
+       "kind": "input",
+       "examples": [
+        "إطارات",
+        "زيت وفلاتر",
+        "إطارات"
+       ],
+       "allowed_values": [
+        "زيت وفلاتر",
+        "إطارات",
+        "فرامل",
+        "كهرباء",
+        "إصلاح حادث",
+        "أخرى"
+       ]
+      },
+      {
+       "column": "D",
+       "header": "التكلفة",
+       "kind": "input",
+       "examples": [
+        5000,
+        900,
+        6000
+       ]
+      },
+      {
+       "column": "E",
+       "header": "الحالة",
+       "kind": "input",
+       "examples": [
+        "منتهية",
+        "منتهية",
+        "منتهية"
+       ],
+       "allowed_values": [
+        "جارية",
+        "منتهية"
+       ]
+      },
+      {
+       "column": "F",
+       "header": "ملاحظة",
+       "kind": "input",
+       "examples": [
+        "تغيير 4 إطارات",
+        "بانتظار قطع الغيار"
+       ]
+      },
+      {
+       "column": "G",
+       "header": "السيارة",
+       "kind": "formula",
+       "formula_row_1": "=IF(B6&\"\"=\"\",\"\",IFERROR(INDEX('السيارات'!$C$6:$C$205,MATCH(B6&\"\",'السيارات'!$A$6:$A$205,0))&\"\",\"كود غير موجود\"))"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "للمتابعة",
+   "formula_cells": 401,
+   "record_tables": [
+    {
+     "header_row": 6,
+     "first_record_row": 7,
+     "sample_rows_filled": 0,
+     "capacity_last_row": 56,
+     "columns": [
+      {
+       "column": "A",
+       "header": "م",
+       "kind": "formula",
+       "formula_row_1": "=IF(1<=$B$4,1,\"\")"
+      },
+      {
+       "column": "B",
+       "header": "الحجز",
+       "kind": "formula",
+       "formula_row_1": "=IF($A7=\"\",\"\",INDEX('الحجوزات'!$A$6:$A$1005,MATCH($A7,'الحجوزات'!$P$6:$P$1005,0))&\"\")"
+      },
+      {
+       "column": "C",
+       "header": "السيارة",
+       "kind": "formula",
+       "formula_row_1": "=IF($A7=\"\",\"\",INDEX('الحجوزات'!$Q$6:$Q$1005,MATCH($A7,'الحجوزات'!$P$6:$P$1005,0))&\"\")"
+      },
+      {
+       "column": "D",
+       "header": "العميل",
+       "kind": "formula",
+       "formula_row_1": "=IF($A7=\"\",\"\",INDEX('الحجوزات'!$C$6:$C$1005,MATCH($A7,'الحجوزات'!$P$6:$P$1005,0))&\"\")"
+      },
+      {
+       "column": "E",
+       "header": "الجوال",
+       "kind": "formula",
+       "formula_row_1": "=IF($A7=\"\",\"\",INDEX('الحجوزات'!$D$6:$D$1005,MATCH($A7,'الحجوزات'!$P$6:$P$1005,0))&\"\")"
+      },
+      {
+       "column": "F",
+       "header": "التسليم المتفق عليه",
+       "kind": "formula",
+       "formula_row_1": "=IF($A7=\"\",\"\",INDEX('الحجوزات'!$F$6:$F$1005,MATCH($A7,'الحجوزات'!$P$6:$P$1005,0)))"
+      },
+      {
+       "column": "G",
+       "header": "أيام التأخير",
+       "kind": "formula",
+       "formula_row_1": "=IF($A7=\"\",\"\",INDEX('الحجوزات'!$O$6:$O$1005,MATCH($A7,'الحجوزات'!$P$6:$P$1005,0)))"
+      },
+      {
+       "column": "H",
+       "header": "المتبقي",
+       "kind": "formula",
+       "formula_row_1": "=IF($A7=\"\",\"\",INDEX('الحجوزات'!$M$6:$M$1005,MATCH($A7,'الحجوزات'!$P$6:$P$1005,0)))"
+      }
+     ]
+    }
+   ],
+   "results": [
+    {
+     "label": "عدد الحجوزات المتأخرة",
+     "cell": "B4",
+     "formula": "=COUNTIF('الحجوزات'!$N$6:$N$1005,\"متأخر التسليم\")"
+    }
+   ]
+  },
+  {
+   "name": "الملخص",
+   "formula_cells": 28,
+   "record_tables": [
+    {
+     "header_row": 31,
+     "first_record_row": 32,
+     "sample_rows_filled": 4,
+     "capacity_last_row": 35,
+     "columns": [
+      {
+       "column": "A",
+       "header": "الحالة",
+       "kind": "input",
+       "examples": [
+        "جارٍ",
+        "قادم",
+        "متأخر التسليم"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "عدد الحجوزات",
+       "kind": "formula",
+       "formula_row_1": "=COUNTIF('الحجوزات'!$N$6:$N$1005,A32)"
+      },
+      {
+       "column": "C",
+       "header": "قيمة الإيجار",
+       "kind": "formula",
+       "formula_row_1": "=SUMIFS('الحجوزات'!$L$6:$L$1005,'الحجوزات'!$N$6:$N$1005,A32)"
+      }
+     ]
+    }
+   ],
+   "results": [
+    {
+     "label": "عدد السيارات",
+     "cell": "B5",
+     "formula": "=COUNTIF('السيارات'!$A$6:$A$205,\"?*\")"
+    },
+    {
+     "label": "متاحة",
+     "cell": "B6",
+     "formula": "=COUNTIF('السيارات'!$K$6:$K$205,\"متاحة\")"
+    },
+    {
+     "label": "مؤجرة الآن",
+     "cell": "B7",
+     "formula": "=COUNTIF('السيارات'!$K$6:$K$205,\"مؤجرة\")"
+    },
+    {
+     "label": "في الصيانة",
+     "cell": "B8",
+     "formula": "=COUNTIF('السيارات'!$K$6:$K$205,\"في الصيانة\")"
+    },
+    {
+     "label": "نسبة السيارات المؤجرة الآن",
+     "cell": "B9",
+     "formula": "=IF(B5=0,\"\",B7/B5)"
+    },
+    {
+     "label": "تأمين منتهٍ أو ينتهي قريبًا",
+     "cell": "B10",
+     "formula": "=COUNTIF('السيارات'!$L$6:$L$205,\"منتهي\")+COUNTIF('السيارات'!$L$6:$L$205,\"ينتهي قريبًا\")"
+    },
+    {
+     "label": "ترخيص منتهٍ أو ينتهي قريبًا",
+     "cell": "B11",
+     "formula": "=COUNTIF('السيارات'!$M$6:$M$205,\"منتهي\")+COUNTIF('السيارات'!$M$6:$M$205,\"ينتهي قريبًا\")"
+    },
+    {
+     "label": "عدد الحجوزات",
+     "cell": "B14",
+     "formula": "=COUNTIF('الحجوزات'!$B$6:$B$1005,\"?*\")"
+    },
+    {
+     "label": "جارية",
+     "cell": "B15",
+     "formula": "=COUNTIF('الحجوزات'!$N$6:$N$1005,\"جارٍ\")"
+    },
+    {
+     "label": "قادمة",
+     "cell": "B16",
+     "formula": "=COUNTIF('الحجوزات'!$N$6:$N$1005,\"قادم\")"
+    },
+    {
+     "label": "متأخرة التسليم",
+     "cell": "B17",
+     "formula": "=COUNTIF('الحجوزات'!$N$6:$N$1005,\"متأخر التسليم\")"
+    },
+    {
+     "label": "سُلّمت",
+     "cell": "B18",
+     "formula": "=COUNTIF('الحجوزات'!$N$6:$N$1005,\"سُلّمت\")"
+    },
+    {
+     "label": "قيمة الحجوزات",
+     "cell": "B21",
+     "formula": "=SUM('الحجوزات'!$L$6:$L$1005)"
+    },
+    {
+     "label": "المدفوع من الإيجار",
+     "cell": "B22",
+     "formula": "=SUM('الحجوزات'!$J$6:$J$1005)"
+    },
+    {
+     "label": "المتبقي على العملاء",
+     "cell": "B23",
+     "formula": "=SUMIF('الحجوزات'!$M$6:$M$1005,\">0\")"
+    },
+    {
+     "label": "تأمينات محتجزة (سيارات لم تُسلَّم)",
+     "cell": "B24",
+     "formula": "=SUM('الحجوزات'!$I$6:$I$1005)-SUMIFS('الحجوزات'!$I$6:$I$1005,'الحجوزات'!$N$6:$N$1005,\"سُلّمت\")"
+    },
+    {
+     "label": "تكلفة الصيانة",
+     "cell": "B25",
+     "formula": "=SUM('الصيانة'!$D$6:$D$1005)"
+    },
+    {
+     "label": "الصافي بعد الصيانة",
+     "cell": "B26",
+     "formula": "=B21-B25"
+    },
+    {
+     "label": "قيمة حجوزات الشهر الحالي (حسب الاستلام)",
+     "cell": "B27",
+     "formula": "=SUMIFS('الحجوزات'!$L$6:$L$1005,'الحجوزات'!$E$6:$E$1005,\">=\"&DATE(YEAR('الإعدادات'!$B$4),MONTH('الإعدادات'!$B$4),1),'الحجوزات'!$E$6:$E$1005,\"<\"&DATE(YEAR('الإعدادات'!$B$4),MONTH('الإعدادات'!$B$4)+1,1))"
+    },
+    {
+     "label": "السيارة الأعلى صافيًا",
+     "cell": "B28",
+     "formula": "=IFERROR(INDEX('السيارات'!$A$6:$A$205,MATCH(MAX('السيارات'!$J$6:$J$205),'السيارات'!$J$6:$J$205,0))&\"\",\"\")"
+    }
+   ]
+  },
+  {
+   "name": "لماذا ما زلت على إكسل؟",
+   "formula_cells": 0
+  }
+ ]
+}

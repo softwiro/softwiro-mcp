@@ -1,0 +1,646 @@
+{
+ "id": "gym-memberships",
+ "file": "softwiro-gym-memberships.xlsx",
+ "title": "شيت اشتراكات الجيم",
+ "language": "ar",
+ "direction": "rtl",
+ "how_it_works": "White cells are typed input; cells whose kind is \"formula\" are calculated and must not be overwritten. Add one record per row under the header row of a record table, keeping the columns in order.",
+ "sheets": [
+  {
+   "name": "ابدأ هنا",
+   "formula_cells": 0
+  },
+  {
+   "name": "الإعدادات",
+   "formula_cells": 0,
+   "settings": [
+    {
+     "label": "تاريخ اليوم",
+     "cell": "B4",
+     "value": "2026-11-01"
+    },
+    {
+     "label": "تنبيه قرب انتهاء الاشتراك (يوم)",
+     "cell": "B5",
+     "value": 7
+    },
+    {
+     "label": "يُعدّ العضو منقطعًا بعد (يوم بلا حضور)",
+     "cell": "B6",
+     "value": 14
+    },
+    {
+     "label": "أي تاريخ داخل شهر الملخص",
+     "cell": "B7",
+     "value": "2026-10-15"
+    }
+   ]
+  },
+  {
+   "name": "الباقات",
+   "formula_cells": 0,
+   "record_tables": [
+    {
+     "header_row": 5,
+     "first_record_row": 6,
+     "sample_rows_filled": 4,
+     "capacity_last_row": 9,
+     "columns": [
+      {
+       "column": "A",
+       "header": "الباقة",
+       "kind": "input",
+       "examples": [
+        "شهري",
+        "ربع سنوي",
+        "نصف سنوي"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "السعر",
+       "kind": "input",
+       "examples": [
+        600,
+        1500,
+        2700
+       ]
+      },
+      {
+       "column": "C",
+       "header": "المدة (أشهر)",
+       "kind": "input",
+       "examples": [
+        1,
+        3,
+        6
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "الأعضاء",
+   "formula_cells": 6500,
+   "record_tables": [
+    {
+     "header_row": 5,
+     "first_record_row": 6,
+     "sample_rows_filled": 10,
+     "capacity_last_row": 505,
+     "columns": [
+      {
+       "column": "A",
+       "header": "كود العضو",
+       "kind": "input",
+       "examples": [
+        "G01",
+        "G02",
+        "G03"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "الاسم",
+       "kind": "input",
+       "examples": [
+        "أحمد علي",
+        "محمد سامي",
+        "كريم فؤاد"
+       ]
+      },
+      {
+       "column": "C",
+       "header": "الجوال",
+       "kind": "input",
+       "examples": [
+        "01010000001",
+        "01010000002",
+        "01010000003"
+       ]
+      },
+      {
+       "column": "D",
+       "header": "تاريخ الانضمام",
+       "kind": "input",
+       "examples": [
+        "2026-01-05",
+        "2026-03-12",
+        "2026-04-20"
+       ]
+      },
+      {
+       "column": "E",
+       "header": "عدد الاشتراكات",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",COUNTIFS('الاشتراكات'!$B$6:$B$1005,A6&\"\"))"
+      },
+      {
+       "column": "F",
+       "header": "تاريخ انتهاء الاشتراك",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",IFERROR(SUMIFS('الاشتراكات'!$I$6:$I$1005,'الاشتراكات'!$B$6:$B$1005,A6&\"\",'الاشتراكات'!$J$6:$J$1005,1)/COUNTIFS('الاشتراكات'!$B$6:$B$1005,A6&\"\",'الاشتراكات'!$J$6:$J$1005,1),\"\"))"
+      },
+      {
+       "column": "G",
+       "header": "أيام حتى الانتهاء",
+       "kind": "formula",
+       "formula_row_1": "=IF(F6=\"\",\"\",F6-'الإعدادات'!$B$4)"
+      },
+      {
+       "column": "H",
+       "header": "الحالة",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",IF(F6=\"\",\"بدون اشتراك\",IF(G6<0,\"منتهي\",IF(G6<='الإعدادات'!$B$5,\"ينتهي قريبًا\",\"ساري\"))))"
+      },
+      {
+       "column": "I",
+       "header": "قيمة الاشتراكات",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",SUMIFS('الاشتراكات'!$G$6:$G$1005,'الاشتراكات'!$B$6:$B$1005,A6&\"\"))"
+      },
+      {
+       "column": "J",
+       "header": "المدفوع",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",SUMIFS('الدفعات'!$C$6:$C$2005,'الدفعات'!$B$6:$B$2005,A6&\"\"))"
+      },
+      {
+       "column": "K",
+       "header": "المتبقي",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",ROUND(I6-J6,2))"
+      },
+      {
+       "column": "L",
+       "header": "زيارات آخر 30 يومًا",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",COUNTIFS('الحضور'!$B$6:$B$2005,A6&\"\",'الحضور'!$A$6:$A$2005,\">=\"&('الإعدادات'!$B$4-29),'الحضور'!$A$6:$A$2005,\"<=\"&'الإعدادات'!$B$4))"
+      },
+      {
+       "column": "M",
+       "header": "آخر حضور",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",IFERROR(SUMIFS('الحضور'!$A$6:$A$2005,'الحضور'!$B$6:$B$2005,A6&\"\",'الحضور'!$D$6:$D$2005,1)/COUNTIFS('الحضور'!$B$6:$B$2005,A6&\"\",'الحضور'!$D$6:$D$2005,1),\"\"))"
+      },
+      {
+       "column": "N",
+       "header": "أيام منذ آخر حضور",
+       "kind": "formula",
+       "formula_row_1": "=IF(M6=\"\",\"\",'الإعدادات'!$B$4-M6)"
+      },
+      {
+       "column": "O",
+       "header": "النشاط",
+       "kind": "formula",
+       "formula_row_1": "=IF(OR(H6=\"ساري\",H6=\"ينتهي قريبًا\"),IF(M6=\"\",\"لم يحضر\",IF(N6>='الإعدادات'!$B$6,\"منقطع\",\"نشط\")),\"\")"
+      },
+      {
+       "column": "P",
+       "header": "مفتاح التجديد",
+       "kind": "formula",
+       "formula_row_1": "=IF(OR(H6=\"منتهي\",H6=\"ينتهي قريبًا\"),G6,\"\")"
+      },
+      {
+       "column": "Q",
+       "header": "ترتيب التجديد",
+       "kind": "formula",
+       "formula_row_1": "=IF(P6=\"\",\"\",COUNTIFS($P$6:$P$505,\"<\"&P6)+COUNTIFS($P$6:P6,P6))"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "الاشتراكات",
+   "formula_cells": 6000,
+   "record_tables": [
+    {
+     "header_row": 5,
+     "first_record_row": 6,
+     "sample_rows_filled": 11,
+     "capacity_last_row": 1005,
+     "columns": [
+      {
+       "column": "A",
+       "header": "تاريخ البداية",
+       "kind": "input",
+       "examples": [
+        "2026-01-05",
+        "2026-05-15",
+        "2026-06-01"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "كود العضو",
+       "kind": "input",
+       "examples": [
+        "G01",
+        "G07",
+        "G05"
+       ],
+       "allowed_values": {
+        "from_range": "'الأعضاء'!$A$6:$A$505"
+       }
+      },
+      {
+       "column": "C",
+       "header": "الباقة",
+       "kind": "input",
+       "examples": [
+        "سنوي",
+        "ربع سنوي",
+        "نصف سنوي"
+       ],
+       "allowed_values": {
+        "from_range": "'الباقات'!$A$6:$A$205"
+       }
+      },
+      {
+       "column": "D",
+       "header": "الخصم",
+       "kind": "input",
+       "examples": [
+        200,
+        100,
+        50
+       ]
+      },
+      {
+       "column": "E",
+       "header": "العضو",
+       "kind": "formula",
+       "formula_row_1": "=IF(B6&\"\"=\"\",\"\",IFERROR(INDEX('الأعضاء'!$B$6:$B$505,MATCH(B6&\"\",'الأعضاء'!$A$6:$A$505,0))&\"\",\"كود غير موجود\"))"
+      },
+      {
+       "column": "F",
+       "header": "سعر الباقة",
+       "kind": "formula",
+       "formula_row_1": "=IF(C6&\"\"=\"\",\"\",IFERROR(INDEX('الباقات'!$B$6:$B$205,MATCH(C6&\"\",'الباقات'!$A$6:$A$205,0)),\"باقة غير موجودة\"))"
+      },
+      {
+       "column": "G",
+       "header": "الصافي",
+       "kind": "formula",
+       "formula_row_1": "=IF(ISNUMBER(F6),ROUND(F6-N(D6),2),\"\")"
+      },
+      {
+       "column": "H",
+       "header": "المدة (أشهر)",
+       "kind": "formula",
+       "formula_row_1": "=IF(C6&\"\"=\"\",\"\",IFERROR(INDEX('الباقات'!$C$6:$C$205,MATCH(C6&\"\",'الباقات'!$A$6:$A$205,0)),\"\"))"
+      },
+      {
+       "column": "I",
+       "header": "تاريخ الانتهاء",
+       "kind": "formula",
+       "formula_row_1": "=IF(AND(ISNUMBER(A6),ISNUMBER(H6)),EDATE(A6,H6)-1,\"\")"
+      },
+      {
+       "column": "J",
+       "header": "الأحدث",
+       "kind": "formula",
+       "formula_row_1": "=IF(ISNUMBER(I6),IF(COUNTIFS($B$6:$B$1005,B6&\"\",$A$6:$A$1005,\">\"&A6)=0,1,0),\"\")"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "الدفعات",
+   "formula_cells": 2000,
+   "record_tables": [
+    {
+     "header_row": 5,
+     "first_record_row": 6,
+     "sample_rows_filled": 13,
+     "capacity_last_row": 2005,
+     "columns": [
+      {
+       "column": "A",
+       "header": "التاريخ",
+       "kind": "input",
+       "examples": [
+        "2026-01-05",
+        "2026-05-15",
+        "2026-06-01"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "كود العضو",
+       "kind": "input",
+       "examples": [
+        "G01",
+        "G07",
+        "G05"
+       ],
+       "allowed_values": {
+        "from_range": "'الأعضاء'!$A$6:$A$505"
+       }
+      },
+      {
+       "column": "C",
+       "header": "المبلغ",
+       "kind": "input",
+       "examples": [
+        4800,
+        1500,
+        1500
+       ]
+      },
+      {
+       "column": "D",
+       "header": "طريقة الدفع",
+       "kind": "input",
+       "examples": [
+        "تحويل بنكي",
+        "نقدًا",
+        "نقدًا"
+       ],
+       "allowed_values": [
+        "نقدًا",
+        "تحويل بنكي",
+        "بطاقة"
+       ]
+      },
+      {
+       "column": "E",
+       "header": "ملاحظة",
+       "kind": "input"
+      },
+      {
+       "column": "F",
+       "header": "العضو",
+       "kind": "formula",
+       "formula_row_1": "=IF(B6&\"\"=\"\",\"\",IFERROR(INDEX('الأعضاء'!$B$6:$B$505,MATCH(B6&\"\",'الأعضاء'!$A$6:$A$505,0))&\"\",\"كود غير موجود\"))"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "الحضور",
+   "formula_cells": 4000,
+   "record_tables": [
+    {
+     "header_row": 5,
+     "first_record_row": 6,
+     "sample_rows_filled": 20,
+     "capacity_last_row": 2005,
+     "columns": [
+      {
+       "column": "A",
+       "header": "التاريخ",
+       "kind": "input",
+       "examples": [
+        "2026-10-02",
+        "2026-10-03",
+        "2026-10-05"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "كود العضو",
+       "kind": "input",
+       "examples": [
+        "G01",
+        "G10",
+        "G02"
+       ],
+       "allowed_values": {
+        "from_range": "'الأعضاء'!$A$6:$A$505"
+       }
+      },
+      {
+       "column": "C",
+       "header": "العضو",
+       "kind": "formula",
+       "formula_row_1": "=IF(B6&\"\"=\"\",\"\",IFERROR(INDEX('الأعضاء'!$B$6:$B$505,MATCH(B6&\"\",'الأعضاء'!$A$6:$A$505,0))&\"\",\"كود غير موجود\"))"
+      },
+      {
+       "column": "D",
+       "header": "آخر حضور",
+       "kind": "formula",
+       "formula_row_1": "=IF(OR(B6&\"\"=\"\",NOT(ISNUMBER(A6))),\"\",IF(COUNTIFS($B$6:$B$2005,B6&\"\",$A$6:$A$2005,\">\"&A6)=0,1,0))"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "للتجديد",
+   "formula_cells": 401,
+   "record_tables": [
+    {
+     "header_row": 6,
+     "first_record_row": 7,
+     "sample_rows_filled": 0,
+     "capacity_last_row": 56,
+     "columns": [
+      {
+       "column": "A",
+       "header": "م",
+       "kind": "formula",
+       "formula_row_1": "=IF(1<=$B$4,1,\"\")"
+      },
+      {
+       "column": "B",
+       "header": "الكود",
+       "kind": "formula",
+       "formula_row_1": "=IF($A7=\"\",\"\",INDEX('الأعضاء'!$A$6:$A$505,MATCH($A7,'الأعضاء'!$Q$6:$Q$505,0))&\"\")"
+      },
+      {
+       "column": "C",
+       "header": "العضو",
+       "kind": "formula",
+       "formula_row_1": "=IF($A7=\"\",\"\",INDEX('الأعضاء'!$B$6:$B$505,MATCH($A7,'الأعضاء'!$Q$6:$Q$505,0))&\"\")"
+      },
+      {
+       "column": "D",
+       "header": "الجوال",
+       "kind": "formula",
+       "formula_row_1": "=IF($A7=\"\",\"\",INDEX('الأعضاء'!$C$6:$C$505,MATCH($A7,'الأعضاء'!$Q$6:$Q$505,0))&\"\")"
+      },
+      {
+       "column": "E",
+       "header": "الحالة",
+       "kind": "formula",
+       "formula_row_1": "=IF($A7=\"\",\"\",INDEX('الأعضاء'!$H$6:$H$505,MATCH($A7,'الأعضاء'!$Q$6:$Q$505,0))&\"\")"
+      },
+      {
+       "column": "F",
+       "header": "تاريخ الانتهاء",
+       "kind": "formula",
+       "formula_row_1": "=IF($A7=\"\",\"\",INDEX('الأعضاء'!$F$6:$F$505,MATCH($A7,'الأعضاء'!$Q$6:$Q$505,0)))"
+      },
+      {
+       "column": "G",
+       "header": "أيام حتى الانتهاء",
+       "kind": "formula",
+       "formula_row_1": "=IF($A7=\"\",\"\",INDEX('الأعضاء'!$G$6:$G$505,MATCH($A7,'الأعضاء'!$Q$6:$Q$505,0)))"
+      },
+      {
+       "column": "H",
+       "header": "المتبقي عليه",
+       "kind": "formula",
+       "formula_row_1": "=IF($A7=\"\",\"\",INDEX('الأعضاء'!$K$6:$K$505,MATCH($A7,'الأعضاء'!$Q$6:$Q$505,0)))"
+      }
+     ]
+    }
+   ],
+   "results": [
+    {
+     "label": "يحتاجون تجديدًا",
+     "cell": "B4",
+     "formula": "=COUNT('الأعضاء'!$P$6:$P$505)"
+    }
+   ]
+  },
+  {
+   "name": "الملخص",
+   "formula_cells": 51,
+   "record_tables": [
+    {
+     "header_row": 34,
+     "first_record_row": 35,
+     "sample_rows_filled": 0,
+     "capacity_last_row": 48,
+     "columns": [
+      {
+       "column": "A",
+       "header": "الباقة",
+       "kind": "formula",
+       "formula_row_1": "=IF('الباقات'!A6&\"\"=\"\",\"\",'الباقات'!A6)"
+      },
+      {
+       "column": "B",
+       "header": "عدد الاشتراكات",
+       "kind": "formula",
+       "formula_row_1": "=IF(A35=\"\",\"\",COUNTIFS('الاشتراكات'!$C$6:$C$1005,A35))"
+      },
+      {
+       "column": "C",
+       "header": "الصافي",
+       "kind": "formula",
+       "formula_row_1": "=IF(A35=\"\",\"\",SUMIFS('الاشتراكات'!$G$6:$G$1005,'الاشتراكات'!$C$6:$C$1005,A35))"
+      }
+     ]
+    }
+   ],
+   "results": [
+    {
+     "label": "عدد الأعضاء",
+     "cell": "B5",
+     "formula": "=COUNTIF('الأعضاء'!$A$6:$A$505,\"?*\")"
+    },
+    {
+     "label": "اشتراكات سارية (تشمل القريبة من الانتهاء)",
+     "cell": "B6",
+     "formula": "=COUNTIF('الأعضاء'!$H$6:$H$505,\"ساري\")+B7"
+    },
+    {
+     "label": "منها تنتهي قريبًا",
+     "cell": "B7",
+     "formula": "=COUNTIF('الأعضاء'!$H$6:$H$505,\"ينتهي قريبًا\")"
+    },
+    {
+     "label": "اشتراكات منتهية",
+     "cell": "B8",
+     "formula": "=COUNTIF('الأعضاء'!$H$6:$H$505,\"منتهي\")"
+    },
+    {
+     "label": "بدون اشتراك",
+     "cell": "B9",
+     "formula": "=COUNTIF('الأعضاء'!$H$6:$H$505,\"بدون اشتراك\")"
+    },
+    {
+     "label": "نسبة الاشتراكات السارية من الأعضاء",
+     "cell": "B10",
+     "formula": "=IF(B5=0,\"\",B6/B5)"
+    },
+    {
+     "label": "ساريون منقطعون عن الحضور",
+     "cell": "B11",
+     "formula": "=COUNTIF('الأعضاء'!$O$6:$O$505,\"منقطع\")"
+    },
+    {
+     "label": "ساريون لم يحضروا أبدًا",
+     "cell": "B12",
+     "formula": "=COUNTIF('الأعضاء'!$O$6:$O$505,\"لم يحضر\")"
+    },
+    {
+     "label": "قيمة كل الاشتراكات",
+     "cell": "B15",
+     "formula": "=SUM('الأعضاء'!$I$6:$I$505)"
+    },
+    {
+     "label": "إجمالي المدفوع",
+     "cell": "B16",
+     "formula": "=SUM('الأعضاء'!$J$6:$J$505)"
+    },
+    {
+     "label": "المتبقي على الأعضاء",
+     "cell": "B17",
+     "formula": "=SUMIF('الأعضاء'!$K$6:$K$505,\">0\")"
+    },
+    {
+     "label": "مدفوع مقدمًا (رصيد للأعضاء)",
+     "cell": "B18",
+     "formula": "=-SUMIF('الأعضاء'!$K$6:$K$505,\"<0\")"
+    },
+    {
+     "label": "أعضاء عليهم متبقي",
+     "cell": "B19",
+     "formula": "=COUNTIF('الأعضاء'!$K$6:$K$505,\">0\")"
+    },
+    {
+     "label": "اشتراكات بدأت في الشهر",
+     "cell": "B22",
+     "formula": "=COUNTIFS('الاشتراكات'!$A$6:$A$1005,\">=\"&DATE(YEAR('الإعدادات'!$B$7),MONTH('الإعدادات'!$B$7),1),'الاشتراكات'!$A$6:$A$1005,\"<=\"&EOMONTH('الإعدادات'!$B$7,0))"
+    },
+    {
+     "label": "صافي قيمتها",
+     "cell": "B23",
+     "formula": "=SUMIFS('الاشتراكات'!$G$6:$G$1005,'الاشتراكات'!$A$6:$A$1005,\">=\"&DATE(YEAR('الإعدادات'!$B$7),MONTH('الإعدادات'!$B$7),1),'الاشتراكات'!$A$6:$A$1005,\"<=\"&EOMONTH('الإعدادات'!$B$7,0))"
+    },
+    {
+     "label": "المحصّل في الشهر",
+     "cell": "B24",
+     "formula": "=SUMIFS('الدفعات'!$C$6:$C$2005,'الدفعات'!$A$6:$A$2005,\">=\"&DATE(YEAR('الإعدادات'!$B$7),MONTH('الإعدادات'!$B$7),1),'الدفعات'!$A$6:$A$2005,\"<=\"&EOMONTH('الإعدادات'!$B$7,0))"
+    },
+    {
+     "label": "أعضاء انضموا في الشهر",
+     "cell": "B25",
+     "formula": "=COUNTIFS('الأعضاء'!$D$6:$D$505,\">=\"&DATE(YEAR('الإعدادات'!$B$7),MONTH('الإعدادات'!$B$7),1),'الأعضاء'!$D$6:$D$505,\"<=\"&EOMONTH('الإعدادات'!$B$7,0))"
+    },
+    {
+     "label": "زيارات الشهر",
+     "cell": "B26",
+     "formula": "=COUNTIFS('الحضور'!$A$6:$A$2005,\">=\"&DATE(YEAR('الإعدادات'!$B$7),MONTH('الإعدادات'!$B$7),1),'الحضور'!$A$6:$A$2005,\"<=\"&EOMONTH('الإعدادات'!$B$7,0))"
+    },
+    {
+     "label": "زيارات اليوم",
+     "cell": "B29",
+     "formula": "=COUNTIFS('الحضور'!$A$6:$A$2005,'الإعدادات'!$B$4)"
+    },
+    {
+     "label": "زيارات آخر 30 يومًا",
+     "cell": "B30",
+     "formula": "=COUNTIFS('الحضور'!$A$6:$A$2005,\">=\"&('الإعدادات'!$B$4-29),'الحضور'!$A$6:$A$2005,\"<=\"&'الإعدادات'!$B$4)"
+    },
+    {
+     "label": "أعضاء حضروا آخر 30 يومًا",
+     "cell": "B31",
+     "formula": "=COUNTIF('الأعضاء'!$L$6:$L$505,\">0\")"
+    }
+   ]
+  },
+  {
+   "name": "لماذا ما زلت على إكسل؟",
+   "formula_cells": 0
+  }
+ ]
+}

@@ -1,0 +1,266 @@
+{
+ "id": "customer-ledger",
+ "file": "softwiro-customer-ledger.xlsx",
+ "title": "شيت حسابات العملاء والآجل",
+ "language": "ar",
+ "direction": "rtl",
+ "how_it_works": "White cells are typed input; cells whose kind is \"formula\" are calculated and must not be overwritten. Add one record per row under the header row of a record table, keeping the columns in order.",
+ "sheets": [
+  {
+   "name": "ابدأ هنا",
+   "formula_cells": 0
+  },
+  {
+   "name": "العملاء",
+   "formula_cells": 1804,
+   "record_tables": [
+    {
+     "header_row": 5,
+     "first_record_row": 6,
+     "sample_rows_filled": 5,
+     "capacity_last_row": 305,
+     "columns": [
+      {
+       "column": "A",
+       "header": "الكود",
+       "kind": "input",
+       "examples": [
+        "C001",
+        "C002",
+        "C003"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "الاسم",
+       "kind": "input",
+       "examples": [
+        "مكتبة النور",
+        "بقالة الأمل",
+        "محل الزهراء للملابس"
+       ]
+      },
+      {
+       "column": "C",
+       "header": "التليفون",
+       "kind": "input",
+       "examples": [
+        "01012345601",
+        "01012345602",
+        "01012345603"
+       ]
+      },
+      {
+       "column": "D",
+       "header": "حد الائتمان",
+       "kind": "input",
+       "examples": [
+        5000,
+        3000,
+        10000
+       ]
+      },
+      {
+       "column": "E",
+       "header": "إجمالي الفواتير",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",SUMIFS('الحركات'!$D$6:$D$2005,'الحركات'!$B$6:$B$2005,A6&\"\",'الحركات'!$C$6:$C$2005,\"فاتورة\"))"
+      },
+      {
+       "column": "F",
+       "header": "المدفوع",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",SUMIFS('الحركات'!$D$6:$D$2005,'الحركات'!$B$6:$B$2005,A6&\"\",'الحركات'!$C$6:$C$2005,\"دفعة\"))"
+      },
+      {
+       "column": "G",
+       "header": "المرتجعات",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",SUMIFS('الحركات'!$D$6:$D$2005,'الحركات'!$B$6:$B$2005,A6&\"\",'الحركات'!$C$6:$C$2005,\"مرتجع\"))"
+      },
+      {
+       "column": "H",
+       "header": "الرصيد المستحق",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",ROUND(E6-F6-G6,2))"
+      },
+      {
+       "column": "I",
+       "header": "نسبة استخدام الحد",
+       "kind": "formula",
+       "formula_row_1": "=IF(OR(A6&\"\"=\"\",D6&\"\"=\"\",D6=0),\"\",H6/D6)"
+      },
+      {
+       "column": "J",
+       "header": "الحالة",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",IF(AND(D6<>\"\",D6>0,H6>D6),\"تجاوز الحد\",IF(H6<0,\"دائن\",IF(AND(H6=0,COUNTIF('الحركات'!$B$6:$B$2005,A6&\"\")>0),\"مسدد\",\"عليه رصيد\"))))"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "الحركات",
+   "formula_cells": 6000,
+   "record_tables": [
+    {
+     "header_row": 5,
+     "first_record_row": 6,
+     "sample_rows_filled": 20,
+     "capacity_last_row": 2005,
+     "columns": [
+      {
+       "column": "A",
+       "header": "التاريخ",
+       "kind": "input",
+       "examples": [
+        "2026-09-01",
+        "2026-09-03",
+        "2026-09-05"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "كود العميل",
+       "kind": "input",
+       "examples": [
+        "C001",
+        "C002",
+        "C003"
+       ],
+       "allowed_values": {
+        "from_range": "'العملاء'!$A$6:$A$305"
+       }
+      },
+      {
+       "column": "C",
+       "header": "النوع",
+       "kind": "input",
+       "examples": [
+        "فاتورة",
+        "فاتورة",
+        "فاتورة"
+       ],
+       "allowed_values": [
+        "فاتورة",
+        "دفعة",
+        "مرتجع"
+       ]
+      },
+      {
+       "column": "D",
+       "header": "المبلغ",
+       "kind": "input",
+       "examples": [
+        2500,
+        1800,
+        4000
+       ]
+      },
+      {
+       "column": "E",
+       "header": "رقم المستند",
+       "kind": "input",
+       "examples": [
+        "INV-101",
+        "INV-102",
+        "INV-103"
+       ]
+      },
+      {
+       "column": "F",
+       "header": "ملاحظة",
+       "kind": "input",
+       "examples": [
+        "نقدًا",
+        "سداد كامل",
+        "دفع أكثر من المستحق"
+       ]
+      },
+      {
+       "column": "G",
+       "header": "اسم العميل",
+       "kind": "formula",
+       "formula_row_1": "=IF(B6&\"\"=\"\",\"\",IFERROR(INDEX('العملاء'!$B$6:$B$305,MATCH(B6,'العملاء'!$A$6:$A$305,0)),\"كود غير موجود\"))"
+      },
+      {
+       "column": "H",
+       "header": "الأثر",
+       "kind": "formula",
+       "formula_row_1": "=IF(OR(B6&\"\"=\"\",D6&\"\"=\"\"),\"\",IF(C6=\"فاتورة\",D6,IF(OR(C6=\"دفعة\",C6=\"مرتجع\"),-D6,0)))"
+      },
+      {
+       "column": "I",
+       "header": "رصيد العميل بعد الحركة",
+       "kind": "formula",
+       "formula_row_1": "=IF(H6=\"\",\"\",SUMIFS($H$6:H6,$B$6:B6,B6&\"\"))"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "كشف حساب",
+   "formula_cells": 9,
+   "settings": [
+    {
+     "label": "كود العميل",
+     "cell": "B4",
+     "value": "C002"
+    }
+   ],
+   "results": [
+    {
+     "label": "اسم العميل",
+     "cell": "B5",
+     "formula": "=IF(B4=\"\",\"\",IFERROR(INDEX('العملاء'!$B$6:$B$305,MATCH(B4,'العملاء'!$A$6:$A$305,0)),\"كود غير موجود\"))"
+    },
+    {
+     "label": "التليفون",
+     "cell": "B6",
+     "formula": "=IF(AND(B4<>\"\",$B$5<>\"كود غير موجود\"),INDEX('العملاء'!$C$6:$C$305,MATCH(B4,'العملاء'!$A$6:$A$305,0)),\"\")"
+    },
+    {
+     "label": "حد الائتمان",
+     "cell": "B7",
+     "formula": "=IF(AND(B4<>\"\",$B$5<>\"كود غير موجود\"),IF(INDEX('العملاء'!$D$6:$D$305,MATCH(B4,'العملاء'!$A$6:$A$305,0))=\"\",\"بلا حد\",INDEX('العملاء'!$D$6:$D$305,MATCH(B4,'العملاء'!$A$6:$A$305,0))),\"\")"
+    },
+    {
+     "label": "إجمالي الفواتير",
+     "cell": "B8",
+     "formula": "=IF(AND(B4<>\"\",$B$5<>\"كود غير موجود\"),SUMIFS('الحركات'!$D$6:$D$2005,'الحركات'!$B$6:$B$2005,B4,'الحركات'!$C$6:$C$2005,\"فاتورة\"),\"\")"
+    },
+    {
+     "label": "إجمالي المدفوع",
+     "cell": "B9",
+     "formula": "=IF(AND(B4<>\"\",$B$5<>\"كود غير موجود\"),SUMIFS('الحركات'!$D$6:$D$2005,'الحركات'!$B$6:$B$2005,B4,'الحركات'!$C$6:$C$2005,\"دفعة\"),\"\")"
+    },
+    {
+     "label": "إجمالي المرتجعات",
+     "cell": "B10",
+     "formula": "=IF(AND(B4<>\"\",$B$5<>\"كود غير موجود\"),SUMIFS('الحركات'!$D$6:$D$2005,'الحركات'!$B$6:$B$2005,B4,'الحركات'!$C$6:$C$2005,\"مرتجع\"),\"\")"
+    },
+    {
+     "label": "الرصيد المستحق",
+     "cell": "B11",
+     "formula": "=IF(AND(B4<>\"\",$B$5<>\"كود غير موجود\"),ROUND(B8-B9-B10,2),\"\")"
+    },
+    {
+     "label": "الحالة",
+     "cell": "B12",
+     "formula": "=IF(AND(B4<>\"\",$B$5<>\"كود غير موجود\"),INDEX('العملاء'!$J$6:$J$305,MATCH(B4,'العملاء'!$A$6:$A$305,0)),\"\")"
+    },
+    {
+     "label": "عدد الحركات",
+     "cell": "B13",
+     "formula": "=IF(AND(B4<>\"\",$B$5<>\"كود غير موجود\"),COUNTIF('الحركات'!$B$6:$B$2005,B4),\"\")"
+    }
+   ]
+  },
+  {
+   "name": "لماذا ما زلت على إكسل؟",
+   "formula_cells": 0
+  }
+ ]
+}

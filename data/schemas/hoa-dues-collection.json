@@ -1,0 +1,561 @@
+{
+ "id": "hoa-dues-collection",
+ "file": "softwiro-hoa-dues-collection.xlsx",
+ "title": "شيت تحصيل اشتراكات الصيانة لاتحاد الملاك",
+ "language": "ar",
+ "direction": "rtl",
+ "how_it_works": "White cells are typed input; cells whose kind is \"formula\" are calculated and must not be overwritten. Add one record per row under the header row of a record table, keeping the columns in order.",
+ "sheets": [
+  {
+   "name": "ابدأ هنا",
+   "formula_cells": 0
+  },
+  {
+   "name": "الإعدادات",
+   "formula_cells": 0,
+   "settings": [
+    {
+     "label": "تاريخ اليوم",
+     "cell": "B4",
+     "value": "2026-11-01"
+    },
+    {
+     "label": "أول شهر بدأ فيه تحصيل الاشتراك",
+     "cell": "B5",
+     "value": "2026-01-01"
+    },
+    {
+     "label": "سعر المتر شهريًا (بعملتك)",
+     "cell": "B6",
+     "value": 6
+    }
+   ]
+  },
+  {
+   "name": "الوحدات",
+   "formula_cells": 2700,
+   "record_tables": [
+    {
+     "header_row": 5,
+     "first_record_row": 6,
+     "sample_rows_filled": 12,
+     "capacity_last_row": 305,
+     "columns": [
+      {
+       "column": "A",
+       "header": "كود الوحدة",
+       "kind": "input",
+       "examples": [
+        "A-101",
+        "A-102",
+        "A-201"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "الدور / المبنى",
+       "kind": "input",
+       "examples": [
+        "مبنى A - الدور 1",
+        "مبنى A - الدور 1",
+        "مبنى A - الدور 2"
+       ]
+      },
+      {
+       "column": "C",
+       "header": "اسم المالك",
+       "kind": "input",
+       "examples": [
+        "أحمد سالم",
+        "مها حسن",
+        "خالد عمر"
+       ]
+      },
+      {
+       "column": "D",
+       "header": "الجوال",
+       "kind": "input",
+       "examples": [
+        "01010000001",
+        "01010000002",
+        "01010000003"
+       ]
+      },
+      {
+       "column": "E",
+       "header": "المساحة (م²)",
+       "kind": "input",
+       "examples": [
+        100,
+        120,
+        100
+       ]
+      },
+      {
+       "column": "F",
+       "header": "الاشتراك الثابت (اختياري)",
+       "kind": "input",
+       "examples": [
+        800,
+        700,
+        1500
+       ]
+      },
+      {
+       "column": "G",
+       "header": "الاشتراك الشهري",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",IF(N(F6)>0,F6,ROUND(N(E6)*'الإعدادات'!$B$6,2)))"
+      },
+      {
+       "column": "H",
+       "header": "الأشهر المستحقة",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",MAX(0,(YEAR('الإعدادات'!$B$4)-YEAR('الإعدادات'!$B$5))*12+MONTH('الإعدادات'!$B$4)-MONTH('الإعدادات'!$B$5)+1))"
+      },
+      {
+       "column": "I",
+       "header": "المستحق",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",ROUND(H6*G6,2))"
+      },
+      {
+       "column": "J",
+       "header": "المدفوع",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",SUMIFS('المدفوعات'!$C$6:$C$2005,'المدفوعات'!$B$6:$B$2005,A6&\"\"))"
+      },
+      {
+       "column": "K",
+       "header": "المتأخر",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",ROUND(I6-J6,2))"
+      },
+      {
+       "column": "L",
+       "header": "الأشهر المتأخرة",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",IF(AND(K6>0,G6>0),ROUNDUP(ROUND(K6/G6,4),0),0))"
+      },
+      {
+       "column": "M",
+       "header": "آخر دفعة",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",IFERROR(SUMIFS('المدفوعات'!$A$6:$A$2005,'المدفوعات'!$B$6:$B$2005,A6&\"\",'المدفوعات'!$H$6:$H$2005,1)/COUNTIFS('المدفوعات'!$B$6:$B$2005,A6&\"\",'المدفوعات'!$H$6:$H$2005,1),\"\"))"
+      },
+      {
+       "column": "N",
+       "header": "الحالة",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",IF(G6<=0,\"حدد الاشتراك\",IF(K6>0,\"متأخر\",IF(K6<0,\"دفع مقدمًا\",\"مسدد\"))))"
+      },
+      {
+       "column": "O",
+       "header": "ترتيب المتابعة",
+       "kind": "formula",
+       "formula_row_1": "=IF(N6=\"متأخر\",COUNTIFS($K$6:$K$305,\">\"&K6)+COUNTIFS($K$6:K6,K6),\"\")"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "المدفوعات",
+   "formula_cells": 8000,
+   "record_tables": [
+    {
+     "header_row": 5,
+     "first_record_row": 6,
+     "sample_rows_filled": 99,
+     "capacity_last_row": 2005,
+     "columns": [
+      {
+       "column": "A",
+       "header": "التاريخ",
+       "kind": "input",
+       "examples": [
+        "2026-01-03",
+        "2026-01-03",
+        "2026-01-03"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "كود الوحدة",
+       "kind": "input",
+       "examples": [
+        "A-101",
+        "A-102",
+        "A-201"
+       ],
+       "allowed_values": {
+        "from_range": "'الوحدات'!$A$6:$A$305"
+       }
+      },
+      {
+       "column": "C",
+       "header": "المبلغ",
+       "kind": "input",
+       "examples": [
+        600,
+        720,
+        600
+       ]
+      },
+      {
+       "column": "D",
+       "header": "عن شهر",
+       "kind": "input",
+       "examples": [
+        "2026-01-01",
+        "2026-01-01",
+        "2026-01-01"
+       ]
+      },
+      {
+       "column": "E",
+       "header": "طريقة الدفع",
+       "kind": "input",
+       "examples": [
+        "نقدًا",
+        "تحويل بنكي",
+        "نقدًا"
+       ],
+       "allowed_values": [
+        "نقدًا",
+        "تحويل بنكي"
+       ]
+      },
+      {
+       "column": "F",
+       "header": "رقم الإيصال",
+       "kind": "input",
+       "examples": [
+        "R-1001",
+        "R-1002",
+        "R-1003"
+       ]
+      },
+      {
+       "column": "G",
+       "header": "المالك",
+       "kind": "formula",
+       "formula_row_1": "=IF(B6&\"\"=\"\",\"\",IFERROR(INDEX('الوحدات'!$C$6:$C$305,MATCH(B6&\"\",'الوحدات'!$A$6:$A$305,0))&\"\",\"كود غير موجود\"))"
+      },
+      {
+       "column": "H",
+       "header": "آخر دفعة للوحدة",
+       "kind": "formula",
+       "formula_row_1": "=IF(OR(B6&\"\"=\"\",NOT(ISNUMBER(A6))),\"\",IF(COUNTIFS($B$6:$B$2005,B6&\"\",$A$6:$A$2005,\">\"&A6)=0,1,0))"
+      },
+      {
+       "column": "I",
+       "header": "رقم الدفعة",
+       "kind": "formula",
+       "formula_row_1": "=IF(B6&\"\"=\"\",\"\",COUNTIFS($B$6:B6,B6&\"\"))"
+      },
+      {
+       "column": "J",
+       "header": "مفتاح الكشف",
+       "kind": "formula",
+       "formula_row_1": "=IF(B6&\"\"=\"\",\"\",B6&\"|\"&I6)"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "كشف حساب",
+   "formula_cells": 250,
+   "record_tables": [
+    {
+     "header_row": 16,
+     "first_record_row": 17,
+     "sample_rows_filled": 0,
+     "capacity_last_row": 56,
+     "columns": [
+      {
+       "column": "A",
+       "header": "م",
+       "kind": "formula",
+       "formula_row_1": "=IF(ISNUMBER(MATCH($B$4&\"|1\",'المدفوعات'!$J$6:$J$2005,0)),1,\"\")"
+      },
+      {
+       "column": "B",
+       "header": "التاريخ",
+       "kind": "formula",
+       "formula_row_1": "=IF($A17=\"\",\"\",INDEX('المدفوعات'!$A$6:$A$2005,MATCH($B$4&\"|\"&$A17,'المدفوعات'!$J$6:$J$2005,0)))",
+       "allowed_values": {
+        "from_range": "'الوحدات'!$A$6:$A$305"
+       }
+      },
+      {
+       "column": "C",
+       "header": "عن شهر",
+       "kind": "formula",
+       "formula_row_1": "=IF($A17=\"\",\"\",IF(INDEX('المدفوعات'!$D$6:$D$2005,MATCH($B$4&\"|\"&$A17,'المدفوعات'!$J$6:$J$2005,0))=\"\",\"\",INDEX('المدفوعات'!$D$6:$D$2005,MATCH($B$4&\"|\"&$A17,'المدفوعات'!$J$6:$J$2005,0))))"
+      },
+      {
+       "column": "D",
+       "header": "المبلغ",
+       "kind": "formula",
+       "formula_row_1": "=IF($A17=\"\",\"\",INDEX('المدفوعات'!$C$6:$C$2005,MATCH($B$4&\"|\"&$A17,'المدفوعات'!$J$6:$J$2005,0)))"
+      },
+      {
+       "column": "E",
+       "header": "طريقة الدفع",
+       "kind": "formula",
+       "formula_row_1": "=IF($A17=\"\",\"\",INDEX('المدفوعات'!$E$6:$E$2005,MATCH($B$4&\"|\"&$A17,'المدفوعات'!$J$6:$J$2005,0))&\"\")"
+      },
+      {
+       "column": "F",
+       "header": "رقم الإيصال",
+       "kind": "formula",
+       "formula_row_1": "=IF($A17=\"\",\"\",INDEX('المدفوعات'!$F$6:$F$2005,MATCH($B$4&\"|\"&$A17,'المدفوعات'!$J$6:$J$2005,0))&\"\")"
+      }
+     ]
+    }
+   ],
+   "settings": [
+    {
+     "label": "اختر كود الوحدة",
+     "cell": "B4",
+     "value": "B-101"
+    }
+   ],
+   "results": [
+    {
+     "label": "اسم المالك",
+     "cell": "B5",
+     "formula": "=IFERROR(INDEX('الوحدات'!$C$6:$C$305,MATCH($B$4&\"\",'الوحدات'!$A$6:$A$305,0)),\"\")&\"\""
+    },
+    {
+     "label": "الدور / المبنى",
+     "cell": "B6",
+     "formula": "=IFERROR(INDEX('الوحدات'!$B$6:$B$305,MATCH($B$4&\"\",'الوحدات'!$A$6:$A$305,0)),\"\")&\"\""
+    },
+    {
+     "label": "الاشتراك الشهري",
+     "cell": "B7",
+     "formula": "=IFERROR(INDEX('الوحدات'!$G$6:$G$305,MATCH($B$4&\"\",'الوحدات'!$A$6:$A$305,0)),\"\")"
+    },
+    {
+     "label": "الأشهر المستحقة",
+     "cell": "B8",
+     "formula": "=IFERROR(INDEX('الوحدات'!$H$6:$H$305,MATCH($B$4&\"\",'الوحدات'!$A$6:$A$305,0)),\"\")"
+    },
+    {
+     "label": "إجمالي المستحق",
+     "cell": "B9",
+     "formula": "=IFERROR(INDEX('الوحدات'!$I$6:$I$305,MATCH($B$4&\"\",'الوحدات'!$A$6:$A$305,0)),\"\")"
+    },
+    {
+     "label": "إجمالي المدفوع",
+     "cell": "B10",
+     "formula": "=IFERROR(INDEX('الوحدات'!$J$6:$J$305,MATCH($B$4&\"\",'الوحدات'!$A$6:$A$305,0)),\"\")"
+    },
+    {
+     "label": "المتأخر",
+     "cell": "B11",
+     "formula": "=IFERROR(INDEX('الوحدات'!$K$6:$K$305,MATCH($B$4&\"\",'الوحدات'!$A$6:$A$305,0)),\"\")"
+    },
+    {
+     "label": "الأشهر المتأخرة",
+     "cell": "B12",
+     "formula": "=IFERROR(INDEX('الوحدات'!$L$6:$L$305,MATCH($B$4&\"\",'الوحدات'!$A$6:$A$305,0)),\"\")"
+    },
+    {
+     "label": "آخر دفعة",
+     "cell": "B13",
+     "formula": "=IFERROR(INDEX('الوحدات'!$M$6:$M$305,MATCH($B$4&\"\",'الوحدات'!$A$6:$A$305,0)),\"\")"
+    },
+    {
+     "label": "الحالة",
+     "cell": "B14",
+     "formula": "=IFERROR(INDEX('الوحدات'!$N$6:$N$305,MATCH($B$4&\"\",'الوحدات'!$A$6:$A$305,0)),\"\")&\"\""
+    }
+   ]
+  },
+  {
+   "name": "للمتابعة",
+   "formula_cells": 401,
+   "record_tables": [
+    {
+     "header_row": 6,
+     "first_record_row": 7,
+     "sample_rows_filled": 0,
+     "capacity_last_row": 56,
+     "columns": [
+      {
+       "column": "A",
+       "header": "م",
+       "kind": "formula",
+       "formula_row_1": "=IF(1<=$B$4,1,\"\")"
+      },
+      {
+       "column": "B",
+       "header": "الوحدة",
+       "kind": "formula",
+       "formula_row_1": "=IF($A7=\"\",\"\",INDEX('الوحدات'!$A$6:$A$305,MATCH($A7,'الوحدات'!$O$6:$O$305,0))&\"\")"
+      },
+      {
+       "column": "C",
+       "header": "المالك",
+       "kind": "formula",
+       "formula_row_1": "=IF($A7=\"\",\"\",INDEX('الوحدات'!$C$6:$C$305,MATCH($A7,'الوحدات'!$O$6:$O$305,0))&\"\")"
+      },
+      {
+       "column": "D",
+       "header": "الجوال",
+       "kind": "formula",
+       "formula_row_1": "=IF($A7=\"\",\"\",INDEX('الوحدات'!$D$6:$D$305,MATCH($A7,'الوحدات'!$O$6:$O$305,0))&\"\")"
+      },
+      {
+       "column": "E",
+       "header": "المتأخر",
+       "kind": "formula",
+       "formula_row_1": "=IF($A7=\"\",\"\",INDEX('الوحدات'!$K$6:$K$305,MATCH($A7,'الوحدات'!$O$6:$O$305,0)))"
+      },
+      {
+       "column": "F",
+       "header": "الأشهر المتأخرة",
+       "kind": "formula",
+       "formula_row_1": "=IF($A7=\"\",\"\",INDEX('الوحدات'!$L$6:$L$305,MATCH($A7,'الوحدات'!$O$6:$O$305,0)))"
+      },
+      {
+       "column": "G",
+       "header": "آخر دفعة",
+       "kind": "formula",
+       "formula_row_1": "=IF($A7=\"\",\"\",INDEX('الوحدات'!$M$6:$M$305,MATCH($A7,'الوحدات'!$O$6:$O$305,0)))"
+      },
+      {
+       "column": "H",
+       "header": "الدور / المبنى",
+       "kind": "formula",
+       "formula_row_1": "=IF($A7=\"\",\"\",INDEX('الوحدات'!$B$6:$B$305,MATCH($A7,'الوحدات'!$O$6:$O$305,0))&\"\")"
+      }
+     ]
+    }
+   ],
+   "results": [
+    {
+     "label": "عدد المتأخرين",
+     "cell": "B4",
+     "formula": "=COUNTIF('الوحدات'!$N$6:$N$305,\"متأخر\")"
+    }
+   ]
+  },
+  {
+   "name": "الملخص",
+   "formula_cells": 22,
+   "record_tables": [
+    {
+     "header_row": 25,
+     "first_record_row": 26,
+     "sample_rows_filled": 4,
+     "capacity_last_row": 29,
+     "columns": [
+      {
+       "column": "A",
+       "header": "الحالة",
+       "kind": "input",
+       "examples": [
+        "مسدد",
+        "دفع مقدمًا",
+        "متأخر"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "عدد الوحدات",
+       "kind": "formula",
+       "formula_row_1": "=COUNTIF('الوحدات'!$N$6:$N$305,A26)"
+      },
+      {
+       "column": "C",
+       "header": "المبلغ",
+       "kind": "formula",
+       "formula_row_1": "=SUMIFS('الوحدات'!$K$6:$K$305,'الوحدات'!$N$6:$N$305,A26)"
+      }
+     ]
+    }
+   ],
+   "results": [
+    {
+     "label": "عدد الوحدات",
+     "cell": "B5",
+     "formula": "=COUNTIF('الوحدات'!$A$6:$A$305,\"?*\")"
+    },
+    {
+     "label": "وحدات لها اشتراك",
+     "cell": "B6",
+     "formula": "=COUNTIF('الوحدات'!$G$6:$G$305,\">0\")"
+    },
+    {
+     "label": "وحدات تحتاج تحديد الاشتراك",
+     "cell": "B7",
+     "formula": "=COUNTIF('الوحدات'!$N$6:$N$305,\"حدد الاشتراك\")"
+    },
+    {
+     "label": "الاشتراك الشهري المتوقع من كل الوحدات",
+     "cell": "B8",
+     "formula": "=SUM('الوحدات'!$G$6:$G$305)"
+    },
+    {
+     "label": "إجمالي المستحق حتى الشهر الحالي",
+     "cell": "B11",
+     "formula": "=SUM('الوحدات'!$I$6:$I$305)"
+    },
+    {
+     "label": "إجمالي المدفوع",
+     "cell": "B12",
+     "formula": "=SUM('الوحدات'!$J$6:$J$305)"
+    },
+    {
+     "label": "إجمالي المتأخرات",
+     "cell": "B13",
+     "formula": "=SUMIF('الوحدات'!$K$6:$K$305,\">0\")"
+    },
+    {
+     "label": "دفعات مقدمة (رصيد للملاك)",
+     "cell": "B14",
+     "formula": "=-SUMIF('الوحدات'!$K$6:$K$305,\"<0\")"
+    },
+    {
+     "label": "نسبة التحصيل من المستحق",
+     "cell": "B15",
+     "formula": "=IF(B11=0,\"\",(B11-B13)/B11)"
+    },
+    {
+     "label": "نسبة الالتزام (وحدات بلا تأخر)",
+     "cell": "B16",
+     "formula": "=IF(B6=0,\"\",(COUNTIF('الوحدات'!$N$6:$N$305,\"مسدد\")+COUNTIF('الوحدات'!$N$6:$N$305,\"دفع مقدمًا\"))/B6)"
+    },
+    {
+     "label": "المحصّل في الشهر الحالي",
+     "cell": "B17",
+     "formula": "=SUMIFS('المدفوعات'!$C$6:$C$2005,'المدفوعات'!$A$6:$A$2005,\">=\"&DATE(YEAR('الإعدادات'!$B$4),MONTH('الإعدادات'!$B$4),1),'المدفوعات'!$A$6:$A$2005,\"<=\"&'الإعدادات'!$B$4)"
+    },
+    {
+     "label": "وحدات متأخرة",
+     "cell": "B20",
+     "formula": "=COUNTIF('الوحدات'!$N$6:$N$305,\"متأخر\")"
+    },
+    {
+     "label": "متأخرة 3 أشهر فأكثر",
+     "cell": "B21",
+     "formula": "=COUNTIF('الوحدات'!$L$6:$L$305,\">=3\")"
+    },
+    {
+     "label": "دفعات بكود وحدة غير موجود",
+     "cell": "B22",
+     "formula": "=COUNTIF('المدفوعات'!$G$6:$G$2005,\"كود غير موجود\")"
+    }
+   ]
+  },
+  {
+   "name": "لماذا ما زلت على إكسل؟",
+   "formula_cells": 0
+  }
+ ]
+}

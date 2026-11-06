@@ -1,0 +1,397 @@
+{
+ "id": "crm-pipeline",
+ "file": "softwiro-crm-pipeline.xlsx",
+ "title": "شيت متابعة العملاء المحتملين والصفقات",
+ "language": "ar",
+ "direction": "rtl",
+ "how_it_works": "White cells are typed input; cells whose kind is \"formula\" are calculated and must not be overwritten. Add one record per row under the header row of a record table, keeping the columns in order.",
+ "sheets": [
+  {
+   "name": "ابدأ هنا",
+   "formula_cells": 0
+  },
+  {
+   "name": "الإعدادات",
+   "formula_cells": 0,
+   "settings": [
+    {
+     "label": "تاريخ اليوم",
+     "cell": "B4",
+     "value": "2026-11-01"
+    },
+    {
+     "label": "المرحلة",
+     "cell": "B7",
+     "value": "احتمال الإغلاق"
+    },
+    {
+     "label": "جديد",
+     "cell": "B8",
+     "value": 0.1
+    },
+    {
+     "label": "تواصل",
+     "cell": "B9",
+     "value": 0.25
+    },
+    {
+     "label": "عرض سعر",
+     "cell": "B10",
+     "value": 0.5
+    },
+    {
+     "label": "تفاوض",
+     "cell": "B11",
+     "value": 0.75
+    },
+    {
+     "label": "تم",
+     "cell": "B12",
+     "value": 1
+    },
+    {
+     "label": "خسارة",
+     "cell": "B13",
+     "value": 0
+    }
+   ]
+  },
+  {
+   "name": "الصفقات",
+   "formula_cells": 3000,
+   "record_tables": [
+    {
+     "header_row": 5,
+     "first_record_row": 6,
+     "sample_rows_filled": 18,
+     "capacity_last_row": 505,
+     "columns": [
+      {
+       "column": "A",
+       "header": "العميل",
+       "kind": "input",
+       "examples": [
+        "مكتب الأمل للمقاولات",
+        "مطعم الواحة",
+        "عيادة د. هالة"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "المصدر",
+       "kind": "input",
+       "examples": [
+        "ترشيح",
+        "إعلان فيسبوك",
+        "موقع"
+       ],
+       "allowed_values": {
+        "from_range": "'الإعدادات'!$A$16:$A$25"
+       }
+      },
+      {
+       "column": "C",
+       "header": "المرحلة",
+       "kind": "input",
+       "examples": [
+        "جديد",
+        "تواصل",
+        "عرض سعر"
+       ],
+       "allowed_values": {
+        "from_range": "'الإعدادات'!$A$8:$A$13"
+       }
+      },
+      {
+       "column": "D",
+       "header": "قيمة الصفقة",
+       "kind": "input",
+       "examples": [
+        45000,
+        18000,
+        60000
+       ]
+      },
+      {
+       "column": "E",
+       "header": "موعد المتابعة القادم",
+       "kind": "input",
+       "examples": [
+        "2026-11-01",
+        "2026-10-29",
+        "2026-11-05"
+       ]
+      },
+      {
+       "column": "F",
+       "header": "آخر تواصل",
+       "kind": "input",
+       "examples": [
+        "2026-10-30",
+        "2026-10-27",
+        "2026-10-28"
+       ]
+      },
+      {
+       "column": "G",
+       "header": "ملاحظة",
+       "kind": "input",
+       "examples": [
+        "طلب مكالمة",
+        "أُرسل العرض",
+        "يطلب خصمًا"
+       ]
+      },
+      {
+       "column": "H",
+       "header": "الاحتمال",
+       "kind": "formula",
+       "formula_row_1": "=IF(C6&\"\"=\"\",\"\",IFERROR(VLOOKUP(C6,'الإعدادات'!$A$8:$B$13,2,FALSE),\"\"))"
+      },
+      {
+       "column": "I",
+       "header": "القيمة الموزونة",
+       "kind": "formula",
+       "formula_row_1": "=IF(OR(H6=\"\",NOT(ISNUMBER(D6))),\"\",ROUND(D6*H6,2))"
+      },
+      {
+       "column": "J",
+       "header": "حالة المتابعة",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",IF(OR(C6=\"تم\",C6=\"خسارة\"),\"مغلقة\",IF(NOT(ISNUMBER(E6)),\"بلا موعد\",IF(E6<'الإعدادات'!$B$4,\"متأخرة\",IF(E6='الإعدادات'!$B$4,\"اليوم\",\"قادمة\")))))"
+      },
+      {
+       "column": "K",
+       "header": "أيام التأخير",
+       "kind": "formula",
+       "formula_row_1": "=IF(OR(J6=\"متأخرة\",J6=\"اليوم\"),'الإعدادات'!$B$4-E6,\"\")"
+      },
+      {
+       "column": "L",
+       "header": "أيام منذ آخر تواصل",
+       "kind": "formula",
+       "formula_row_1": "=IF(OR(A6&\"\"=\"\",NOT(ISNUMBER(F6))),\"\",'الإعدادات'!$B$4-F6)"
+      },
+      {
+       "column": "M",
+       "header": "ترتيب المتابعة",
+       "kind": "formula",
+       "formula_row_1": "=IF(OR(J6=\"متأخرة\",J6=\"اليوم\"),COUNTIFS($J$6:$J$505,\"متأخرة\",$E$6:$E$505,\"<\"&E6)+COUNTIFS($J$6:$J$505,\"اليوم\",$E$6:$E$505,\"<\"&E6)+COUNTIFS($E$6:E6,E6&\"\",$J$6:J6,J6),\"\")"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "المتابعات",
+   "formula_cells": 452,
+   "record_tables": [
+    {
+     "header_row": 7,
+     "first_record_row": 8,
+     "sample_rows_filled": 0,
+     "capacity_last_row": 57,
+     "columns": [
+      {
+       "column": "A",
+       "header": "م",
+       "kind": "formula",
+       "formula_row_1": "=IF(1<=$B$4+$B$5,1,\"\")"
+      },
+      {
+       "column": "B",
+       "header": "العميل",
+       "kind": "formula",
+       "formula_row_1": "=IF($A8=\"\",\"\",INDEX('الصفقات'!$A$6:$A$505,MATCH($A8,'الصفقات'!$M$6:$M$505,0))&\"\")"
+      },
+      {
+       "column": "C",
+       "header": "المرحلة",
+       "kind": "formula",
+       "formula_row_1": "=IF($A8=\"\",\"\",INDEX('الصفقات'!$C$6:$C$505,MATCH($A8,'الصفقات'!$M$6:$M$505,0))&\"\")"
+      },
+      {
+       "column": "D",
+       "header": "قيمة الصفقة",
+       "kind": "formula",
+       "formula_row_1": "=IF($A8=\"\",\"\",INDEX('الصفقات'!$D$6:$D$505,MATCH($A8,'الصفقات'!$M$6:$M$505,0)))"
+      },
+      {
+       "column": "E",
+       "header": "موعد المتابعة",
+       "kind": "formula",
+       "formula_row_1": "=IF($A8=\"\",\"\",INDEX('الصفقات'!$E$6:$E$505,MATCH($A8,'الصفقات'!$M$6:$M$505,0)))"
+      },
+      {
+       "column": "F",
+       "header": "أيام التأخير",
+       "kind": "formula",
+       "formula_row_1": "=IF($A8=\"\",\"\",INDEX('الصفقات'!$K$6:$K$505,MATCH($A8,'الصفقات'!$M$6:$M$505,0)))"
+      },
+      {
+       "column": "G",
+       "header": "آخر تواصل",
+       "kind": "formula",
+       "formula_row_1": "=IF($A8=\"\",\"\",IF(INDEX('الصفقات'!$F$6:$F$505,MATCH($A8,'الصفقات'!$M$6:$M$505,0))=\"\",\"\",INDEX('الصفقات'!$F$6:$F$505,MATCH($A8,'الصفقات'!$M$6:$M$505,0))))"
+      },
+      {
+       "column": "H",
+       "header": "ملاحظة",
+       "kind": "formula",
+       "formula_row_1": "=IF($A8=\"\",\"\",INDEX('الصفقات'!$G$6:$G$505,MATCH($A8,'الصفقات'!$M$6:$M$505,0))&\"\")"
+      },
+      {
+       "column": "I",
+       "header": "الحالة",
+       "kind": "formula",
+       "formula_row_1": "=IF($A8=\"\",\"\",INDEX('الصفقات'!$J$6:$J$505,MATCH($A8,'الصفقات'!$M$6:$M$505,0))&\"\")"
+      }
+     ]
+    }
+   ],
+   "results": [
+    {
+     "label": "متأخرة",
+     "cell": "B4",
+     "formula": "=COUNTIF('الصفقات'!$J$6:$J$505,\"متأخرة\")"
+    },
+    {
+     "label": "متابعات اليوم",
+     "cell": "B5",
+     "formula": "=COUNTIF('الصفقات'!$J$6:$J$505,\"اليوم\")"
+    }
+   ]
+  },
+  {
+   "name": "ملخص القمع",
+   "formula_cells": 111,
+   "record_tables": [
+    {
+     "header_row": 24,
+     "first_record_row": 25,
+     "sample_rows_filled": 0,
+     "capacity_last_row": 43,
+     "columns": [
+      {
+       "column": "A",
+       "header": "المرحلة",
+       "kind": "formula",
+       "formula_row_1": "='الإعدادات'!A8"
+      },
+      {
+       "column": "B",
+       "header": "عدد الصفقات",
+       "kind": "formula",
+       "formula_row_1": "=COUNTIFS('الصفقات'!$C$6:$C$505,A25)"
+      },
+      {
+       "column": "C",
+       "header": "القيمة",
+       "kind": "formula",
+       "formula_row_1": "=SUMIFS('الصفقات'!$D$6:$D$505,'الصفقات'!$C$6:$C$505,A25)"
+      },
+      {
+       "column": "D",
+       "header": "نسبة من الصفقات",
+       "kind": "formula",
+       "formula_row_1": "=IF($B$5=0,\"\",B25/$B$5)"
+      },
+      {
+       "column": "E",
+       "header": "الاحتمال",
+       "kind": "formula",
+       "formula_row_1": "='الإعدادات'!B8"
+      },
+      {
+       "column": "F",
+       "header": "القيمة الموزونة",
+       "kind": "formula",
+       "formula_row_1": "=SUMIFS('الصفقات'!$I$6:$I$505,'الصفقات'!$C$6:$C$505,A25)"
+      }
+     ]
+    }
+   ],
+   "results": [
+    {
+     "label": "إجمالي الصفقات",
+     "cell": "B5",
+     "formula": "=COUNTIF('الصفقات'!$A$6:$A$505,\"?*\")"
+    },
+    {
+     "label": "صفقات مفتوحة",
+     "cell": "B6",
+     "formula": "=B5-B7-B8"
+    },
+    {
+     "label": "صفقات تمت",
+     "cell": "B7",
+     "formula": "=COUNTIF('الصفقات'!$C$6:$C$505,\"تم\")"
+    },
+    {
+     "label": "صفقات خاسرة",
+     "cell": "B8",
+     "formula": "=COUNTIF('الصفقات'!$C$6:$C$505,\"خسارة\")"
+    },
+    {
+     "label": "قيمة الصفقات المفتوحة",
+     "cell": "B9",
+     "formula": "=SUM('الصفقات'!$D$6:$D$505)-SUMIFS('الصفقات'!$D$6:$D$505,'الصفقات'!$C$6:$C$505,\"تم\")-SUMIFS('الصفقات'!$D$6:$D$505,'الصفقات'!$C$6:$C$505,\"خسارة\")"
+    },
+    {
+     "label": "القيمة الموزونة المتوقعة للمفتوحة",
+     "cell": "B10",
+     "formula": "=SUM('الصفقات'!$I$6:$I$505)-SUMIFS('الصفقات'!$I$6:$I$505,'الصفقات'!$C$6:$C$505,\"تم\")-SUMIFS('الصفقات'!$I$6:$I$505,'الصفقات'!$C$6:$C$505,\"خسارة\")"
+    },
+    {
+     "label": "قيمة المبيعات المغلقة (تم)",
+     "cell": "B11",
+     "formula": "=SUMIFS('الصفقات'!$D$6:$D$505,'الصفقات'!$C$6:$C$505,\"تم\")"
+    },
+    {
+     "label": "قيمة الصفقات الخاسرة",
+     "cell": "B12",
+     "formula": "=SUMIFS('الصفقات'!$D$6:$D$505,'الصفقات'!$C$6:$C$505,\"خسارة\")"
+    },
+    {
+     "label": "نسبة الفوز (تم من تم + خسارة)",
+     "cell": "B13",
+     "formula": "=IF(B7+B8=0,\"\",B7/(B7+B8))"
+    },
+    {
+     "label": "نسبة التحويل الكلية (تم من كل الصفقات)",
+     "cell": "B14",
+     "formula": "=IF(B5=0,\"\",B7/B5)"
+    },
+    {
+     "label": "متوسط قيمة الصفقة المغلقة",
+     "cell": "B15",
+     "formula": "=IF(B7=0,\"\",B11/B7)"
+    },
+    {
+     "label": "متأخرة",
+     "cell": "B18",
+     "formula": "=COUNTIF('الصفقات'!$J$6:$J$505,\"متأخرة\")"
+    },
+    {
+     "label": "اليوم",
+     "cell": "B19",
+     "formula": "=COUNTIF('الصفقات'!$J$6:$J$505,\"اليوم\")"
+    },
+    {
+     "label": "قادمة",
+     "cell": "B20",
+     "formula": "=COUNTIF('الصفقات'!$J$6:$J$505,\"قادمة\")"
+    },
+    {
+     "label": "مفتوحة بلا موعد",
+     "cell": "B21",
+     "formula": "=COUNTIF('الصفقات'!$J$6:$J$505,\"بلا موعد\")"
+    }
+   ]
+  },
+  {
+   "name": "لماذا ما زلت على إكسل؟",
+   "formula_cells": 0
+  }
+ ]
+}

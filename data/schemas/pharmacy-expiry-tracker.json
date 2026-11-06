@@ -1,0 +1,260 @@
+{
+ "id": "pharmacy-expiry-tracker",
+ "file": "softwiro-pharmacy-expiry-tracker.xlsx",
+ "title": "شيت متابعة صلاحية وأرصدة أدوية الصيدلية",
+ "language": "ar",
+ "direction": "rtl",
+ "how_it_works": "White cells are typed input; cells whose kind is \"formula\" are calculated and must not be overwritten. Add one record per row under the header row of a record table, keeping the columns in order.",
+ "sheets": [
+  {
+   "name": "ابدأ هنا",
+   "formula_cells": 0
+  },
+  {
+   "name": "الإعدادات",
+   "formula_cells": 1,
+   "results": [
+    {
+     "label": "تاريخ اليوم",
+     "cell": "B4",
+     "formula": "=TODAY()"
+    }
+   ]
+  },
+  {
+   "name": "الأصناف",
+   "formula_cells": 3500,
+   "record_tables": [
+    {
+     "header_row": 5,
+     "first_record_row": 6,
+     "sample_rows_filled": 15,
+     "capacity_last_row": 505,
+     "columns": [
+      {
+       "column": "A",
+       "header": "الصنف",
+       "kind": "input",
+       "examples": [
+        "مسكن 500 مجم",
+        "مضاد حيوي 250 مجم",
+        "شراب سعال 100 مل"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "رقم التشغيلة",
+       "kind": "input",
+       "examples": [
+        "B-1001",
+        "B-1002",
+        "B-1003"
+       ]
+      },
+      {
+       "column": "C",
+       "header": "تاريخ الانتهاء",
+       "kind": "input",
+       "examples": [
+        "2026-10-14",
+        "2026-10-29",
+        "2026-11-15"
+       ]
+      },
+      {
+       "column": "D",
+       "header": "الكمية",
+       "kind": "input",
+       "examples": [
+        40,
+        10,
+        25
+       ]
+      },
+      {
+       "column": "E",
+       "header": "حد الطلب",
+       "kind": "input",
+       "examples": [
+        30,
+        20,
+        15
+       ]
+      },
+      {
+       "column": "F",
+       "header": "سعر التكلفة",
+       "kind": "input",
+       "examples": [
+        12,
+        45,
+        30
+       ]
+      },
+      {
+       "column": "G",
+       "header": "سعر البيع",
+       "kind": "input",
+       "examples": [
+        18,
+        60,
+        42
+       ]
+      },
+      {
+       "column": "H",
+       "header": "الأيام المتبقية",
+       "kind": "formula",
+       "formula_row_1": "=IF(OR(A6&\"\"=\"\",NOT(ISNUMBER(C6))),\"\",C6-'الإعدادات'!$B$4)"
+      },
+      {
+       "column": "I",
+       "header": "حالة الصلاحية",
+       "kind": "formula",
+       "formula_row_1": "=IF(H6=\"\",\"\",IF(H6<0,\"منتهي\",IF(H6<=30,\"خلال 30 يومًا\",IF(H6<=60,\"خلال 60 يومًا\",IF(H6<=90,\"خلال 90 يومًا\",\"سليم\")))))"
+      },
+      {
+       "column": "J",
+       "header": "حالة الرصيد",
+       "kind": "formula",
+       "formula_row_1": "=IF(OR(A6&\"\"=\"\",NOT(ISNUMBER(D6)),NOT(ISNUMBER(E6))),\"\",IF(D6<=E6,\"تحت حد الطلب\",\"كافٍ\"))"
+      },
+      {
+       "column": "K",
+       "header": "قيمة المخزون بالتكلفة",
+       "kind": "formula",
+       "formula_row_1": "=IF(OR(A6&\"\"=\"\",NOT(ISNUMBER(D6)),NOT(ISNUMBER(F6))),\"\",ROUND(D6*F6,2))"
+      },
+      {
+       "column": "L",
+       "header": "قيمة معرضة للانتهاء",
+       "kind": "formula",
+       "formula_row_1": "=IF(OR(K6=\"\",I6=\"\"),\"\",IF(I6=\"سليم\",0,K6))"
+      },
+      {
+       "column": "M",
+       "header": "يحتاج إجراء",
+       "kind": "formula",
+       "formula_row_1": "=IF(OR(I6=\"\",J6=\"\"),\"\",IF(OR(I6<>\"سليم\",J6=\"تحت حد الطلب\"),\"نعم\",\"\"))"
+      },
+      {
+       "column": "N",
+       "header": "ترتيب",
+       "kind": "formula",
+       "formula_row_1": "=IF(M6=\"نعم\",COUNTIFS($M$6:$M$505,\"نعم\",$H$6:$H$505,\"<\"&H6)+COUNTIFS($M$6:M6,\"نعم\",$H$6:H6,H6),\"\")"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "يحتاج إجراء",
+   "formula_cells": 481,
+   "record_tables": [
+    {
+     "header_row": 6,
+     "first_record_row": 7,
+     "sample_rows_filled": 0,
+     "capacity_last_row": 66,
+     "columns": [
+      {
+       "column": "A",
+       "header": "م",
+       "kind": "formula",
+       "formula_row_1": "=IF(1<=$B$4,1,\"\")"
+      },
+      {
+       "column": "B",
+       "header": "الصنف",
+       "kind": "formula",
+       "formula_row_1": "=IF($A7=\"\",\"\",INDEX('الأصناف'!$A$6:$A$505,MATCH($A7,'الأصناف'!$N$6:$N$505,0))&\"\")"
+      },
+      {
+       "column": "C",
+       "header": "رقم التشغيلة",
+       "kind": "formula",
+       "formula_row_1": "=IF($A7=\"\",\"\",INDEX('الأصناف'!$B$6:$B$505,MATCH($A7,'الأصناف'!$N$6:$N$505,0))&\"\")"
+      },
+      {
+       "column": "D",
+       "header": "تاريخ الانتهاء",
+       "kind": "formula",
+       "formula_row_1": "=IF($A7=\"\",\"\",INDEX('الأصناف'!$C$6:$C$505,MATCH($A7,'الأصناف'!$N$6:$N$505,0)))"
+      },
+      {
+       "column": "E",
+       "header": "الأيام المتبقية",
+       "kind": "formula",
+       "formula_row_1": "=IF($A7=\"\",\"\",INDEX('الأصناف'!$H$6:$H$505,MATCH($A7,'الأصناف'!$N$6:$N$505,0)))"
+      },
+      {
+       "column": "F",
+       "header": "الكمية",
+       "kind": "formula",
+       "formula_row_1": "=IF($A7=\"\",\"\",INDEX('الأصناف'!$D$6:$D$505,MATCH($A7,'الأصناف'!$N$6:$N$505,0)))"
+      },
+      {
+       "column": "G",
+       "header": "حالة الصلاحية",
+       "kind": "formula",
+       "formula_row_1": "=IF($A7=\"\",\"\",INDEX('الأصناف'!$I$6:$I$505,MATCH($A7,'الأصناف'!$N$6:$N$505,0)))"
+      },
+      {
+       "column": "H",
+       "header": "حالة الرصيد",
+       "kind": "formula",
+       "formula_row_1": "=IF($A7=\"\",\"\",INDEX('الأصناف'!$J$6:$J$505,MATCH($A7,'الأصناف'!$N$6:$N$505,0)))"
+      }
+     ]
+    }
+   ],
+   "results": [
+    {
+     "label": "عدد التشغيلات المطلوب مراجعتها",
+     "cell": "B4",
+     "formula": "=COUNTIF('الأصناف'!$M$6:$M$505,\"نعم\")"
+    }
+   ]
+  },
+  {
+   "name": "الملخص",
+   "formula_cells": 16,
+   "record_tables": [
+    {
+     "header_row": 5,
+     "first_record_row": 6,
+     "sample_rows_filled": 11,
+     "capacity_last_row": 17,
+     "columns": [
+      {
+       "column": "A",
+       "header": "الحالة",
+       "kind": "input",
+       "examples": [
+        "منتهي",
+        "خلال 30 يومًا",
+        "خلال 60 يومًا"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "عدد التشغيلات",
+       "kind": "formula",
+       "formula_row_1": "=COUNTIFS('الأصناف'!$I$6:$I$505,A6)"
+      },
+      {
+       "column": "C",
+       "header": "قيمتها بالتكلفة",
+       "kind": "formula",
+       "formula_row_1": "=SUMIFS('الأصناف'!$K$6:$K$505,'الأصناف'!$I$6:$I$505,A6)"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "لماذا ما زلت على إكسل؟",
+   "formula_cells": 0
+  }
+ ]
+}

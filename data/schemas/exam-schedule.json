@@ -1,0 +1,455 @@
+{
+ "id": "exam-schedule",
+ "file": "softwiro-exam-schedule.xlsx",
+ "title": "شيت جدول الامتحانات واللجان والمراقبين",
+ "language": "ar",
+ "direction": "rtl",
+ "how_it_works": "White cells are typed input; cells whose kind is \"formula\" are calculated and must not be overwritten. Add one record per row under the header row of a record table, keeping the columns in order.",
+ "sheets": [
+  {
+   "name": "ابدأ هنا",
+   "formula_cells": 0
+  },
+  {
+   "name": "الفصول",
+   "formula_cells": 400,
+   "record_tables": [
+    {
+     "header_row": 5,
+     "first_record_row": 6,
+     "sample_rows_filled": 3,
+     "capacity_last_row": 205,
+     "columns": [
+      {
+       "column": "A",
+       "header": "كود الفصل",
+       "kind": "input",
+       "examples": [
+        "ف1",
+        "ف2",
+        "ف3"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "اسم الفصل",
+       "kind": "input",
+       "examples": [
+        "الصف الأول - أ",
+        "الصف الأول - ب",
+        "الصف الثاني - أ"
+       ]
+      },
+      {
+       "column": "C",
+       "header": "عدد الطلاب",
+       "kind": "input",
+       "examples": [
+        32,
+        30,
+        28
+       ]
+      },
+      {
+       "column": "D",
+       "header": "عدد الامتحانات",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",COUNTIFS('الامتحانات'!$D$6:$D$405,A6&\"\"))"
+      },
+      {
+       "column": "E",
+       "header": "امتحانات متعارضة",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",COUNTIFS('الامتحانات'!$D$6:$D$405,A6&\"\",'الامتحانات'!$J$6:$J$405,\"تعارض\"))"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "اللجان",
+   "formula_cells": 600,
+   "record_tables": [
+    {
+     "header_row": 5,
+     "first_record_row": 6,
+     "sample_rows_filled": 4,
+     "capacity_last_row": 205,
+     "columns": [
+      {
+       "column": "A",
+       "header": "كود اللجنة",
+       "kind": "input",
+       "examples": [
+        "L1",
+        "L2",
+        "L3"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "اسم اللجنة",
+       "kind": "input",
+       "examples": [
+        "لجنة 1",
+        "لجنة 2",
+        "لجنة 3"
+       ]
+      },
+      {
+       "column": "C",
+       "header": "السعة (مقاعد)",
+       "kind": "input",
+       "examples": [
+        35,
+        32,
+        30
+       ]
+      },
+      {
+       "column": "D",
+       "header": "عدد الامتحانات",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",COUNTIFS('الامتحانات'!$E$6:$E$405,A6&\"\"))"
+      },
+      {
+       "column": "E",
+       "header": "حجز مكرر",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",COUNTIFS('الامتحانات'!$E$6:$E$405,A6&\"\",'الامتحانات'!$K$6:$K$405,\"تعارض\"))"
+      },
+      {
+       "column": "F",
+       "header": "تجاوز السعة",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",COUNTIFS('الامتحانات'!$E$6:$E$405,A6&\"\",'الامتحانات'!$M$6:$M$405,\"تجاوز\"))"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "المراقبون",
+   "formula_cells": 800,
+   "record_tables": [
+    {
+     "header_row": 5,
+     "first_record_row": 6,
+     "sample_rows_filled": 7,
+     "capacity_last_row": 205,
+     "columns": [
+      {
+       "column": "A",
+       "header": "كود المراقب",
+       "kind": "input",
+       "examples": [
+        "S01",
+        "S02",
+        "S03"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "اسم المراقب",
+       "kind": "input",
+       "examples": [
+        "أ. سامي رضا",
+        "أ. نهى فؤاد",
+        "أ. وائل صبحي"
+       ]
+      },
+      {
+       "column": "C",
+       "header": "الحد الأقصى للمراقبات",
+       "kind": "input",
+       "examples": [
+        3,
+        3,
+        3
+       ]
+      },
+      {
+       "column": "D",
+       "header": "عدد المراقبات",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",COUNTIFS('الامتحانات'!$F$6:$F$405,A6&\"\"))"
+      },
+      {
+       "column": "E",
+       "header": "الباقي من الحد",
+       "kind": "formula",
+       "formula_row_1": "=IF(OR(D6=\"\",NOT(ISNUMBER(C6))),\"\",C6-D6)"
+      },
+      {
+       "column": "F",
+       "header": "الحالة",
+       "kind": "formula",
+       "formula_row_1": "=IF(D6=\"\",\"\",IF(D6=0,\"بدون مراقبة\",IF(E6<0,\"فوق الحد\",\"ضمن الحد\")))"
+      },
+      {
+       "column": "G",
+       "header": "مراقبات متعارضة",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",COUNTIFS('الامتحانات'!$F$6:$F$405,A6&\"\",'الامتحانات'!$L$6:$L$405,\"تعارض\"))"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "الامتحانات",
+   "formula_cells": 3600,
+   "record_tables": [
+    {
+     "header_row": 5,
+     "first_record_row": 6,
+     "sample_rows_filled": 21,
+     "capacity_last_row": 405,
+     "columns": [
+      {
+       "column": "A",
+       "header": "التاريخ",
+       "kind": "input",
+       "examples": [
+        "2026-12-20",
+        "2026-12-20",
+        "2026-12-20"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "الفترة",
+       "kind": "input",
+       "examples": [
+        "الأولى",
+        "الأولى",
+        "الأولى"
+       ],
+       "allowed_values": [
+        "الأولى",
+        "الثانية"
+       ]
+      },
+      {
+       "column": "C",
+       "header": "المادة",
+       "kind": "input",
+       "examples": [
+        "عربي",
+        "عربي",
+        "عربي"
+       ]
+      },
+      {
+       "column": "D",
+       "header": "كود الفصل",
+       "kind": "input",
+       "examples": [
+        "ف1",
+        "ف2",
+        "ف3"
+       ],
+       "allowed_values": {
+        "from_range": "'الفصول'!$A$6:$A$205"
+       }
+      },
+      {
+       "column": "E",
+       "header": "كود اللجنة",
+       "kind": "input",
+       "examples": [
+        "L1",
+        "L2",
+        "L3"
+       ],
+       "allowed_values": {
+        "from_range": "'اللجان'!$A$6:$A$205"
+       }
+      },
+      {
+       "column": "F",
+       "header": "كود المراقب",
+       "kind": "input",
+       "examples": [
+        "S01",
+        "S02",
+        "S03"
+       ],
+       "allowed_values": {
+        "from_range": "'المراقبون'!$A$6:$A$205"
+       }
+      },
+      {
+       "column": "G",
+       "header": "اسم المراقب",
+       "kind": "formula",
+       "formula_row_1": "=IF(F6&\"\"=\"\",\"\",IFERROR(INDEX('المراقبون'!$B$6:$B$205,MATCH(F6&\"\",'المراقبون'!$A$6:$A$205,0))&\"\",\"كود غير موجود\"))"
+      },
+      {
+       "column": "H",
+       "header": "طلاب الفصل",
+       "kind": "formula",
+       "formula_row_1": "=IF(D6&\"\"=\"\",\"\",IFERROR(INDEX('الفصول'!$C$6:$C$205,MATCH(D6&\"\",'الفصول'!$A$6:$A$205,0)),\"\"))"
+      },
+      {
+       "column": "I",
+       "header": "سعة اللجنة",
+       "kind": "formula",
+       "formula_row_1": "=IF(E6&\"\"=\"\",\"\",IFERROR(INDEX('اللجان'!$C$6:$C$205,MATCH(E6&\"\",'اللجان'!$A$6:$A$205,0)),\"\"))"
+      },
+      {
+       "column": "J",
+       "header": "تعارض طالب",
+       "kind": "formula",
+       "formula_row_1": "=IF(OR(NOT(AND(ISNUMBER(A6),B6&\"\"<>\"\",D6&\"\"<>\"\"))),\"\",IF(COUNTIFS($A$6:$A$405,A6&\"\",$B$6:$B$405,B6&\"\",$D$6:$D$405,D6&\"\")>1,\"تعارض\",\"\"))"
+      },
+      {
+       "column": "K",
+       "header": "تعارض لجنة",
+       "kind": "formula",
+       "formula_row_1": "=IF(OR(NOT(AND(ISNUMBER(A6),B6&\"\"<>\"\",E6&\"\"<>\"\"))),\"\",IF(COUNTIFS($A$6:$A$405,A6&\"\",$B$6:$B$405,B6&\"\",$E$6:$E$405,E6&\"\")>1,\"تعارض\",\"\"))"
+      },
+      {
+       "column": "L",
+       "header": "تعارض مراقب",
+       "kind": "formula",
+       "formula_row_1": "=IF(OR(NOT(AND(ISNUMBER(A6),B6&\"\"<>\"\",F6&\"\"<>\"\"))),\"\",IF(COUNTIFS($A$6:$A$405,A6&\"\",$B$6:$B$405,B6&\"\",$F$6:$F$405,F6&\"\")>1,\"تعارض\",\"\"))"
+      },
+      {
+       "column": "M",
+       "header": "سعة اللجنة",
+       "kind": "formula",
+       "formula_row_1": "=IF(AND(ISNUMBER(H6),ISNUMBER(I6)),IF(H6>I6,\"تجاوز\",\"\"),\"\")"
+      },
+      {
+       "column": "N",
+       "header": "عدد المشكلات",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6=\"\",\"\",IF(J6=\"\",0,1)+IF(K6=\"\",0,1)+IF(L6=\"\",0,1)+IF(M6=\"\",0,1))"
+      },
+      {
+       "column": "O",
+       "header": "الحالة",
+       "kind": "formula",
+       "formula_row_1": "=IF(N6=\"\",\"\",IF(N6=0,\"سليم\",IF(N6>1,\"أكثر من مشكلة\",IF(J6<>\"\",\"تعارض طالب\",IF(K6<>\"\",\"تعارض لجنة\",IF(L6<>\"\",\"تعارض مراقب\",\"تجاوز السعة\"))))))"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "الملخص",
+   "formula_cells": 36,
+   "record_tables": [
+    {
+     "header_row": 21,
+     "first_record_row": 22,
+     "sample_rows_filled": 6,
+     "capacity_last_row": 27,
+     "columns": [
+      {
+       "column": "A",
+       "header": "التاريخ",
+       "kind": "input",
+       "examples": [
+        "2026-12-20",
+        "2026-12-21",
+        "2026-12-22"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "فترة الأولى",
+       "kind": "formula",
+       "formula_row_1": "=IF(ISNUMBER(A22),COUNTIFS('الامتحانات'!$A$6:$A$405,A22&\"\",'الامتحانات'!$B$6:$B$405,\"الأولى\"),\"\")"
+      },
+      {
+       "column": "C",
+       "header": "فترة الثانية",
+       "kind": "formula",
+       "formula_row_1": "=IF(ISNUMBER(A22),COUNTIFS('الامتحانات'!$A$6:$A$405,A22&\"\",'الامتحانات'!$B$6:$B$405,\"الثانية\"),\"\")"
+      },
+      {
+       "column": "D",
+       "header": "الإجمالي",
+       "kind": "formula",
+       "formula_row_1": "=IF(ISNUMBER(A22),B22+C22,\"\")"
+      },
+      {
+       "column": "E",
+       "header": "فيها مشكلة",
+       "kind": "formula",
+       "formula_row_1": "=IF(ISNUMBER(A22),COUNTIFS('الامتحانات'!$A$6:$A$405,A22&\"\",'الامتحانات'!$O$6:$O$405,\"<>سليم\"),\"\")"
+      }
+     ]
+    }
+   ],
+   "results": [
+    {
+     "label": "الامتحانات المسجلة",
+     "cell": "B5",
+     "formula": "=COUNT('الامتحانات'!$A$6:$A$405)"
+    },
+    {
+     "label": "امتحانات سليمة",
+     "cell": "B6",
+     "formula": "=COUNTIF('الامتحانات'!$O$6:$O$405,\"سليم\")"
+    },
+    {
+     "label": "امتحانات فيها تعارض طالب",
+     "cell": "B7",
+     "formula": "=COUNTIF('الامتحانات'!$J$6:$J$405,\"تعارض\")"
+    },
+    {
+     "label": "امتحانات فيها تعارض لجنة",
+     "cell": "B8",
+     "formula": "=COUNTIF('الامتحانات'!$K$6:$K$405,\"تعارض\")"
+    },
+    {
+     "label": "امتحانات فيها تعارض مراقب",
+     "cell": "B9",
+     "formula": "=COUNTIF('الامتحانات'!$L$6:$L$405,\"تعارض\")"
+    },
+    {
+     "label": "امتحانات تجاوزت سعة اللجنة",
+     "cell": "B10",
+     "formula": "=COUNTIF('الامتحانات'!$M$6:$M$405,\"تجاوز\")"
+    },
+    {
+     "label": "عدد المراقبين",
+     "cell": "B13",
+     "formula": "=COUNTIF('المراقبون'!$A$6:$A$205,\"?*\")"
+    },
+    {
+     "label": "مراقبون فوق الحد",
+     "cell": "B14",
+     "formula": "=COUNTIF('المراقبون'!$F$6:$F$205,\"فوق الحد\")"
+    },
+    {
+     "label": "مراقبون بدون مراقبة",
+     "cell": "B15",
+     "formula": "=COUNTIF('المراقبون'!$F$6:$F$205,\"بدون مراقبة\")"
+    },
+    {
+     "label": "أكثر عدد مراقبات لمراقب",
+     "cell": "B16",
+     "formula": "=MAX('المراقبون'!$D$6:$D$205)"
+    },
+    {
+     "label": "أقل عدد مراقبات لمراقب",
+     "cell": "B17",
+     "formula": "=MIN('المراقبون'!$D$6:$D$205)"
+    },
+    {
+     "label": "الفرق بين الأكثر والأقل",
+     "cell": "B18",
+     "formula": "=B16-B17"
+    }
+   ]
+  },
+  {
+   "name": "لماذا ما زلت على إكسل؟",
+   "formula_cells": 0
+  }
+ ]
+}

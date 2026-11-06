@@ -1,0 +1,350 @@
+{
+ "id": "lesson-plan-coverage-tracker",
+ "file": "softwiro-lesson-plan-coverage-tracker.xlsx",
+ "title": "شيت تحضير الدروس وتغطية المنهج",
+ "language": "ar",
+ "direction": "rtl",
+ "how_it_works": "White cells are typed input; cells whose kind is \"formula\" are calculated and must not be overwritten. Add one record per row under the header row of a record table, keeping the columns in order.",
+ "sheets": [
+  {
+   "name": "ابدأ هنا",
+   "formula_cells": 0
+  },
+  {
+   "name": "الإعدادات",
+   "formula_cells": 0,
+   "settings": [
+    {
+     "label": "تاريخ اليوم",
+     "cell": "B4",
+     "value": "2026-11-01"
+    },
+    {
+     "label": "أيام السماح قبل اعتبار الدرس متأخرًا",
+     "cell": "B5",
+     "value": 0
+    }
+   ]
+  },
+  {
+   "name": "المواد",
+   "formula_cells": 480,
+   "record_tables": [
+    {
+     "header_row": 5,
+     "first_record_row": 6,
+     "sample_rows_filled": 6,
+     "capacity_last_row": 65,
+     "columns": [
+      {
+       "column": "A",
+       "header": "الكود",
+       "kind": "input",
+       "examples": [
+        "عربي 1/أ",
+        "علوم 1/أ",
+        "رياضيات 2/ب"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "المادة",
+       "kind": "input",
+       "examples": [
+        "اللغة العربية",
+        "العلوم",
+        "الرياضيات"
+       ]
+      },
+      {
+       "column": "C",
+       "header": "الفصل",
+       "kind": "input",
+       "examples": [
+        "1/أ",
+        "1/أ",
+        "2/ب"
+       ]
+      },
+      {
+       "column": "D",
+       "header": "عدد الدروس",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",COUNTIFS('الدروس'!$A$6:$A$1005,A6&\"\"))"
+      },
+      {
+       "column": "E",
+       "header": "دروس تمت",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",COUNTIFS('الدروس'!$A$6:$A$1005,A6&\"\",'الدروس'!$H$6:$H$1005,\"تم\"))"
+      },
+      {
+       "column": "F",
+       "header": "الحصص المخططة",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",SUMIFS('الدروس'!$D$6:$D$1005,'الدروس'!$A$6:$A$1005,A6&\"\"))"
+      },
+      {
+       "column": "G",
+       "header": "الحصص المنفذة (محتسبة)",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",SUMIFS('الدروس'!$J$6:$J$1005,'الدروس'!$A$6:$A$1005,A6&\"\"))"
+      },
+      {
+       "column": "H",
+       "header": "نسبة التغطية",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",IF(F6=0,\"\",MIN(1,G6/F6)))"
+      },
+      {
+       "column": "I",
+       "header": "دروس متأخرة",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",COUNTIFS('الدروس'!$A$6:$A$1005,A6&\"\",'الدروس'!$L$6:$L$1005,\"متأخر عن الخطة\"))"
+      },
+      {
+       "column": "J",
+       "header": "حصص متأخرة",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",SUMIFS('الدروس'!$K$6:$K$1005,'الدروس'!$A$6:$A$1005,A6&\"\",'الدروس'!$L$6:$L$1005,\"متأخر عن الخطة\"))"
+      },
+      {
+       "column": "K",
+       "header": "الحالة",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",IF(F6=0,\"لا دروس مسجلة\",IF(I6>0,\"متأخرة عن الخطة\",IF(G6>=F6,\"مكتملة\",IF(G6=0,\"لم تبدأ\",\"في الموعد\")))))"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "الدروس",
+   "formula_cells": 4000,
+   "record_tables": [
+    {
+     "header_row": 5,
+     "first_record_row": 6,
+     "sample_rows_filled": 23,
+     "capacity_last_row": 1005,
+     "columns": [
+      {
+       "column": "A",
+       "header": "كود المادة والفصل",
+       "kind": "input",
+       "examples": [
+        "عربي 1/أ",
+        "عربي 1/أ",
+        "عربي 1/أ"
+       ],
+       "allowed_values": {
+        "from_range": "'المواد'!$A$6:$A$65"
+       }
+      },
+      {
+       "column": "B",
+       "header": "الوحدة",
+       "kind": "input",
+       "examples": [
+        "الوحدة 1",
+        "الوحدة 1",
+        "الوحدة 2"
+       ]
+      },
+      {
+       "column": "C",
+       "header": "الدرس",
+       "kind": "input",
+       "examples": [
+        "قراءة: الأسرة",
+        "نحو: الجملة الاسمية",
+        "قصة قصيرة"
+       ]
+      },
+      {
+       "column": "D",
+       "header": "الحصص المخططة",
+       "kind": "input",
+       "examples": [
+        2,
+        3,
+        2
+       ]
+      },
+      {
+       "column": "E",
+       "header": "الحصص المنفذة",
+       "kind": "input",
+       "examples": [
+        2,
+        3,
+        1
+       ]
+      },
+      {
+       "column": "F",
+       "header": "موعد التنفيذ المخطط",
+       "kind": "input",
+       "examples": [
+        "2026-09-20",
+        "2026-09-27",
+        "2026-10-18"
+       ]
+      },
+      {
+       "column": "G",
+       "header": "تاريخ التنفيذ",
+       "kind": "input",
+       "examples": [
+        "2026-09-21",
+        "2026-09-28",
+        "2026-09-16"
+       ]
+      },
+      {
+       "column": "H",
+       "header": "الحالة",
+       "kind": "input",
+       "examples": [
+        "تم",
+        "تم",
+        "جارٍ"
+       ],
+       "allowed_values": [
+        "لم يبدأ",
+        "جارٍ",
+        "تم"
+       ]
+      },
+      {
+       "column": "I",
+       "header": "ملاحظة تحضير",
+       "kind": "input",
+       "examples": [
+        "أسئلة فهم شفهية",
+        "أمثلة من الفصل",
+        "تبقى حصة نقاش"
+       ]
+      },
+      {
+       "column": "J",
+       "header": "الحصص المحتسبة",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",MIN(N(E6),N(D6)))"
+      },
+      {
+       "column": "K",
+       "header": "الحصص المتبقية",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",MAX(0,N(D6)-J6))"
+      },
+      {
+       "column": "L",
+       "header": "تنبيه",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",IF(AND(H6<>\"تم\",ISNUMBER(F6),F6<'الإعدادات'!$B$4-N('الإعدادات'!$B$5)),\"متأخر عن الخطة\",\"\"))"
+      },
+      {
+       "column": "M",
+       "header": "مراجعة",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",IF(AND(H6=\"تم\",N(E6)<N(D6)),\"راجع الحصص المنفذة\",\"\"))"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "الملخص",
+   "formula_cells": 21,
+   "record_tables": [
+    {
+     "header_row": 19,
+     "first_record_row": 20,
+     "sample_rows_filled": 10,
+     "capacity_last_row": 30,
+     "columns": [
+      {
+       "column": "A",
+       "header": "الحالة",
+       "kind": "input",
+       "examples": [
+        "لم يبدأ",
+        "جارٍ",
+        "تم"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "عدد الدروس",
+       "kind": "formula",
+       "formula_row_1": "=COUNTIF('الدروس'!$H$6:$H$1005,A20)"
+      },
+      {
+       "column": "C",
+       "header": "الحصص المخططة",
+       "kind": "formula",
+       "formula_row_1": "=SUMIFS('الدروس'!$D$6:$D$1005,'الدروس'!$H$6:$H$1005,A20)"
+      }
+     ]
+    }
+   ],
+   "results": [
+    {
+     "label": "عدد المواد والفصول",
+     "cell": "B5",
+     "formula": "=COUNTIF('المواد'!$A$6:$A$65,\"?*\")"
+    },
+    {
+     "label": "عدد الدروس المسجلة",
+     "cell": "B6",
+     "formula": "=COUNTIF('الدروس'!$A$6:$A$1005,\"?*\")"
+    },
+    {
+     "label": "الحصص المخططة",
+     "cell": "B7",
+     "formula": "=SUM('الدروس'!$D$6:$D$1005)"
+    },
+    {
+     "label": "الحصص المنفذة (محتسبة)",
+     "cell": "B8",
+     "formula": "=SUM('الدروس'!$J$6:$J$1005)"
+    },
+    {
+     "label": "نسبة تغطية المنهج",
+     "cell": "B9",
+     "formula": "=IF(B7=0,\"\",B8/B7)"
+    },
+    {
+     "label": "حصص منفذة زيادة على المخطط",
+     "cell": "B10",
+     "formula": "=SUM('الدروس'!$E$6:$E$1005)-B8"
+    },
+    {
+     "label": "دروس متأخرة عن الخطة",
+     "cell": "B13",
+     "formula": "=COUNTIF('الدروس'!$L$6:$L$1005,\"متأخر عن الخطة\")"
+    },
+    {
+     "label": "حصص متأخرة",
+     "cell": "B14",
+     "formula": "=SUMIF('الدروس'!$L$6:$L$1005,\"متأخر عن الخطة\",'الدروس'!$K$6:$K$1005)"
+    },
+    {
+     "label": "مواد وفصول متأخرة",
+     "cell": "B15",
+     "formula": "=COUNTIF('المواد'!$K$6:$K$65,\"متأخرة عن الخطة\")"
+    },
+    {
+     "label": "دروس تحتاج مراجعة الحصص",
+     "cell": "B16",
+     "formula": "=COUNTIF('الدروس'!$M$6:$M$1005,\"راجع الحصص المنفذة\")"
+    }
+   ]
+  },
+  {
+   "name": "لماذا ما زلت على إكسل؟",
+   "formula_cells": 0
+  }
+ ]
+}

@@ -1,0 +1,611 @@
+{
+ "id": "supplier-purchase-orders",
+ "file": "softwiro-supplier-purchase-orders.xlsx",
+ "title": "شيت أوامر الشراء والموردين",
+ "language": "ar",
+ "direction": "rtl",
+ "how_it_works": "White cells are typed input; cells whose kind is \"formula\" are calculated and must not be overwritten. Add one record per row under the header row of a record table, keeping the columns in order.",
+ "sheets": [
+  {
+   "name": "ابدأ هنا",
+   "formula_cells": 0
+  },
+  {
+   "name": "الإعدادات",
+   "formula_cells": 0,
+   "settings": [
+    {
+     "label": "تاريخ اليوم",
+     "cell": "B4",
+     "value": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "name": "الموردون",
+   "formula_cells": 1400,
+   "record_tables": [
+    {
+     "header_row": 5,
+     "first_record_row": 6,
+     "sample_rows_filled": 6,
+     "capacity_last_row": 205,
+     "columns": [
+      {
+       "column": "A",
+       "header": "كود المورد",
+       "kind": "input",
+       "examples": [
+        "S01",
+        "S02",
+        "S03"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "اسم المورد",
+       "kind": "input",
+       "examples": [
+        "مورد الأرز والسكر",
+        "مورد المنظفات",
+        "مورد الألبان"
+       ]
+      },
+      {
+       "column": "C",
+       "header": "الجوال",
+       "kind": "input",
+       "examples": [
+        "01020000001",
+        "01020000002",
+        "01020000003"
+       ]
+      },
+      {
+       "column": "D",
+       "header": "أيام السداد",
+       "kind": "input",
+       "examples": [
+        15,
+        15,
+        7
+       ]
+      },
+      {
+       "column": "E",
+       "header": "ما يورّده",
+       "kind": "input",
+       "examples": [
+        "بقالة جافة",
+        "منظفات",
+        "ألبان وأجبان"
+       ]
+      },
+      {
+       "column": "F",
+       "header": "عدد الأوامر",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",COUNTIFS('أوامر الشراء'!$C$6:$C$1005,A6&\"\"))"
+      },
+      {
+       "column": "G",
+       "header": "قيمة الأوامر",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",SUMIFS('أوامر الشراء'!$D$6:$D$1005,'أوامر الشراء'!$C$6:$C$1005,A6&\"\"))"
+      },
+      {
+       "column": "H",
+       "header": "المستلم",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",SUMIFS('الاستلامات'!$D$6:$D$1005,'الاستلامات'!$F$6:$F$1005,A6&\"\"))"
+      },
+      {
+       "column": "I",
+       "header": "المدفوع",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",SUMIFS('المدفوعات'!$C$6:$C$1005,'المدفوعات'!$F$6:$F$1005,A6&\"\"))"
+      },
+      {
+       "column": "J",
+       "header": "المستحق للمورد",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",ROUND(H6-I6,2))"
+      },
+      {
+       "column": "K",
+       "header": "أوامر لم تكتمل",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",COUNTIFS('أوامر الشراء'!$C$6:$C$1005,A6&\"\",'أوامر الشراء'!$I$6:$I$1005,\">0\"))"
+      },
+      {
+       "column": "L",
+       "header": "الحالة",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",IF(J6>0,\"مستحق للمورد\",IF(J6<0,\"مدفوع زيادة\",IF(H6>0,\"مسدد\",\"لا مشتريات\"))))"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "أوامر الشراء",
+   "formula_cells": 5000,
+   "record_tables": [
+    {
+     "header_row": 5,
+     "first_record_row": 6,
+     "sample_rows_filled": 10,
+     "capacity_last_row": 1005,
+     "columns": [
+      {
+       "column": "A",
+       "header": "رقم الأمر",
+       "kind": "input",
+       "examples": [
+        "PO-001",
+        "PO-002",
+        "PO-003"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "تاريخ الأمر",
+       "kind": "input",
+       "examples": [
+        "2026-08-05",
+        "2026-09-01",
+        "2026-09-10"
+       ]
+      },
+      {
+       "column": "C",
+       "header": "كود المورد",
+       "kind": "input",
+       "examples": [
+        "S01",
+        "S01",
+        "S02"
+       ],
+       "allowed_values": {
+        "from_range": "'الموردون'!$A$6:$A$205"
+       }
+      },
+      {
+       "column": "D",
+       "header": "قيمة الأمر",
+       "kind": "input",
+       "examples": [
+        40000,
+        35000,
+        12000
+       ]
+      },
+      {
+       "column": "E",
+       "header": "التسليم المتوقع",
+       "kind": "input",
+       "examples": [
+        "2026-08-12",
+        "2026-09-08",
+        "2026-09-15"
+       ]
+      },
+      {
+       "column": "F",
+       "header": "ملاحظة",
+       "kind": "input",
+       "examples": [
+        "أرز وسكر وزيت",
+        "أرز وسكر",
+        "منظفات"
+       ]
+      },
+      {
+       "column": "G",
+       "header": "المورد",
+       "kind": "formula",
+       "formula_row_1": "=IF(C6&\"\"=\"\",\"\",IFERROR(INDEX('الموردون'!$B$6:$B$205,MATCH(C6&\"\",'الموردون'!$A$6:$A$205,0))&\"\",\"كود غير موجود\"))"
+      },
+      {
+       "column": "H",
+       "header": "المستلم",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",SUMIFS('الاستلامات'!$D$6:$D$1005,'الاستلامات'!$C$6:$C$1005,A6&\"\"))"
+      },
+      {
+       "column": "I",
+       "header": "المتبقي للاستلام",
+       "kind": "formula",
+       "formula_row_1": "=IF(OR(A6&\"\"=\"\",NOT(ISNUMBER(D6))),\"\",ROUND(D6-H6,2))"
+      },
+      {
+       "column": "J",
+       "header": "الحالة",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",IF(I6=\"\",\"بيانات ناقصة\",IF(I6<=0,\"تم الاستلام\",IF(AND(ISNUMBER(E6),E6<'الإعدادات'!$B$4),\"متأخر التسليم\",IF(H6>0,\"استلام جزئي\",\"بانتظار الاستلام\")))))"
+      },
+      {
+       "column": "K",
+       "header": "أيام التأخير في التسليم",
+       "kind": "formula",
+       "formula_row_1": "=IF(J6=\"متأخر التسليم\",'الإعدادات'!$B$4-E6,\"\")"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "الاستلامات",
+   "formula_cells": 8000,
+   "record_tables": [
+    {
+     "header_row": 5,
+     "first_record_row": 6,
+     "sample_rows_filled": 9,
+     "capacity_last_row": 1005,
+     "columns": [
+      {
+       "column": "A",
+       "header": "رقم الاستلام",
+       "kind": "input",
+       "examples": [
+        "R-001",
+        "R-002",
+        "R-003"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "تاريخ الاستلام",
+       "kind": "input",
+       "examples": [
+        "2026-08-12",
+        "2026-08-20",
+        "2026-09-08"
+       ]
+      },
+      {
+       "column": "C",
+       "header": "رقم أمر الشراء",
+       "kind": "input",
+       "examples": [
+        "PO-001",
+        "PO-001",
+        "PO-002"
+       ],
+       "allowed_values": {
+        "from_range": "'أوامر الشراء'!$A$6:$A$1005"
+       }
+      },
+      {
+       "column": "D",
+       "header": "قيمة المستلم",
+       "kind": "input",
+       "examples": [
+        25000,
+        15000,
+        35000
+       ]
+      },
+      {
+       "column": "E",
+       "header": "ملاحظة",
+       "kind": "input",
+       "examples": [
+        "فاتورة المورد 411",
+        "فاتورة المورد 418",
+        "فاتورة المورد 430"
+       ]
+      },
+      {
+       "column": "F",
+       "header": "كود المورد",
+       "kind": "formula",
+       "formula_row_1": "=IF(C6&\"\"=\"\",\"\",IFERROR(INDEX('أوامر الشراء'!$C$6:$C$1005,MATCH(C6&\"\",'أوامر الشراء'!$A$6:$A$1005,0))&\"\",\"أمر غير موجود\"))"
+      },
+      {
+       "column": "G",
+       "header": "المورد",
+       "kind": "formula",
+       "formula_row_1": "=IF(F6=\"\",\"\",IFERROR(INDEX('الموردون'!$B$6:$B$205,MATCH(F6,'الموردون'!$A$6:$A$205,0))&\"\",\"مورد غير موجود\"))"
+      },
+      {
+       "column": "H",
+       "header": "أيام السداد",
+       "kind": "formula",
+       "formula_row_1": "=IF(F6=\"\",\"\",IFERROR(INDEX('الموردون'!$D$6:$D$205,MATCH(F6,'الموردون'!$A$6:$A$205,0)),\"\"))"
+      },
+      {
+       "column": "I",
+       "header": "تاريخ الاستحقاق",
+       "kind": "formula",
+       "formula_row_1": "=IF(OR(H6=\"\",NOT(ISNUMBER(B6))),\"\",B6+H6)"
+      },
+      {
+       "column": "J",
+       "header": "المدفوع",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",SUMIFS('المدفوعات'!$C$6:$C$1005,'المدفوعات'!$B$6:$B$1005,A6&\"\"))"
+      },
+      {
+       "column": "K",
+       "header": "المتبقي",
+       "kind": "formula",
+       "formula_row_1": "=IF(OR(A6&\"\"=\"\",NOT(ISNUMBER(D6))),\"\",ROUND(D6-J6,2))"
+      },
+      {
+       "column": "L",
+       "header": "أيام التأخير",
+       "kind": "formula",
+       "formula_row_1": "=IF(OR(K6=\"\",I6=\"\"),\"\",IF(AND(K6>0,I6<'الإعدادات'!$B$4),'الإعدادات'!$B$4-I6,0))"
+      },
+      {
+       "column": "M",
+       "header": "فئة العمر",
+       "kind": "formula",
+       "formula_row_1": "=IF(K6=\"\",\"\",IF(K6<=0,\"مسدد\",IF(I6=\"\",\"بدون موعد\",IF(I6>='الإعدادات'!$B$4,\"لم يحن\",IF(L6<=30,\"من 1 إلى 30 يوم\",IF(L6<=60,\"من 31 إلى 60 يوم\",\"أكثر من 60 يوم\"))))))"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "المدفوعات",
+   "formula_cells": 2000,
+   "record_tables": [
+    {
+     "header_row": 5,
+     "first_record_row": 6,
+     "sample_rows_filled": 7,
+     "capacity_last_row": 1005,
+     "columns": [
+      {
+       "column": "A",
+       "header": "التاريخ",
+       "kind": "input",
+       "examples": [
+        "2026-09-11",
+        "2026-09-29",
+        "2026-10-01"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "رقم الاستلام",
+       "kind": "input",
+       "examples": [
+        "R-001",
+        "R-004",
+        "R-005"
+       ],
+       "allowed_values": {
+        "from_range": "'الاستلامات'!$A$6:$A$1005"
+       }
+      },
+      {
+       "column": "C",
+       "header": "المبلغ",
+       "kind": "input",
+       "examples": [
+        20000,
+        12000,
+        3000
+       ]
+      },
+      {
+       "column": "D",
+       "header": "طريقة الدفع",
+       "kind": "input",
+       "examples": [
+        "نقدًا",
+        "تحويل بنكي",
+        "شيك"
+       ],
+       "allowed_values": [
+        "نقدًا",
+        "تحويل بنكي",
+        "شيك"
+       ]
+      },
+      {
+       "column": "E",
+       "header": "ملاحظة",
+       "kind": "input"
+      },
+      {
+       "column": "F",
+       "header": "كود المورد",
+       "kind": "formula",
+       "formula_row_1": "=IF(B6&\"\"=\"\",\"\",IFERROR(INDEX('الاستلامات'!$F$6:$F$1005,MATCH(B6&\"\",'الاستلامات'!$A$6:$A$1005,0))&\"\",\"استلام غير موجود\"))"
+      },
+      {
+       "column": "G",
+       "header": "المورد",
+       "kind": "formula",
+       "formula_row_1": "=IF(B6&\"\"=\"\",\"\",IFERROR(INDEX('الاستلامات'!$G$6:$G$1005,MATCH(B6&\"\",'الاستلامات'!$A$6:$A$1005,0))&\"\",\"استلام غير موجود\"))"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "أعمار الديون",
+   "formula_cells": 1606,
+   "record_tables": [
+    {
+     "header_row": 5,
+     "first_record_row": 6,
+     "sample_rows_filled": 0,
+     "capacity_last_row": 205,
+     "columns": [
+      {
+       "column": "A",
+       "header": "كود المورد",
+       "kind": "formula",
+       "formula_row_1": "=IF('الموردون'!A6&\"\"=\"\",\"\",'الموردون'!A6&\"\")"
+      },
+      {
+       "column": "B",
+       "header": "المورد",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6=\"\",\"\",'الموردون'!B6&\"\")"
+      },
+      {
+       "column": "C",
+       "header": "إجمالي المتبقي",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6=\"\",\"\",SUMIFS('الاستلامات'!$K$6:$K$1005,'الاستلامات'!$F$6:$F$1005,A6))"
+      },
+      {
+       "column": "D",
+       "header": "لم يحن",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6=\"\",\"\",SUMIFS('الاستلامات'!$K$6:$K$1005,'الاستلامات'!$F$6:$F$1005,A6,'الاستلامات'!$M$6:$M$1005,$D$5))"
+      },
+      {
+       "column": "E",
+       "header": "من 1 إلى 30 يوم",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6=\"\",\"\",SUMIFS('الاستلامات'!$K$6:$K$1005,'الاستلامات'!$F$6:$F$1005,A6,'الاستلامات'!$M$6:$M$1005,$E$5))"
+      },
+      {
+       "column": "F",
+       "header": "من 31 إلى 60 يوم",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6=\"\",\"\",SUMIFS('الاستلامات'!$K$6:$K$1005,'الاستلامات'!$F$6:$F$1005,A6,'الاستلامات'!$M$6:$M$1005,$F$5))"
+      },
+      {
+       "column": "G",
+       "header": "أكثر من 60 يوم",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6=\"\",\"\",SUMIFS('الاستلامات'!$K$6:$K$1005,'الاستلامات'!$F$6:$F$1005,A6,'الاستلامات'!$M$6:$M$1005,$G$5))"
+      },
+      {
+       "column": "H",
+       "header": "استلامات غير مسددة",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6=\"\",\"\",COUNTIFS('الاستلامات'!$F$6:$F$1005,A6,'الاستلامات'!$K$6:$K$1005,\">0\"))"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "الملخص",
+   "formula_cells": 25,
+   "record_tables": [
+    {
+     "header_row": 26,
+     "first_record_row": 27,
+     "sample_rows_filled": 5,
+     "capacity_last_row": 31,
+     "columns": [
+      {
+       "column": "A",
+       "header": "الفئة",
+       "kind": "input",
+       "examples": [
+        "لم يحن",
+        "من 1 إلى 30 يوم",
+        "من 31 إلى 60 يوم"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "المبلغ",
+       "kind": "formula",
+       "formula_row_1": "=SUMIFS('الاستلامات'!$K$6:$K$1005,'الاستلامات'!$M$6:$M$1005,A27)"
+      },
+      {
+       "column": "C",
+       "header": "نسبتها من المستحق",
+       "kind": "formula",
+       "formula_row_1": "=IF($B$31=0,\"\",B27/$B$31)"
+      }
+     ]
+    }
+   ],
+   "results": [
+    {
+     "label": "عدد الموردين",
+     "cell": "B5",
+     "formula": "=COUNTIF('الموردون'!$A$6:$A$205,\"?*\")"
+    },
+    {
+     "label": "موردون لهم مستحقات عندك",
+     "cell": "B6",
+     "formula": "=COUNTIF('الموردون'!$L$6:$L$205,\"مستحق للمورد\")"
+    },
+    {
+     "label": "عدد الأوامر",
+     "cell": "B9",
+     "formula": "=COUNTIF('أوامر الشراء'!$A$6:$A$1005,\"?*\")"
+    },
+    {
+     "label": "بانتظار الاستلام",
+     "cell": "B10",
+     "formula": "=COUNTIF('أوامر الشراء'!$J$6:$J$1005,\"بانتظار الاستلام\")"
+    },
+    {
+     "label": "استلام جزئي",
+     "cell": "B11",
+     "formula": "=COUNTIF('أوامر الشراء'!$J$6:$J$1005,\"استلام جزئي\")"
+    },
+    {
+     "label": "تم الاستلام",
+     "cell": "B12",
+     "formula": "=COUNTIF('أوامر الشراء'!$J$6:$J$1005,\"تم الاستلام\")"
+    },
+    {
+     "label": "متأخر التسليم",
+     "cell": "B13",
+     "formula": "=COUNTIF('أوامر الشراء'!$J$6:$J$1005,\"متأخر التسليم\")"
+    },
+    {
+     "label": "قيمة بضاعة طلبتها ولم تستلمها",
+     "cell": "B14",
+     "formula": "=SUMIF('أوامر الشراء'!$I$6:$I$1005,\">0\")"
+    },
+    {
+     "label": "إجمالي قيمة الأوامر",
+     "cell": "B17",
+     "formula": "=SUM('أوامر الشراء'!$D$6:$D$1005)"
+    },
+    {
+     "label": "إجمالي المستلم",
+     "cell": "B18",
+     "formula": "=SUM('الاستلامات'!$D$6:$D$1005)"
+    },
+    {
+     "label": "إجمالي المدفوع للموردين",
+     "cell": "B19",
+     "formula": "=SUM('المدفوعات'!$C$6:$C$1005)"
+    },
+    {
+     "label": "المستحق للموردين",
+     "cell": "B20",
+     "formula": "=SUMIF('الاستلامات'!$K$6:$K$1005,\">0\")"
+    },
+    {
+     "label": "منه بعد تاريخ الاستحقاق",
+     "cell": "B21",
+     "formula": "=SUMIFS('الاستلامات'!$K$6:$K$1005,'الاستلامات'!$L$6:$L$1005,\">0\")"
+    },
+    {
+     "label": "المستلم هذا الشهر",
+     "cell": "B22",
+     "formula": "=SUMIFS('الاستلامات'!$D$6:$D$1005,'الاستلامات'!$B$6:$B$1005,\">=\"&DATE(YEAR('الإعدادات'!$B$4),MONTH('الإعدادات'!$B$4),1),'الاستلامات'!$B$6:$B$1005,\"<=\"&'الإعدادات'!$B$4)"
+    },
+    {
+     "label": "المدفوع هذا الشهر",
+     "cell": "B23",
+     "formula": "=SUMIFS('المدفوعات'!$C$6:$C$1005,'المدفوعات'!$A$6:$A$1005,\">=\"&DATE(YEAR('الإعدادات'!$B$4),MONTH('الإعدادات'!$B$4),1),'المدفوعات'!$A$6:$A$1005,\"<=\"&'الإعدادات'!$B$4)"
+    }
+   ]
+  },
+  {
+   "name": "لماذا ما زلت على إكسل؟",
+   "formula_cells": 0
+  }
+ ]
+}

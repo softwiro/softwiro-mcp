@@ -1,0 +1,395 @@
+{
+ "id": "crop-farm-expenses",
+ "file": "softwiro-crop-farm-expenses.xlsx",
+ "title": "شيت مصروفات وإيراد الموسم الزراعي",
+ "language": "ar",
+ "direction": "rtl",
+ "how_it_works": "White cells are typed input; cells whose kind is \"formula\" are calculated and must not be overwritten. Add one record per row under the header row of a record table, keeping the columns in order.",
+ "sheets": [
+  {
+   "name": "ابدأ هنا",
+   "formula_cells": 0
+  },
+  {
+   "name": "القطع",
+   "formula_cells": 2400,
+   "record_tables": [
+    {
+     "header_row": 5,
+     "first_record_row": 6,
+     "sample_rows_filled": 6,
+     "capacity_last_row": 205,
+     "columns": [
+      {
+       "column": "A",
+       "header": "كود القطعة",
+       "kind": "input",
+       "examples": [
+        "P01",
+        "P02",
+        "P03"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "اسم القطعة",
+       "kind": "input",
+       "examples": [
+        "قطعة الجنوب",
+        "قطعة الترعة",
+        "قطعة الشرق"
+       ]
+      },
+      {
+       "column": "C",
+       "header": "المحصول",
+       "kind": "input",
+       "examples": [
+        "قمح",
+        "ذرة",
+        "طماطم"
+       ]
+      },
+      {
+       "column": "D",
+       "header": "المساحة (فدان)",
+       "kind": "input",
+       "examples": [
+        5,
+        3,
+        2
+       ]
+      },
+      {
+       "column": "E",
+       "header": "تاريخ الزراعة",
+       "kind": "input",
+       "examples": [
+        "2025-11-20",
+        "2026-06-01",
+        "2026-08-01"
+       ]
+      },
+      {
+       "column": "F",
+       "header": "إجمالي المصروفات",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",ROUND(SUMIFS('المصروفات'!$D$6:$D$2005,'المصروفات'!$B$6:$B$2005,A6&\"\"),2))"
+      },
+      {
+       "column": "G",
+       "header": "عمالة",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",ROUND(SUMIFS('المصروفات'!$D$6:$D$2005,'المصروفات'!$B$6:$B$2005,A6&\"\",'المصروفات'!$C$6:$C$2005,\"عمالة\"),2))"
+      },
+      {
+       "column": "H",
+       "header": "أسمدة",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",ROUND(SUMIFS('المصروفات'!$D$6:$D$2005,'المصروفات'!$B$6:$B$2005,A6&\"\",'المصروفات'!$C$6:$C$2005,\"أسمدة\"),2))"
+      },
+      {
+       "column": "I",
+       "header": "ري",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",ROUND(SUMIFS('المصروفات'!$D$6:$D$2005,'المصروفات'!$B$6:$B$2005,A6&\"\",'المصروفات'!$C$6:$C$2005,\"ري\"),2))"
+      },
+      {
+       "column": "J",
+       "header": "حصاد ونقل",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",ROUND(SUMIFS('المصروفات'!$D$6:$D$2005,'المصروفات'!$B$6:$B$2005,A6&\"\",'المصروفات'!$C$6:$C$2005,\"حصاد ونقل\"),2))"
+      },
+      {
+       "column": "K",
+       "header": "الكمية المباعة (كجم)",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",SUMIFS('المبيعات'!$C$6:$C$1005,'المبيعات'!$B$6:$B$1005,A6&\"\"))"
+      },
+      {
+       "column": "L",
+       "header": "الإيراد",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",ROUND(SUMIFS('المبيعات'!$F$6:$F$1005,'المبيعات'!$B$6:$B$1005,A6&\"\"),2))"
+      },
+      {
+       "column": "M",
+       "header": "الربح",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",IF(L6=0,\"\",ROUND(L6-F6,2)))"
+      },
+      {
+       "column": "N",
+       "header": "تكلفة الفدان",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",IF(N(D6)<=0,\"\",ROUND(F6/D6,2)))"
+      },
+      {
+       "column": "O",
+       "header": "ربح الفدان",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",IF(OR(M6=\"\",N(D6)<=0),\"\",ROUND(M6/D6,2)))"
+      },
+      {
+       "column": "P",
+       "header": "تكلفة الكيلو",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",IF(K6<=0,\"\",ROUND(F6/K6,2)))"
+      },
+      {
+       "column": "Q",
+       "header": "الحالة",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",IF(AND(F6=0,L6=0),\"لم تبدأ\",IF(L6=0,\"قيد الزراعة\",IF(M6>=0,\"رابح\",\"خاسر\"))))"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "المصروفات",
+   "formula_cells": 2000,
+   "record_tables": [
+    {
+     "header_row": 5,
+     "first_record_row": 6,
+     "sample_rows_filled": 43,
+     "capacity_last_row": 2005,
+     "columns": [
+      {
+       "column": "A",
+       "header": "التاريخ",
+       "kind": "input",
+       "examples": [
+        "2025-11-18",
+        "2025-11-20",
+        "2025-11-25"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "كود القطعة",
+       "kind": "input",
+       "examples": [
+        "P01",
+        "P01",
+        "P01"
+       ],
+       "allowed_values": {
+        "from_range": "'القطع'!$A$6:$A$205"
+       }
+      },
+      {
+       "column": "C",
+       "header": "البند",
+       "kind": "input",
+       "examples": [
+        "تقاوي وشتلات",
+        "حراثة ومعدات",
+        "أسمدة"
+       ],
+       "allowed_values": [
+        "تقاوي وشتلات",
+        "عمالة",
+        "أسمدة",
+        "مبيدات",
+        "ري",
+        "حراثة ومعدات",
+        "حصاد ونقل",
+        "أخرى"
+       ]
+      },
+      {
+       "column": "D",
+       "header": "المبلغ",
+       "kind": "input",
+       "examples": [
+        15000,
+        6000,
+        12000
+       ]
+      },
+      {
+       "column": "E",
+       "header": "ملاحظة",
+       "kind": "input",
+       "examples": [
+        "تقاوي قمح",
+        "تسوية وزراعة",
+        "دفعة ثانية"
+       ]
+      },
+      {
+       "column": "F",
+       "header": "القطعة",
+       "kind": "formula",
+       "formula_row_1": "=IF(B6&\"\"=\"\",\"\",IFERROR(INDEX('القطع'!$B$6:$B$205,MATCH(B6&\"\",'القطع'!$A$6:$A$205,0))&\"\",\"كود غير موجود\"))"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "المبيعات",
+   "formula_cells": 2000,
+   "record_tables": [
+    {
+     "header_row": 5,
+     "first_record_row": 6,
+     "sample_rows_filled": 9,
+     "capacity_last_row": 1005,
+     "columns": [
+      {
+       "column": "A",
+       "header": "التاريخ",
+       "kind": "input",
+       "examples": [
+        "2026-05-20",
+        "2026-05-28",
+        "2026-09-25"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "كود القطعة",
+       "kind": "input",
+       "examples": [
+        "P01",
+        "P01",
+        "P04"
+       ],
+       "allowed_values": {
+        "from_range": "'القطع'!$A$6:$A$205"
+       }
+      },
+      {
+       "column": "C",
+       "header": "الكمية (كجم)",
+       "kind": "input",
+       "examples": [
+        8000,
+        5000,
+        10000
+       ]
+      },
+      {
+       "column": "D",
+       "header": "سعر الكيلو",
+       "kind": "input",
+       "examples": [
+        8,
+        8.5,
+        3.5
+       ]
+      },
+      {
+       "column": "E",
+       "header": "المشتري",
+       "kind": "input",
+       "examples": [
+        "تاجر الغلال أ",
+        "شونة الحبوب",
+        "تاجر خضار ب"
+       ]
+      },
+      {
+       "column": "F",
+       "header": "الإيراد",
+       "kind": "formula",
+       "formula_row_1": "=IF(OR(B6&\"\"=\"\",NOT(ISNUMBER(C6))),\"\",ROUND(C6*N(D6),2))"
+      },
+      {
+       "column": "G",
+       "header": "القطعة",
+       "kind": "formula",
+       "formula_row_1": "=IF(B6&\"\"=\"\",\"\",IFERROR(INDEX('القطع'!$B$6:$B$205,MATCH(B6&\"\",'القطع'!$A$6:$A$205,0))&\"\",\"كود غير موجود\"))"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "الملخص",
+   "formula_cells": 35,
+   "record_tables": [
+    {
+     "header_row": 14,
+     "first_record_row": 15,
+     "sample_rows_filled": 14,
+     "capacity_last_row": 29,
+     "columns": [
+      {
+       "column": "A",
+       "header": "الحالة",
+       "kind": "input",
+       "examples": [
+        "رابح",
+        "خاسر",
+        "قيد الزراعة"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "عدد القطع",
+       "kind": "formula",
+       "formula_row_1": "=COUNTIF('القطع'!$Q$6:$Q$205,A15)"
+      },
+      {
+       "column": "C",
+       "header": "المصروفات",
+       "kind": "formula",
+       "formula_row_1": "=SUMIFS('القطع'!$F$6:$F$205,'القطع'!$Q$6:$Q$205,A15)"
+      },
+      {
+       "column": "D",
+       "header": "الإيراد",
+       "kind": "formula",
+       "formula_row_1": "=SUMIFS('القطع'!$L$6:$L$205,'القطع'!$Q$6:$Q$205,A15)"
+      }
+     ]
+    }
+   ],
+   "results": [
+    {
+     "label": "عدد القطع",
+     "cell": "B5",
+     "formula": "=COUNTIF('القطع'!$A$6:$A$205,\"?*\")"
+    },
+    {
+     "label": "المساحة الكلية (فدان)",
+     "cell": "B6",
+     "formula": "=SUM('القطع'!$D$6:$D$205)"
+    },
+    {
+     "label": "إجمالي المصروفات",
+     "cell": "B7",
+     "formula": "=SUM('المصروفات'!$D$6:$D$2005)"
+    },
+    {
+     "label": "إجمالي الإيراد",
+     "cell": "B8",
+     "formula": "=SUM('المبيعات'!$F$6:$F$1005)"
+    },
+    {
+     "label": "الصافي (الإيراد − المصروفات)",
+     "cell": "B9",
+     "formula": "=B8-B7"
+    },
+    {
+     "label": "مصروفات قطع قيد الزراعة",
+     "cell": "B10",
+     "formula": "=SUMIFS('القطع'!$F$6:$F$205,'القطع'!$Q$6:$Q$205,\"قيد الزراعة\")"
+    },
+    {
+     "label": "ربح القطع التي بيع منها",
+     "cell": "B11",
+     "formula": "=SUM('القطع'!$M$6:$M$205)"
+    }
+   ]
+  },
+  {
+   "name": "لماذا ما زلت على إكسل؟",
+   "formula_cells": 0
+  }
+ ]
+}

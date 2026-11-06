@@ -1,0 +1,195 @@
+{
+ "id": "production-tracking",
+ "file": "softwiro-production-tracking.xlsx",
+ "title": "شيت متابعة الإنتاج بالمراحل",
+ "language": "ar",
+ "direction": "rtl",
+ "how_it_works": "White cells are typed input; cells whose kind is \"formula\" are calculated and must not be overwritten. Add one record per row under the header row of a record table, keeping the columns in order.",
+ "sheets": [
+  {
+   "name": "ابدأ هنا",
+   "formula_cells": 0
+  },
+  {
+   "name": "المراحل",
+   "formula_cells": 2
+  },
+  {
+   "name": "أوامر الإنتاج",
+   "formula_cells": 0,
+   "record_tables": [
+    {
+     "header_row": 4,
+     "first_record_row": 5,
+     "sample_rows_filled": 4,
+     "capacity_last_row": 8,
+     "columns": [
+      {
+       "column": "A",
+       "header": "رقم الأمر",
+       "kind": "input",
+       "examples": [
+        "PO-101",
+        "PO-102",
+        "PO-103"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "الموديل",
+       "kind": "input",
+       "examples": [
+        "قميص رجالي",
+        "بنطلون جينز",
+        "تيشيرت أطفال"
+       ]
+      },
+      {
+       "column": "C",
+       "header": "العميل",
+       "kind": "input",
+       "examples": [
+        "شركة النيل للملابس",
+        "متجر الأناقة",
+        "مؤسسة الرواد"
+       ]
+      },
+      {
+       "column": "D",
+       "header": "الكمية",
+       "kind": "input",
+       "examples": [
+        500,
+        300,
+        800
+       ]
+      },
+      {
+       "column": "E",
+       "header": "تاريخ التسليم",
+       "kind": "input",
+       "examples": [
+        "2026-10-14",
+        "2026-10-09",
+        "2026-11-05"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "حركة المراحل",
+   "formula_cells": 0,
+   "record_tables": [
+    {
+     "header_row": 4,
+     "first_record_row": 5,
+     "sample_rows_filled": 20,
+     "capacity_last_row": 24,
+     "columns": [
+      {
+       "column": "A",
+       "header": "التاريخ",
+       "kind": "input",
+       "examples": [
+        "2026-10-01",
+        "2026-10-03",
+        "2026-10-05"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "رقم الأمر",
+       "kind": "input",
+       "examples": [
+        "PO-101",
+        "PO-101",
+        "PO-101"
+       ],
+       "allowed_values": {
+        "from_range": "'أوامر الإنتاج'!$A$5:$A$304"
+       }
+      },
+      {
+       "column": "C",
+       "header": "المرحلة",
+       "kind": "input",
+       "examples": [
+        "قص",
+        "طباعة",
+        "خياطة"
+       ],
+       "allowed_values": {
+        "from_range": "'المراحل'!$A$5:$A$16"
+       }
+      },
+      {
+       "column": "D",
+       "header": "الكمية الخارجة من المرحلة",
+       "kind": "input",
+       "examples": [
+        500,
+        500,
+        420
+       ]
+      },
+      {
+       "column": "E",
+       "header": "ملاحظات",
+       "kind": "input"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "لوحة المتابعة",
+   "formula_cells": 6012,
+   "record_tables": [
+    {
+     "header_row": 4,
+     "first_record_row": 5,
+     "sample_rows_filled": 0,
+     "capacity_last_row": 304,
+     "columns": [
+      {
+       "column": "P",
+       "header": "الخارج من آخر مرحلة",
+       "kind": "formula",
+       "formula_row_1": "=IF(OR($A5=\"\",'المراحل'!$D$5=\"\"),\"\",SUMIFS('حركة المراحل'!$D$5:$D$504,'حركة المراحل'!$B$5:$B$504,$A5,'حركة المراحل'!$C$5:$C$504,'المراحل'!$D$5))"
+      },
+      {
+       "column": "Q",
+       "header": "نسبة الإنجاز",
+       "kind": "formula",
+       "formula_row_1": "=IF(OR(A5=\"\",P5=\"\",C5=\"\",C5=0),\"\",P5/C5)"
+      },
+      {
+       "column": "R",
+       "header": "المتبقي",
+       "kind": "formula",
+       "formula_row_1": "=IF(OR(A5=\"\",P5=\"\",C5=\"\"),\"\",MAX(C5-P5,0))"
+      },
+      {
+       "column": "S",
+       "header": "الأيام المتبقية للتسليم",
+       "kind": "formula",
+       "formula_row_1": "=IF(OR(A5=\"\",'أوامر الإنتاج'!E5=\"\"),\"\",'أوامر الإنتاج'!E5-TODAY())"
+      },
+      {
+       "column": "T",
+       "header": "الحالة",
+       "kind": "formula",
+       "formula_row_1": "=IF(OR(A5=\"\",P5=\"\",C5=\"\"),\"\",IF(P5>=C5,\"تم\",IF(S5=\"\",\"جارٍ\",IF(S5<0,\"متأخر\",IF(S5<=3,\"قريب\",\"جارٍ\")))))"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "لماذا ما زلت على إكسل؟",
+   "formula_cells": 0
+  }
+ ]
+}

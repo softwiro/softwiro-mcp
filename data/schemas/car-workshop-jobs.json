@@ -1,0 +1,579 @@
+{
+ "id": "car-workshop-jobs",
+ "file": "softwiro-car-workshop-jobs.xlsx",
+ "title": "شيت أوامر شغل ورشة السيارات",
+ "language": "ar",
+ "direction": "rtl",
+ "how_it_works": "White cells are typed input; cells whose kind is \"formula\" are calculated and must not be overwritten. Add one record per row under the header row of a record table, keeping the columns in order.",
+ "sheets": [
+  {
+   "name": "ابدأ هنا",
+   "formula_cells": 0
+  },
+  {
+   "name": "العملاء",
+   "formula_cells": 1200,
+   "record_tables": [
+    {
+     "header_row": 5,
+     "first_record_row": 6,
+     "sample_rows_filled": 7,
+     "capacity_last_row": 205,
+     "columns": [
+      {
+       "column": "A",
+       "header": "كود العميل",
+       "kind": "input",
+       "examples": [
+        "C01",
+        "C02",
+        "C03"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "اسم العميل",
+       "kind": "input",
+       "examples": [
+        "أحمد سالم",
+        "محمود عادل",
+        "سيد رمضان"
+       ]
+      },
+      {
+       "column": "C",
+       "header": "الجوال",
+       "kind": "input",
+       "examples": [
+        "01010000001",
+        "01010000002",
+        "01010000003"
+       ]
+      },
+      {
+       "column": "D",
+       "header": "عدد الأوامر",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",COUNTIFS('أوامر الشغل'!$C$6:$C$1005,A6&\"\",'أوامر الشغل'!$F$6:$F$1005,\"<>ملغي\"))"
+      },
+      {
+       "column": "E",
+       "header": "إجمالي الأوامر",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",SUMIFS('أوامر الشغل'!$K$6:$K$1005,'أوامر الشغل'!$C$6:$C$1005,A6&\"\"))"
+      },
+      {
+       "column": "F",
+       "header": "المدفوع",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",SUMIFS('أوامر الشغل'!$L$6:$L$1005,'أوامر الشغل'!$C$6:$C$1005,A6&\"\"))"
+      },
+      {
+       "column": "G",
+       "header": "المديونية",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",ROUND(E6-F6,2))"
+      },
+      {
+       "column": "H",
+       "header": "الحالة",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",IF(G6>0,\"مدين\",IF(G6<0,\"دفع مقدمًا\",IF(D6=0,\"لا أوامر\",\"مسدد\"))))"
+      },
+      {
+       "column": "I",
+       "header": "ترتيب المتابعة",
+       "kind": "formula",
+       "formula_row_1": "=IF(ISNUMBER(G6),IF(G6>0,COUNTIFS($G$6:$G$205,\">\"&G6)+COUNTIFS($G$6:G6,G6),\"\"),\"\")"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "أوامر الشغل",
+   "formula_cells": 6000,
+   "record_tables": [
+    {
+     "header_row": 5,
+     "first_record_row": 6,
+     "sample_rows_filled": 10,
+     "capacity_last_row": 1005,
+     "columns": [
+      {
+       "column": "A",
+       "header": "رقم الأمر",
+       "kind": "input",
+       "examples": [
+        "J001",
+        "J002",
+        "J003"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "التاريخ",
+       "kind": "input",
+       "examples": [
+        "2026-10-05",
+        "2026-10-12",
+        "2026-10-20"
+       ]
+      },
+      {
+       "column": "C",
+       "header": "كود العميل",
+       "kind": "input",
+       "examples": [
+        "C01",
+        "C02",
+        "C01"
+       ],
+       "allowed_values": {
+        "from_range": "'العملاء'!$A$6:$A$205"
+       }
+      },
+      {
+       "column": "D",
+       "header": "رقم اللوحة",
+       "kind": "input",
+       "examples": [
+        "أ ب ج 1234",
+        "س ص ع 5678",
+        "أ ب ج 1234"
+       ]
+      },
+      {
+       "column": "E",
+       "header": "الموديل",
+       "kind": "input",
+       "examples": [
+        "تويوتا كورولا 2018",
+        "هيونداي إلنترا 2016",
+        "تويوتا كورولا 2018"
+       ]
+      },
+      {
+       "column": "F",
+       "header": "الحالة",
+       "kind": "input",
+       "examples": [
+        "سُلّمت",
+        "سُلّمت",
+        "سُلّمت"
+       ],
+       "allowed_values": [
+        "قيد الفحص",
+        "تحت التنفيذ",
+        "بانتظار قطعة",
+        "جاهزة",
+        "سُلّمت",
+        "ملغي"
+       ]
+      },
+      {
+       "column": "G",
+       "header": "أجرة الصنعة",
+       "kind": "input",
+       "examples": [
+        800,
+        1200,
+        500
+       ]
+      },
+      {
+       "column": "H",
+       "header": "خصم",
+       "kind": "input",
+       "examples": [
+        0,
+        100,
+        0
+       ]
+      },
+      {
+       "column": "I",
+       "header": "اسم العميل",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",IFERROR(INDEX('العملاء'!$B$6:$B$205,MATCH(C6&\"\",'العملاء'!$A$6:$A$205,0))&\"\",\"كود غير موجود\"))"
+      },
+      {
+       "column": "J",
+       "header": "مبيعات القطع",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",SUMIFS('القطع'!$F$6:$F$2005,'القطع'!$A$6:$A$2005,A6&\"\"))"
+      },
+      {
+       "column": "K",
+       "header": "إجمالي الأمر",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",IF(F6=\"ملغي\",0,ROUND(MAX(0,N(G6)+J6-N(H6)),2)))"
+      },
+      {
+       "column": "L",
+       "header": "المدفوع",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",SUMIFS('الدفعات'!$C$6:$C$2005,'الدفعات'!$B$6:$B$2005,A6&\"\"))"
+      },
+      {
+       "column": "M",
+       "header": "المتبقي",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",ROUND(K6-L6,2))"
+      },
+      {
+       "column": "N",
+       "header": "تنبيه",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",IF(AND(F6=\"جاهزة\",M6>0),\"جاهزة ولم تُسدَّد\",IF(AND(F6=\"سُلّمت\",M6>0),\"سُلّمت وعليها متبقي\",\"\")))"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "القطع",
+   "formula_cells": 8000,
+   "record_tables": [
+    {
+     "header_row": 5,
+     "first_record_row": 6,
+     "sample_rows_filled": 11,
+     "capacity_last_row": 2005,
+     "columns": [
+      {
+       "column": "A",
+       "header": "رقم الأمر",
+       "kind": "input",
+       "examples": [
+        "J001",
+        "J001",
+        "J002"
+       ],
+       "allowed_values": {
+        "from_range": "'أوامر الشغل'!$A$6:$A$1005"
+       }
+      },
+      {
+       "column": "B",
+       "header": "القطعة",
+       "kind": "input",
+       "examples": [
+        "فلتر زيت",
+        "زيت محرك (لتر)",
+        "تيل فرامل أمامي"
+       ]
+      },
+      {
+       "column": "C",
+       "header": "الكمية",
+       "kind": "input",
+       "examples": [
+        1,
+        4,
+        1
+       ]
+      },
+      {
+       "column": "D",
+       "header": "سعر الشراء للوحدة",
+       "kind": "input",
+       "examples": [
+        90,
+        180,
+        600
+       ]
+      },
+      {
+       "column": "E",
+       "header": "سعر البيع للوحدة",
+       "kind": "input",
+       "examples": [
+        130,
+        230,
+        800
+       ]
+      },
+      {
+       "column": "F",
+       "header": "إجمالي البيع",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",ROUND(N(C6)*N(E6),2))"
+      },
+      {
+       "column": "G",
+       "header": "إجمالي التكلفة",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",ROUND(N(C6)*N(D6),2))"
+      },
+      {
+       "column": "H",
+       "header": "ربح القطعة",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",ROUND(F6-G6,2))"
+      },
+      {
+       "column": "I",
+       "header": "حالة الأمر",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",IFERROR(INDEX('أوامر الشغل'!$F$6:$F$1005,MATCH(A6&\"\",'أوامر الشغل'!$A$6:$A$1005,0))&\"\",\"أمر غير موجود\"))"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "الدفعات",
+   "formula_cells": 2000,
+   "record_tables": [
+    {
+     "header_row": 5,
+     "first_record_row": 6,
+     "sample_rows_filled": 9,
+     "capacity_last_row": 2005,
+     "columns": [
+      {
+       "column": "A",
+       "header": "التاريخ",
+       "kind": "input",
+       "examples": [
+        "2026-10-05",
+        "2026-10-12",
+        "2026-10-20"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "رقم الأمر",
+       "kind": "input",
+       "examples": [
+        "J001",
+        "J002",
+        "J002"
+       ],
+       "allowed_values": {
+        "from_range": "'أوامر الشغل'!$A$6:$A$1005"
+       }
+      },
+      {
+       "column": "C",
+       "header": "المبلغ",
+       "kind": "input",
+       "examples": [
+        1850,
+        1000,
+        500
+       ]
+      },
+      {
+       "column": "D",
+       "header": "طريقة الدفع",
+       "kind": "input",
+       "examples": [
+        "نقدًا",
+        "نقدًا",
+        "تحويل بنكي"
+       ],
+       "allowed_values": [
+        "نقدًا",
+        "تحويل بنكي",
+        "فيزا"
+       ]
+      },
+      {
+       "column": "E",
+       "header": "ملاحظة",
+       "kind": "input"
+      },
+      {
+       "column": "F",
+       "header": "العميل",
+       "kind": "formula",
+       "formula_row_1": "=IF(B6&\"\"=\"\",\"\",IFERROR(INDEX('أوامر الشغل'!$I$6:$I$1005,MATCH(B6&\"\",'أوامر الشغل'!$A$6:$A$1005,0)),\"أمر غير موجود\"))"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "المديونيات",
+   "formula_cells": 301,
+   "record_tables": [
+    {
+     "header_row": 6,
+     "first_record_row": 7,
+     "sample_rows_filled": 0,
+     "capacity_last_row": 56,
+     "columns": [
+      {
+       "column": "A",
+       "header": "م",
+       "kind": "formula",
+       "formula_row_1": "=IF(1<=$B$4,1,\"\")"
+      },
+      {
+       "column": "B",
+       "header": "الكود",
+       "kind": "formula",
+       "formula_row_1": "=IF($A7=\"\",\"\",INDEX('العملاء'!$A$6:$A$205,MATCH($A7,'العملاء'!$I$6:$I$205,0))&\"\")"
+      },
+      {
+       "column": "C",
+       "header": "العميل",
+       "kind": "formula",
+       "formula_row_1": "=IF($A7=\"\",\"\",INDEX('العملاء'!$B$6:$B$205,MATCH($A7,'العملاء'!$I$6:$I$205,0))&\"\")"
+      },
+      {
+       "column": "D",
+       "header": "الجوال",
+       "kind": "formula",
+       "formula_row_1": "=IF($A7=\"\",\"\",INDEX('العملاء'!$C$6:$C$205,MATCH($A7,'العملاء'!$I$6:$I$205,0))&\"\")"
+      },
+      {
+       "column": "E",
+       "header": "المديونية",
+       "kind": "formula",
+       "formula_row_1": "=IF($A7=\"\",\"\",INDEX('العملاء'!$G$6:$G$205,MATCH($A7,'العملاء'!$I$6:$I$205,0)))"
+      },
+      {
+       "column": "F",
+       "header": "عدد الأوامر",
+       "kind": "formula",
+       "formula_row_1": "=IF($A7=\"\",\"\",INDEX('العملاء'!$D$6:$D$205,MATCH($A7,'العملاء'!$I$6:$I$205,0)))"
+      }
+     ]
+    }
+   ],
+   "results": [
+    {
+     "label": "عدد العملاء المدينين",
+     "cell": "B4",
+     "formula": "=COUNTIF('العملاء'!$H$6:$H$205,\"مدين\")"
+    }
+   ]
+  },
+  {
+   "name": "الملخص",
+   "formula_cells": 33,
+   "record_tables": [
+    {
+     "header_row": 26,
+     "first_record_row": 27,
+     "sample_rows_filled": 6,
+     "capacity_last_row": 32,
+     "columns": [
+      {
+       "column": "A",
+       "header": "الحالة",
+       "kind": "input",
+       "examples": [
+        "قيد الفحص",
+        "تحت التنفيذ",
+        "بانتظار قطعة"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "عدد الأوامر",
+       "kind": "formula",
+       "formula_row_1": "=COUNTIF('أوامر الشغل'!$F$6:$F$1005,A27)"
+      },
+      {
+       "column": "C",
+       "header": "إجمالي الأوامر",
+       "kind": "formula",
+       "formula_row_1": "=SUMIFS('أوامر الشغل'!$K$6:$K$1005,'أوامر الشغل'!$F$6:$F$1005,A27)"
+      },
+      {
+       "column": "D",
+       "header": "المتبقي",
+       "kind": "formula",
+       "formula_row_1": "=SUMIFS('أوامر الشغل'!$M$6:$M$1005,'أوامر الشغل'!$F$6:$F$1005,A27)"
+      }
+     ]
+    }
+   ],
+   "results": [
+    {
+     "label": "عدد الأوامر المسجلة",
+     "cell": "B5",
+     "formula": "=COUNTIF('أوامر الشغل'!$A$6:$A$1005,\"?*\")"
+    },
+    {
+     "label": "أوامر ملغية",
+     "cell": "B6",
+     "formula": "=COUNTIF('أوامر الشغل'!$F$6:$F$1005,\"ملغي\")"
+    },
+    {
+     "label": "عربيات داخل الورشة (لم تُسلَّم)",
+     "cell": "B7",
+     "formula": "=B5-B6-COUNTIF('أوامر الشغل'!$F$6:$F$1005,\"سُلّمت\")"
+    },
+    {
+     "label": "عربيات جاهزة ولم تُسلَّم",
+     "cell": "B8",
+     "formula": "=COUNTIF('أوامر الشغل'!$F$6:$F$1005,\"جاهزة\")"
+    },
+    {
+     "label": "أجرة الصنعة (دون الملغي)",
+     "cell": "B11",
+     "formula": "=SUMIFS('أوامر الشغل'!$G$6:$G$1005,'أوامر الشغل'!$F$6:$F$1005,\"<>ملغي\")"
+    },
+    {
+     "label": "مبيعات القطع (دون الملغي)",
+     "cell": "B12",
+     "formula": "=SUMIFS('القطع'!$F$6:$F$2005,'القطع'!$I$6:$I$2005,\"<>ملغي\")"
+    },
+    {
+     "label": "الخصومات",
+     "cell": "B13",
+     "formula": "=SUMIFS('أوامر الشغل'!$H$6:$H$1005,'أوامر الشغل'!$F$6:$F$1005,\"<>ملغي\")"
+    },
+    {
+     "label": "إجمالي الأوامر",
+     "cell": "B14",
+     "formula": "=SUM('أوامر الشغل'!$K$6:$K$1005)"
+    },
+    {
+     "label": "إجمالي المدفوع",
+     "cell": "B15",
+     "formula": "=SUM('الدفعات'!$C$6:$C$2005)"
+    },
+    {
+     "label": "مديونية العملاء (المدينون فقط)",
+     "cell": "B16",
+     "formula": "=SUMIF('العملاء'!$G$6:$G$205,\">0\")"
+    },
+    {
+     "label": "عملاء مدينون",
+     "cell": "B17",
+     "formula": "=COUNTIF('العملاء'!$H$6:$H$205,\"مدين\")"
+    },
+    {
+     "label": "أوامر جاهزة أو مسلّمة عليها متبقي",
+     "cell": "B18",
+     "formula": "=COUNTIF('أوامر الشغل'!$N$6:$N$1005,\"?*\")"
+    },
+    {
+     "label": "تكلفة القطع",
+     "cell": "B21",
+     "formula": "=SUMIFS('القطع'!$G$6:$G$2005,'القطع'!$I$6:$I$2005,\"<>ملغي\")"
+    },
+    {
+     "label": "ربح القطع",
+     "cell": "B22",
+     "formula": "=B12-B21"
+    },
+    {
+     "label": "هامش ربح القطع",
+     "cell": "B23",
+     "formula": "=IF(B12=0,\"\",B22/B12)"
+    }
+   ]
+  },
+  {
+   "name": "لماذا ما زلت على إكسل؟",
+   "formula_cells": 0
+  }
+ ]
+}

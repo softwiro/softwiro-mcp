@@ -1,0 +1,589 @@
+{
+ "id": "gamaeya-savings-circle",
+ "file": "softwiro-gamaeya-savings-circle.xlsx",
+ "title": "شيت جمعية شهرية",
+ "language": "ar",
+ "direction": "rtl",
+ "how_it_works": "White cells are typed input; cells whose kind is \"formula\" are calculated and must not be overwritten. Add one record per row under the header row of a record table, keeping the columns in order.",
+ "sheets": [
+  {
+   "name": "ابدأ هنا",
+   "formula_cells": 0
+  },
+  {
+   "name": "الإعدادات",
+   "formula_cells": 4,
+   "settings": [
+    {
+     "label": "اسم الجمعية",
+     "cell": "B4",
+     "value": "جمعية موظفي المثال"
+    },
+    {
+     "label": "قيمة السهم الشهرية",
+     "cell": "B5",
+     "value": 1000
+    },
+    {
+     "label": "تاريخ أول شهر في الجمعية",
+     "cell": "B6",
+     "value": "2026-07-01"
+    },
+    {
+     "label": "عدد شهور الجمعية",
+     "cell": "B7",
+     "value": 10
+    },
+    {
+     "label": "تاريخ اليوم",
+     "cell": "B8",
+     "value": "2026-11-01"
+    }
+   ],
+   "results": [
+    {
+     "label": "إجمالي الأسهم",
+     "cell": "B11",
+     "formula": "=SUM('الأعضاء'!$D$6:$D$45)"
+    },
+    {
+     "label": "القبضة الشهرية (إجمالي الأسهم × قيمة السهم)",
+     "cell": "B12",
+     "formula": "=B11*N(B5)"
+    },
+    {
+     "label": "رقم الشهر الحالي",
+     "cell": "B13",
+     "formula": "=IF(NOT(ISNUMBER(B6)),0,MAX(0,MIN(N(B7),(YEAR(B8)-YEAR(B6))*12+MONTH(B8)-MONTH(B6)+1)))"
+    },
+    {
+     "label": "مراجعة",
+     "cell": "B14",
+     "formula": "=IF(B11=B7,\"عدد الشهور يساوي إجمالي الأسهم\",\"تنبيه: عدد الشهور لا يساوي إجمالي الأسهم\")"
+    }
+   ]
+  },
+  {
+   "name": "الأعضاء",
+   "formula_cells": 360,
+   "record_tables": [
+    {
+     "header_row": 5,
+     "first_record_row": 6,
+     "sample_rows_filled": 8,
+     "capacity_last_row": 45,
+     "columns": [
+      {
+       "column": "A",
+       "header": "الكود",
+       "kind": "input",
+       "examples": [
+        "G01",
+        "G02",
+        "G03"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "اسم العضو",
+       "kind": "input",
+       "examples": [
+        "أحمد سالم",
+        "منى حسن",
+        "خالد عمر"
+       ]
+      },
+      {
+       "column": "C",
+       "header": "الجوال",
+       "kind": "input",
+       "examples": [
+        "01010000001",
+        "01010000002",
+        "01010000003"
+       ]
+      },
+      {
+       "column": "D",
+       "header": "عدد الأسهم",
+       "kind": "input",
+       "examples": [
+        2,
+        1,
+        1
+       ]
+      },
+      {
+       "column": "E",
+       "header": "القسط الشهري",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",N(D6)*N('الإعدادات'!$B$5))"
+      },
+      {
+       "column": "F",
+       "header": "إجمالي المدفوع",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",SUMIFS('الدفعات'!$D$6:$D$1505,'الدفعات'!$B$6:$B$1505,A6&\"\"))"
+      },
+      {
+       "column": "G",
+       "header": "المستحق عن الشهور السابقة",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",E6*MAX(0,'الإعدادات'!$B$13-1))"
+      },
+      {
+       "column": "H",
+       "header": "المتأخر",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",MAX(0,G6-SUMIFS('الدفعات'!$D$6:$D$1505,'الدفعات'!$B$6:$B$1505,A6&\"\",'الدفعات'!$C$6:$C$1505,\"<\"&'الإعدادات'!$B$13)))"
+      },
+      {
+       "column": "I",
+       "header": "مدفوع هذا الشهر",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",SUMIFS('الدفعات'!$D$6:$D$1505,'الدفعات'!$B$6:$B$1505,A6&\"\",'الدفعات'!$C$6:$C$1505,'الإعدادات'!$B$13))"
+      },
+      {
+       "column": "J",
+       "header": "المتبقي هذا الشهر",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",MAX(0,E6-I6))"
+      },
+      {
+       "column": "K",
+       "header": "مرات القبض",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",COUNTIFS('الشهور'!$B$6:$B$29,A6&\"\"))"
+      },
+      {
+       "column": "L",
+       "header": "إجمالي ما يقبضه",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",K6*'الإعدادات'!$B$12)"
+      },
+      {
+       "column": "M",
+       "header": "الحالة",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",IF('الإعدادات'!$B$13=0,\"لم تبدأ\",IF(H6>0,\"متأخر\",IF(J6=0,\"مدفوع هذا الشهر\",\"لم يدفع هذا الشهر\"))))"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "الشهور",
+   "formula_cells": 144,
+   "record_tables": [
+    {
+     "header_row": 5,
+     "first_record_row": 6,
+     "sample_rows_filled": 10,
+     "capacity_last_row": 29,
+     "columns": [
+      {
+       "column": "A",
+       "header": "رقم الشهر",
+       "kind": "input",
+       "examples": [
+        1,
+        2,
+        3
+       ]
+      },
+      {
+       "column": "B",
+       "header": "كود من يقبض",
+       "kind": "input",
+       "examples": [
+        "G03",
+        "G01",
+        "G05"
+       ],
+       "allowed_values": {
+        "from_range": "'الأعضاء'!$A$6:$A$45"
+       }
+      },
+      {
+       "column": "C",
+       "header": "الشهر",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",EDATE('الإعدادات'!$B$6,A6-1))"
+      },
+      {
+       "column": "D",
+       "header": "اسم القابض",
+       "kind": "formula",
+       "formula_row_1": "=IF(B6&\"\"=\"\",\"\",IFERROR(INDEX('الأعضاء'!$B$6:$B$45,MATCH(B6&\"\",'الأعضاء'!$A$6:$A$45,0))&\"\",\"كود غير موجود\"))"
+      },
+      {
+       "column": "E",
+       "header": "القبضة",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",'الإعدادات'!$B$12)"
+      },
+      {
+       "column": "F",
+       "header": "المحصّل فعلًا",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",SUMIFS('الدفعات'!$D$6:$D$1505,'الدفعات'!$C$6:$C$1505,A6&\"\"))"
+      },
+      {
+       "column": "G",
+       "header": "المتبقي",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",MAX(0,E6-F6))"
+      },
+      {
+       "column": "H",
+       "header": "حالة الشهر",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",IF('الإعدادات'!$B$13=0,\"لم يبدأ\",IF(A6<'الإعدادات'!$B$13,\"مضى\",IF(A6='الإعدادات'!$B$13,\"الحالي\",\"قادم\"))))"
+      },
+      {
+       "column": "I",
+       "header": "تم تسليم القبضة؟",
+       "kind": "input",
+       "examples": [
+        "نعم",
+        "نعم",
+        "نعم"
+       ],
+       "allowed_values": [
+        "نعم",
+        "لا"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "الدفعات",
+   "formula_cells": 1500,
+   "record_tables": [
+    {
+     "header_row": 5,
+     "first_record_row": 6,
+     "sample_rows_filled": 36,
+     "capacity_last_row": 1505,
+     "columns": [
+      {
+       "column": "A",
+       "header": "التاريخ",
+       "kind": "input",
+       "examples": [
+        "2026-07-03",
+        "2026-07-03",
+        "2026-07-03"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "كود العضو",
+       "kind": "input",
+       "examples": [
+        "G01",
+        "G02",
+        "G03"
+       ],
+       "allowed_values": {
+        "from_range": "'الأعضاء'!$A$6:$A$45"
+       }
+      },
+      {
+       "column": "C",
+       "header": "رقم الشهر",
+       "kind": "input",
+       "examples": [
+        1,
+        1,
+        1
+       ],
+       "allowed_values": {
+        "from_range": "'الشهور'!$A$6:$A$29"
+       }
+      },
+      {
+       "column": "D",
+       "header": "المبلغ",
+       "kind": "input",
+       "examples": [
+        2000,
+        1000,
+        1000
+       ]
+      },
+      {
+       "column": "E",
+       "header": "طريقة الدفع",
+       "kind": "input",
+       "examples": [
+        "نقدًا",
+        "تحويل",
+        "نقدًا"
+       ],
+       "allowed_values": [
+        "نقدًا",
+        "تحويل"
+       ]
+      },
+      {
+       "column": "F",
+       "header": "ملاحظة",
+       "kind": "input",
+       "examples": [
+        "دفع نصف القسط",
+        "دفع مقدمًا",
+        "دفع نصف القسط"
+       ]
+      },
+      {
+       "column": "G",
+       "header": "اسم العضو",
+       "kind": "formula",
+       "formula_row_1": "=IF(B6&\"\"=\"\",\"\",IFERROR(INDEX('الأعضاء'!$B$6:$B$45,MATCH(B6&\"\",'الأعضاء'!$A$6:$A$45,0))&\"\",\"كود غير موجود\"))"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "المتابعة",
+   "formula_cells": 1080,
+   "record_tables": [
+    {
+     "header_row": 5,
+     "first_record_row": 6,
+     "sample_rows_filled": 0,
+     "capacity_last_row": 45,
+     "columns": [
+      {
+       "column": "A",
+       "header": "الكود",
+       "kind": "formula",
+       "formula_row_1": "=IF('الأعضاء'!A6&\"\"=\"\",\"\",'الأعضاء'!A6)"
+      },
+      {
+       "column": "B",
+       "header": "العضو",
+       "kind": "formula",
+       "formula_row_1": "=IF($A6=\"\",\"\",'الأعضاء'!B6)"
+      },
+      {
+       "column": "C",
+       "header": "القسط الشهري",
+       "kind": "formula",
+       "formula_row_1": "=IF($A6=\"\",\"\",'الأعضاء'!E6)"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "كشف الشهر",
+   "formula_cells": 367,
+   "record_tables": [
+    {
+     "header_row": 12,
+     "first_record_row": 13,
+     "sample_rows_filled": 0,
+     "capacity_last_row": 52,
+     "columns": [
+      {
+       "column": "A",
+       "header": "م",
+       "kind": "formula",
+       "formula_row_1": "=IF('الأعضاء'!A6&\"\"=\"\",\"\",1)"
+      },
+      {
+       "column": "B",
+       "header": "الكود",
+       "kind": "formula",
+       "formula_row_1": "=IF($A13=\"\",\"\",'الأعضاء'!A6)"
+      },
+      {
+       "column": "C",
+       "header": "العضو",
+       "kind": "formula",
+       "formula_row_1": "=IF($A13=\"\",\"\",'الأعضاء'!B6)"
+      },
+      {
+       "column": "D",
+       "header": "الأسهم",
+       "kind": "formula",
+       "formula_row_1": "=IF($A13=\"\",\"\",'الأعضاء'!D6)"
+      },
+      {
+       "column": "E",
+       "header": "القسط",
+       "kind": "formula",
+       "formula_row_1": "=IF($A13=\"\",\"\",'الأعضاء'!E6)"
+      },
+      {
+       "column": "F",
+       "header": "المدفوع",
+       "kind": "formula",
+       "formula_row_1": "=IF($A13=\"\",\"\",SUMIFS('الدفعات'!$D$6:$D$1505,'الدفعات'!$B$6:$B$1505,$B13,'الدفعات'!$C$6:$C$1505,$B$5))"
+      },
+      {
+       "column": "G",
+       "header": "المتأخر قبل الشهر",
+       "kind": "formula",
+       "formula_row_1": "=IF($A13=\"\",\"\",MAX(0,E13*MAX(0,$B$5-1)-SUMIFS('الدفعات'!$D$6:$D$1505,'الدفعات'!$B$6:$B$1505,$B13,'الدفعات'!$C$6:$C$1505,\"<\"&$B$5)))"
+      },
+      {
+       "column": "H",
+       "header": "المتبقي للشهر",
+       "kind": "formula",
+       "formula_row_1": "=IF($A13=\"\",\"\",MAX(0,E13-F13))"
+      },
+      {
+       "column": "I",
+       "header": "الإجمالي المطلوب",
+       "kind": "formula",
+       "formula_row_1": "=IF($A13=\"\",\"\",G13+H13)"
+      },
+      {
+       "column": "J",
+       "header": "التوقيع",
+       "kind": "input"
+      }
+     ]
+    }
+   ],
+   "results": [
+    {
+     "label": "الشهر المعروض",
+     "cell": "B5",
+     "formula": "=IF(B4&\"\"=\"\",'الإعدادات'!$B$13,B4)"
+    },
+    {
+     "label": "تاريخ الشهر",
+     "cell": "B6",
+     "formula": "=IF(B5=0,\"\",EDATE('الإعدادات'!$B$6,B5-1))"
+    },
+    {
+     "label": "القابض هذا الشهر",
+     "cell": "B7",
+     "formula": "=IFERROR(INDEX('الشهور'!$D$6:$D$29,MATCH(B5,'الشهور'!$A$6:$A$29,0))&\"\",\"\")"
+    },
+    {
+     "label": "القبضة",
+     "cell": "B8",
+     "formula": "='الإعدادات'!$B$12"
+    },
+    {
+     "label": "المحصّل",
+     "cell": "B9",
+     "formula": "=SUMIFS('الدفعات'!$D$6:$D$1505,'الدفعات'!$C$6:$C$1505,B5)"
+    },
+    {
+     "label": "المتبقي للتحصيل",
+     "cell": "B10",
+     "formula": "=MAX(0,B8-B9)"
+    }
+   ]
+  },
+  {
+   "name": "الملخص",
+   "formula_cells": 18,
+   "results": [
+    {
+     "label": "عدد الأعضاء",
+     "cell": "B5",
+     "formula": "=COUNTIF('الأعضاء'!$A$6:$A$45,\"?*\")"
+    },
+    {
+     "label": "إجمالي الأسهم",
+     "cell": "B6",
+     "formula": "='الإعدادات'!$B$11"
+    },
+    {
+     "label": "القبضة الشهرية",
+     "cell": "B7",
+     "formula": "='الإعدادات'!$B$12"
+    },
+    {
+     "label": "عدد شهور الجمعية",
+     "cell": "B8",
+     "formula": "=COUNT('الشهور'!$A$6:$A$29)"
+    },
+    {
+     "label": "الشهور المتبقية بعد الشهر الحالي",
+     "cell": "B9",
+     "formula": "=MAX(0,B8-'الإعدادات'!$B$13)"
+    },
+    {
+     "label": "رقم الشهر",
+     "cell": "B12",
+     "formula": "='الإعدادات'!$B$13"
+    },
+    {
+     "label": "القابض",
+     "cell": "B13",
+     "formula": "=IFERROR(INDEX('الشهور'!$D$6:$D$29,MATCH(B12,'الشهور'!$A$6:$A$29,0))&\"\",\"\")"
+    },
+    {
+     "label": "القبضة المطلوب جمعها",
+     "cell": "B14",
+     "formula": "=IF(B12=0,0,B7)"
+    },
+    {
+     "label": "ما تم جمعه",
+     "cell": "B15",
+     "formula": "=SUMIFS('الدفعات'!$D$6:$D$1505,'الدفعات'!$C$6:$C$1505,B12)"
+    },
+    {
+     "label": "المتبقي للتحصيل",
+     "cell": "B16",
+     "formula": "=MAX(0,B14-B15)"
+    },
+    {
+     "label": "نسبة التحصيل",
+     "cell": "B17",
+     "formula": "=IF(B14=0,\"\",MIN(1,B15/B14))"
+    },
+    {
+     "label": "أعضاء لم يكتمل قسطهم هذا الشهر",
+     "cell": "B18",
+     "formula": "=COUNTIF('الأعضاء'!$J$6:$J$45,\">0\")"
+    },
+    {
+     "label": "إجمالي المتأخر عن الشهور السابقة",
+     "cell": "B21",
+     "formula": "=SUM('الأعضاء'!$H$6:$H$45)"
+    },
+    {
+     "label": "عدد الأعضاء المتأخرين",
+     "cell": "B22",
+     "formula": "=COUNTIF('الأعضاء'!$H$6:$H$45,\">0\")"
+    },
+    {
+     "label": "أكبر متأخر على عضو",
+     "cell": "B23",
+     "formula": "=MAX('الأعضاء'!$H$6:$H$45)"
+    },
+    {
+     "label": "إجمالي ما حُصّل",
+     "cell": "B26",
+     "formula": "=SUM('الدفعات'!$D$6:$D$1505)"
+    },
+    {
+     "label": "قبضات سُلّمت",
+     "cell": "B27",
+     "formula": "=COUNTIF('الشهور'!$I$6:$I$29,\"نعم\")"
+    },
+    {
+     "label": "الشهر القادم والقابض فيه",
+     "cell": "B28",
+     "formula": "=IFERROR(INDEX('الشهور'!$D$6:$D$29,MATCH(B12+1,'الشهور'!$A$6:$A$29,0))&\"\",\"لا يوجد\")"
+    }
+   ]
+  },
+  {
+   "name": "لماذا ما زلت على إكسل؟",
+   "formula_cells": 0
+  }
+ ]
+}

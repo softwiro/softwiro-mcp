@@ -1,0 +1,588 @@
+{
+ "id": "hoa-meetings-decisions",
+ "file": "softwiro-hoa-meetings-decisions.xlsx",
+ "title": "شيت اجتماعات وقرارات اتحاد الملاك",
+ "language": "ar",
+ "direction": "rtl",
+ "how_it_works": "White cells are typed input; cells whose kind is \"formula\" are calculated and must not be overwritten. Add one record per row under the header row of a record table, keeping the columns in order.",
+ "sheets": [
+  {
+   "name": "ابدأ هنا",
+   "formula_cells": 0
+  },
+  {
+   "name": "الإعدادات",
+   "formula_cells": 0,
+   "settings": [
+    {
+     "label": "نسبة النصاب (من إجمالي الحصص)",
+     "cell": "B4",
+     "value": 0.5
+    },
+    {
+     "label": "نسبة الموافقة المطلوبة للقرار",
+     "cell": "B5",
+     "value": 0.6
+    },
+    {
+     "label": "تاريخ اليوم",
+     "cell": "B6",
+     "value": "2026-11-01"
+    }
+   ]
+  },
+  {
+   "name": "الملاك",
+   "formula_cells": 600,
+   "record_tables": [
+    {
+     "header_row": 5,
+     "first_record_row": 6,
+     "sample_rows_filled": 10,
+     "capacity_last_row": 205,
+     "columns": [
+      {
+       "column": "A",
+       "header": "كود الوحدة",
+       "kind": "input",
+       "examples": [
+        "A-01",
+        "A-02",
+        "A-03"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "المالك",
+       "kind": "input",
+       "examples": [
+        "أحمد سالم",
+        "مها حسن",
+        "خالد عمر"
+       ]
+      },
+      {
+       "column": "C",
+       "header": "الجوال",
+       "kind": "input",
+       "examples": [
+        "01010000021",
+        "01010000022",
+        "01010000023"
+       ]
+      },
+      {
+       "column": "D",
+       "header": "مساحة الوحدة (م²)",
+       "kind": "input",
+       "examples": [
+        100,
+        100,
+        120
+       ]
+      },
+      {
+       "column": "E",
+       "header": "الحصة",
+       "kind": "input",
+       "examples": [
+        100,
+        100,
+        120
+       ]
+      },
+      {
+       "column": "F",
+       "header": "نسبة الحصة",
+       "kind": "formula",
+       "formula_row_1": "=IF(OR(A6&\"\"=\"\",N(E6)=0),\"\",E6/SUM($E$6:$E$205))"
+      },
+      {
+       "column": "G",
+       "header": "مرات الحضور",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",COUNTIFS('الحضور'!$B$6:$B$2005,A6&\"\",'الحضور'!$C$6:$C$2005,\"أصالة\")+COUNTIFS('الحضور'!$B$6:$B$2005,A6&\"\",'الحضور'!$C$6:$C$2005,\"توكيل\"))"
+      },
+      {
+       "column": "H",
+       "header": "مرات الغياب",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",COUNTIFS('الحضور'!$B$6:$B$2005,A6&\"\",'الحضور'!$C$6:$C$2005,\"غياب\"))"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "الاجتماعات",
+   "formula_cells": 1200,
+   "record_tables": [
+    {
+     "header_row": 5,
+     "first_record_row": 6,
+     "sample_rows_filled": 4,
+     "capacity_last_row": 205,
+     "columns": [
+      {
+       "column": "A",
+       "header": "رقم الاجتماع",
+       "kind": "input",
+       "examples": [
+        "M01",
+        "M02",
+        "M03"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "التاريخ",
+       "kind": "input",
+       "examples": [
+        "2026-03-10",
+        "2026-06-15",
+        "2026-10-05"
+       ]
+      },
+      {
+       "column": "C",
+       "header": "الموضوع",
+       "kind": "input",
+       "examples": [
+        "اعتماد الميزانية السنوية",
+        "مناقشة عقود الخدمات",
+        "إصلاح المصعد وتجديد عقد الحراسة"
+       ]
+      },
+      {
+       "column": "D",
+       "header": "حضور بالأصالة",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",COUNTIFS('الحضور'!$A$6:$A$2005,A6&\"\",'الحضور'!$C$6:$C$2005,\"أصالة\"))"
+      },
+      {
+       "column": "E",
+       "header": "حضور بالتوكيل",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",COUNTIFS('الحضور'!$A$6:$A$2005,A6&\"\",'الحضور'!$C$6:$C$2005,\"توكيل\"))"
+      },
+      {
+       "column": "F",
+       "header": "غياب",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",COUNTIFS('الحضور'!$A$6:$A$2005,A6&\"\",'الحضور'!$C$6:$C$2005,\"غياب\"))"
+      },
+      {
+       "column": "G",
+       "header": "حصص الحاضرين",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",SUMIFS('الحضور'!$F$6:$F$2005,'الحضور'!$A$6:$A$2005,A6&\"\",'الحضور'!$C$6:$C$2005,\"أصالة\")+SUMIFS('الحضور'!$F$6:$F$2005,'الحضور'!$A$6:$A$2005,A6&\"\",'الحضور'!$C$6:$C$2005,\"توكيل\"))"
+      },
+      {
+       "column": "H",
+       "header": "نسبة الحضور",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",IF(COUNTIF('الحضور'!$A$6:$A$2005,A6&\"\")=0,\"\",IF(SUM('الملاك'!$E$6:$E$205)=0,\"\",G6/SUM('الملاك'!$E$6:$E$205))))"
+      },
+      {
+       "column": "I",
+       "header": "النصاب",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",IF(H6=\"\",\"لم يُسجَّل حضور\",IF(H6>='الإعدادات'!$B$4,\"مكتمل\",\"غير مكتمل\")))"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "الحضور",
+   "formula_cells": 6000,
+   "record_tables": [
+    {
+     "header_row": 5,
+     "first_record_row": 6,
+     "sample_rows_filled": 30,
+     "capacity_last_row": 2005,
+     "columns": [
+      {
+       "column": "A",
+       "header": "رقم الاجتماع",
+       "kind": "input",
+       "examples": [
+        "M01",
+        "M01",
+        "M01"
+       ],
+       "allowed_values": {
+        "from_range": "'الاجتماعات'!$A$6:$A$205"
+       }
+      },
+      {
+       "column": "B",
+       "header": "كود الوحدة",
+       "kind": "input",
+       "examples": [
+        "A-01",
+        "A-02",
+        "A-03"
+       ],
+       "allowed_values": {
+        "from_range": "'الملاك'!$A$6:$A$205"
+       }
+      },
+      {
+       "column": "C",
+       "header": "الحضور",
+       "kind": "input",
+       "examples": [
+        "أصالة",
+        "توكيل",
+        "أصالة"
+       ],
+       "allowed_values": [
+        "أصالة",
+        "توكيل",
+        "غياب"
+       ]
+      },
+      {
+       "column": "D",
+       "header": "ملاحظة (اسم الوكيل ...)",
+       "kind": "input",
+       "examples": [
+        "بتوكيل رسمي",
+        "بتوكيل رسمي",
+        "بتوكيل رسمي"
+       ]
+      },
+      {
+       "column": "E",
+       "header": "المالك",
+       "kind": "formula",
+       "formula_row_1": "=IF(B6&\"\"=\"\",\"\",IFERROR(INDEX('الملاك'!$B$6:$B$205,MATCH(B6&\"\",'الملاك'!$A$6:$A$205,0))&\"\",\"كود غير موجود\"))"
+      },
+      {
+       "column": "F",
+       "header": "الحصة",
+       "kind": "formula",
+       "formula_row_1": "=IF(B6&\"\"=\"\",\"\",IFERROR(INDEX('الملاك'!$E$6:$E$205,MATCH(B6&\"\",'الملاك'!$A$6:$A$205,0)),\"\"))"
+      },
+      {
+       "column": "G",
+       "header": "تنبيه",
+       "kind": "formula",
+       "formula_row_1": "=IF(OR(A6&\"\"=\"\",B6&\"\"=\"\"),\"\",IF(COUNTIF('الاجتماعات'!$A$6:$A$205,A6&\"\")=0,\"اجتماع غير موجود\",IF(COUNTIFS($A$6:$A$2005,A6&\"\",$B$6:$B$2005,B6&\"\")>1,\"مكرر\",\"\")))"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "القرارات",
+   "formula_cells": 3000,
+   "record_tables": [
+    {
+     "header_row": 5,
+     "first_record_row": 6,
+     "sample_rows_filled": 9,
+     "capacity_last_row": 505,
+     "columns": [
+      {
+       "column": "A",
+       "header": "رقم القرار",
+       "kind": "input",
+       "examples": [
+        "D01",
+        "D02",
+        "D03"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "الاجتماع",
+       "kind": "input",
+       "examples": [
+        "M01",
+        "M01",
+        "M02"
+       ],
+       "allowed_values": {
+        "from_range": "'الاجتماعات'!$A$6:$A$205"
+       }
+      },
+      {
+       "column": "C",
+       "header": "نص القرار",
+       "kind": "input",
+       "examples": [
+        "اعتماد الميزانية السنوية",
+        "فرض اشتراك صيانة شهري على كل وحدة",
+        "تجديد عقد النظافة"
+       ]
+      },
+      {
+       "column": "D",
+       "header": "موافق (حصص)",
+       "kind": "input",
+       "examples": [
+        500,
+        400,
+        300
+       ]
+      },
+      {
+       "column": "E",
+       "header": "معترض (حصص)",
+       "kind": "input",
+       "examples": [
+        100,
+        200,
+        100
+       ]
+      },
+      {
+       "column": "F",
+       "header": "ممتنع (حصص)",
+       "kind": "input",
+       "examples": [
+        70,
+        70,
+        50
+       ]
+      },
+      {
+       "column": "G",
+       "header": "المسؤول عن التنفيذ",
+       "kind": "input",
+       "examples": [
+        "أمين الصندوق",
+        "أمين الصندوق",
+        "مدير العقار"
+       ]
+      },
+      {
+       "column": "H",
+       "header": "موعد التنفيذ",
+       "kind": "input",
+       "examples": [
+        "2026-04-30",
+        "2026-05-31",
+        "2026-07-31"
+       ]
+      },
+      {
+       "column": "I",
+       "header": "حالة التنفيذ",
+       "kind": "input",
+       "examples": [
+        "منفذ",
+        "لم يبدأ",
+        "لم يبدأ"
+       ],
+       "allowed_values": [
+        "لم يبدأ",
+        "قيد التنفيذ",
+        "منفذ",
+        "ملغي"
+       ]
+      },
+      {
+       "column": "J",
+       "header": "نصاب الاجتماع",
+       "kind": "formula",
+       "formula_row_1": "=IF(C6&\"\"=\"\",\"\",IFERROR(INDEX('الاجتماعات'!$I$6:$I$205,MATCH(B6&\"\",'الاجتماعات'!$A$6:$A$205,0)),\"اجتماع غير موجود\"))"
+      },
+      {
+       "column": "K",
+       "header": "نسبة الموافقة",
+       "kind": "formula",
+       "formula_row_1": "=IF(N(D6)+N(E6)+N(F6)=0,\"\",N(D6)/(N(D6)+N(E6)+N(F6)))"
+      },
+      {
+       "column": "L",
+       "header": "النتيجة",
+       "kind": "formula",
+       "formula_row_1": "=IF(C6&\"\"=\"\",\"\",IF(J6<>\"مكتمل\",\"لا يُعتد به\",IF(K6=\"\",\"لم يُصوَّت\",IF(K6>='الإعدادات'!$B$5,\"مقبول\",\"مرفوض\"))))"
+      },
+      {
+       "column": "M",
+       "header": "المتابعة",
+       "kind": "formula",
+       "formula_row_1": "=IF(AND(L6=\"مقبول\",I6<>\"منفذ\",I6<>\"ملغي\"),IF(AND(ISNUMBER(H6),H6<'الإعدادات'!$B$6),\"متأخر\",\"غير منفذ\"),\"\")"
+      },
+      {
+       "column": "N",
+       "header": "مفتاح الترتيب",
+       "kind": "formula",
+       "formula_row_1": "=IF(M6=\"\",\"\",IF(ISNUMBER(H6),H6,99999))"
+      },
+      {
+       "column": "O",
+       "header": "الترتيب",
+       "kind": "formula",
+       "formula_row_1": "=IF(N6=\"\",\"\",COUNTIF($N$6:$N$505,\"<\"&N6)+COUNTIF($N$6:N6,N6))"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "غير المنفذة",
+   "formula_cells": 401,
+   "record_tables": [
+    {
+     "header_row": 6,
+     "first_record_row": 7,
+     "sample_rows_filled": 0,
+     "capacity_last_row": 56,
+     "columns": [
+      {
+       "column": "A",
+       "header": "م",
+       "kind": "formula",
+       "formula_row_1": "=IF(1<=$B$4,1,\"\")"
+      },
+      {
+       "column": "B",
+       "header": "رقم القرار",
+       "kind": "formula",
+       "formula_row_1": "=IF($A7=\"\",\"\",INDEX('القرارات'!$A$6:$A$505,MATCH($A7,'القرارات'!$O$6:$O$505,0))&\"\")"
+      },
+      {
+       "column": "C",
+       "header": "الاجتماع",
+       "kind": "formula",
+       "formula_row_1": "=IF($A7=\"\",\"\",INDEX('القرارات'!$B$6:$B$505,MATCH($A7,'القرارات'!$O$6:$O$505,0))&\"\")"
+      },
+      {
+       "column": "D",
+       "header": "نص القرار",
+       "kind": "formula",
+       "formula_row_1": "=IF($A7=\"\",\"\",INDEX('القرارات'!$C$6:$C$505,MATCH($A7,'القرارات'!$O$6:$O$505,0))&\"\")"
+      },
+      {
+       "column": "E",
+       "header": "المسؤول عن التنفيذ",
+       "kind": "formula",
+       "formula_row_1": "=IF($A7=\"\",\"\",INDEX('القرارات'!$G$6:$G$505,MATCH($A7,'القرارات'!$O$6:$O$505,0))&\"\")"
+      },
+      {
+       "column": "F",
+       "header": "موعد التنفيذ",
+       "kind": "formula",
+       "formula_row_1": "=IF($A7=\"\",\"\",IF(INDEX('القرارات'!$H$6:$H$505,MATCH($A7,'القرارات'!$O$6:$O$505,0))=\"\",\"\",INDEX('القرارات'!$H$6:$H$505,MATCH($A7,'القرارات'!$O$6:$O$505,0))))"
+      },
+      {
+       "column": "G",
+       "header": "حالة التنفيذ",
+       "kind": "formula",
+       "formula_row_1": "=IF($A7=\"\",\"\",INDEX('القرارات'!$I$6:$I$505,MATCH($A7,'القرارات'!$O$6:$O$505,0))&\"\")"
+      },
+      {
+       "column": "H",
+       "header": "المتابعة",
+       "kind": "formula",
+       "formula_row_1": "=IF($A7=\"\",\"\",INDEX('القرارات'!$M$6:$M$505,MATCH($A7,'القرارات'!$O$6:$O$505,0))&\"\")"
+      }
+     ]
+    }
+   ],
+   "results": [
+    {
+     "label": "قرارات مقبولة لم تُنفذ",
+     "cell": "B4",
+     "formula": "=COUNTIF('القرارات'!$O$6:$O$505,\">0\")"
+    }
+   ]
+  },
+  {
+   "name": "الملخص",
+   "formula_cells": 16,
+   "results": [
+    {
+     "label": "عدد الملاك (الوحدات)",
+     "cell": "B5",
+     "formula": "=COUNTIF('الملاك'!$A$6:$A$205,\"?*\")"
+    },
+    {
+     "label": "إجمالي الحصص",
+     "cell": "B6",
+     "formula": "=SUM('الملاك'!$E$6:$E$205)"
+    },
+    {
+     "label": "عدد الاجتماعات",
+     "cell": "B9",
+     "formula": "=COUNTIF('الاجتماعات'!$A$6:$A$205,\"?*\")"
+    },
+    {
+     "label": "اجتماعات مكتملة النصاب",
+     "cell": "B10",
+     "formula": "=COUNTIF('الاجتماعات'!$I$6:$I$205,\"مكتمل\")"
+    },
+    {
+     "label": "اجتماعات غير مكتملة النصاب",
+     "cell": "B11",
+     "formula": "=COUNTIF('الاجتماعات'!$I$6:$I$205,\"غير مكتمل\")"
+    },
+    {
+     "label": "اجتماعات بلا حضور مسجل",
+     "cell": "B12",
+     "formula": "=COUNTIF('الاجتماعات'!$I$6:$I$205,\"لم يُسجَّل حضور\")"
+    },
+    {
+     "label": "نسبة النصاب المطلوبة (من الإعدادات)",
+     "cell": "B13",
+     "formula": "='الإعدادات'!$B$4"
+    },
+    {
+     "label": "عدد القرارات",
+     "cell": "B16",
+     "formula": "=COUNTIF('القرارات'!$A$6:$A$505,\"?*\")"
+    },
+    {
+     "label": "مقبولة",
+     "cell": "B17",
+     "formula": "=COUNTIF('القرارات'!$L$6:$L$505,\"مقبول\")"
+    },
+    {
+     "label": "مرفوضة",
+     "cell": "B18",
+     "formula": "=COUNTIF('القرارات'!$L$6:$L$505,\"مرفوض\")"
+    },
+    {
+     "label": "لا يُعتد بها (نصاب غير مكتمل)",
+     "cell": "B19",
+     "formula": "=COUNTIF('القرارات'!$L$6:$L$505,\"لا يُعتد به\")"
+    },
+    {
+     "label": "لم يُصوَّت عليها",
+     "cell": "B20",
+     "formula": "=COUNTIF('القرارات'!$L$6:$L$505,\"لم يُصوَّت\")"
+    },
+    {
+     "label": "مقبولة ومنفذة",
+     "cell": "B21",
+     "formula": "=COUNTIFS('القرارات'!$L$6:$L$505,\"مقبول\",'القرارات'!$I$6:$I$505,\"منفذ\")"
+    },
+    {
+     "label": "نسبة تنفيذ القرارات المقبولة",
+     "cell": "B22",
+     "formula": "=IF(B17=0,\"\",B21/B17)"
+    },
+    {
+     "label": "قرارات مقبولة لم تُنفذ",
+     "cell": "B25",
+     "formula": "=COUNTIF('القرارات'!$M$6:$M$505,\"غير منفذ\")+COUNTIF('القرارات'!$M$6:$M$505,\"متأخر\")"
+    },
+    {
+     "label": "منها متأخرة عن موعدها",
+     "cell": "B26",
+     "formula": "=COUNTIF('القرارات'!$M$6:$M$505,\"متأخر\")"
+    }
+   ]
+  },
+  {
+   "name": "لماذا ما زلت على إكسل؟",
+   "formula_cells": 0
+  }
+ ]
+}

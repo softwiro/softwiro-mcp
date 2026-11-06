@@ -1,0 +1,547 @@
+{
+ "id": "employee-payroll-attendance",
+ "file": "softwiro-employee-payroll-attendance.xlsx",
+ "title": "شيت مرتبات وحضور الموظفين",
+ "language": "ar",
+ "direction": "rtl",
+ "how_it_works": "White cells are typed input; cells whose kind is \"formula\" are calculated and must not be overwritten. Add one record per row under the header row of a record table, keeping the columns in order.",
+ "sheets": [
+  {
+   "name": "ابدأ هنا",
+   "formula_cells": 0
+  },
+  {
+   "name": "الإعدادات",
+   "formula_cells": 3,
+   "settings": [
+    {
+     "label": "السنة",
+     "cell": "B4",
+     "value": 2026
+    },
+    {
+     "label": "الشهر (1 إلى 12)",
+     "cell": "B5",
+     "value": 10
+    },
+    {
+     "label": "أيام الشهر للحساب",
+     "cell": "B8",
+     "value": 30
+    },
+    {
+     "label": "ساعات العمل في اليوم",
+     "cell": "B9",
+     "value": 8
+    },
+    {
+     "label": "معامل الإضافي (مثال 1.5)",
+     "cell": "B10",
+     "value": 1.5
+    },
+    {
+     "label": "اسم المنشأة",
+     "cell": "B11",
+     "value": "شركة المثال للخدمات"
+    }
+   ],
+   "results": [
+    {
+     "label": "أول يوم في الشهر",
+     "cell": "B6",
+     "formula": "=DATE(B4,B5,1)"
+    },
+    {
+     "label": "آخر يوم في الشهر",
+     "cell": "B7",
+     "formula": "=DATE(B4,B5+1,1)-1"
+    },
+    {
+     "label": "عنوان الكشف",
+     "cell": "B12",
+     "formula": "=\"كشف مرتبات شهر \"&CHOOSE(B5,\"يناير\",\"فبراير\",\"مارس\",\"أبريل\",\"مايو\",\"يونيو\",\"يوليو\",\"أغسطس\",\"سبتمبر\",\"أكتوبر\",\"نوفمبر\",\"ديسمبر\")&\" \"&B4"
+    }
+   ]
+  },
+  {
+   "name": "الموظفون",
+   "formula_cells": 600,
+   "record_tables": [
+    {
+     "header_row": 5,
+     "first_record_row": 6,
+     "sample_rows_filled": 8,
+     "capacity_last_row": 205,
+     "columns": [
+      {
+       "column": "A",
+       "header": "الكود",
+       "kind": "input",
+       "examples": [
+        "E01",
+        "E02",
+        "E03"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "الاسم",
+       "kind": "input",
+       "examples": [
+        "محمد علي",
+        "هبة سمير",
+        "كريم عادل"
+       ]
+      },
+      {
+       "column": "C",
+       "header": "الوظيفة",
+       "kind": "input",
+       "examples": [
+        "محاسب",
+        "سكرتيرة",
+        "فني"
+       ]
+      },
+      {
+       "column": "D",
+       "header": "الأساسي",
+       "kind": "input",
+       "examples": [
+        9000,
+        6000,
+        7000
+       ]
+      },
+      {
+       "column": "E",
+       "header": "البدلات",
+       "kind": "input",
+       "examples": [
+        1500,
+        800,
+        1000
+       ]
+      },
+      {
+       "column": "F",
+       "header": "الحالة",
+       "kind": "input",
+       "examples": [
+        "نشط",
+        "نشط",
+        "نشط"
+       ],
+       "allowed_values": [
+        "نشط",
+        "متوقف"
+       ]
+      },
+      {
+       "column": "G",
+       "header": "إجمالي الأجر الشهري",
+       "kind": "formula",
+       "formula_row_1": "=IF(B6&\"\"=\"\",\"\",N(D6)+N(E6))"
+      },
+      {
+       "column": "H",
+       "header": "أجر اليوم",
+       "kind": "formula",
+       "formula_row_1": "=IF(G6=\"\",\"\",G6/'الإعدادات'!$B$8)"
+      },
+      {
+       "column": "I",
+       "header": "أجر الساعة",
+       "kind": "formula",
+       "formula_row_1": "=IF(H6=\"\",\"\",H6/'الإعدادات'!$B$9)"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "الحضور",
+   "formula_cells": 4000,
+   "record_tables": [
+    {
+     "header_row": 5,
+     "first_record_row": 6,
+     "sample_rows_filled": 17,
+     "capacity_last_row": 2005,
+     "columns": [
+      {
+       "column": "A",
+       "header": "التاريخ",
+       "kind": "input",
+       "examples": [
+        "2026-10-04",
+        "2026-10-11",
+        "2026-10-12"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "كود الموظف",
+       "kind": "input",
+       "examples": [
+        "E01",
+        "E03",
+        "E03"
+       ],
+       "allowed_values": {
+        "from_range": "'الموظفون'!$A$6:$A$205"
+       }
+      },
+      {
+       "column": "C",
+       "header": "النوع",
+       "kind": "input",
+       "examples": [
+        "غياب",
+        "غياب",
+        "غياب"
+       ],
+       "allowed_values": [
+        "غياب",
+        "إجازة مدفوعة",
+        "إضافي",
+        "تأخير"
+       ]
+      },
+      {
+       "column": "D",
+       "header": "الساعات",
+       "kind": "input",
+       "examples": [
+        3,
+        2,
+        1.5
+       ]
+      },
+      {
+       "column": "E",
+       "header": "ملاحظة",
+       "kind": "input"
+      },
+      {
+       "column": "F",
+       "header": "الموظف",
+       "kind": "formula",
+       "formula_row_1": "=IF(B6&\"\"=\"\",\"\",IFERROR(INDEX('الموظفون'!$B$6:$B$205,MATCH(B6&\"\",'الموظفون'!$A$6:$A$205,0))&\"\",\"كود غير موجود\"))"
+      },
+      {
+       "column": "G",
+       "header": "ضمن الشهر المختار",
+       "kind": "formula",
+       "formula_row_1": "=IF(NOT(ISNUMBER(A6)),\"\",IF(AND(A6>='الإعدادات'!$B$6,A6<='الإعدادات'!$B$7),1,0))"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "السلف والخصومات",
+   "formula_cells": 2000,
+   "record_tables": [
+    {
+     "header_row": 5,
+     "first_record_row": 6,
+     "sample_rows_filled": 7,
+     "capacity_last_row": 1005,
+     "columns": [
+      {
+       "column": "A",
+       "header": "التاريخ",
+       "kind": "input",
+       "examples": [
+        "2026-10-10",
+        "2026-10-03",
+        "2026-10-20"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "كود الموظف",
+       "kind": "input",
+       "examples": [
+        "E02",
+        "E05",
+        "E03"
+       ],
+       "allowed_values": {
+        "from_range": "'الموظفون'!$A$6:$A$205"
+       }
+      },
+      {
+       "column": "C",
+       "header": "النوع",
+       "kind": "input",
+       "examples": [
+        "سلفة",
+        "سلفة",
+        "خصم"
+       ],
+       "allowed_values": [
+        "سلفة",
+        "خصم",
+        "مكافأة"
+       ]
+      },
+      {
+       "column": "D",
+       "header": "المبلغ",
+       "kind": "input",
+       "examples": [
+        1000,
+        500,
+        300
+       ]
+      },
+      {
+       "column": "E",
+       "header": "ملاحظة",
+       "kind": "input"
+      },
+      {
+       "column": "F",
+       "header": "الموظف",
+       "kind": "formula",
+       "formula_row_1": "=IF(B6&\"\"=\"\",\"\",IFERROR(INDEX('الموظفون'!$B$6:$B$205,MATCH(B6&\"\",'الموظفون'!$A$6:$A$205,0))&\"\",\"كود غير موجود\"))"
+      },
+      {
+       "column": "G",
+       "header": "ضمن الشهر المختار",
+       "kind": "formula",
+       "formula_row_1": "=IF(NOT(ISNUMBER(A6)),\"\",IF(AND(A6>='الإعدادات'!$B$6,A6<='الإعدادات'!$B$7),1,0))"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "كشف المرتبات",
+   "formula_cells": 3213,
+   "record_tables": [
+    {
+     "header_row": 5,
+     "first_record_row": 6,
+     "sample_rows_filled": 0,
+     "capacity_last_row": 205,
+     "columns": [
+      {
+       "column": "A",
+       "header": "م",
+       "kind": "formula",
+       "formula_row_1": "=IF(AND('الموظفون'!$B6&\"\"<>\"\",'الموظفون'!$F6&\"\"<>\"متوقف\"),COUNTIFS('الموظفون'!$B$6:$B6,\"?*\",'الموظفون'!$F$6:$F6,\"<>متوقف\"),\"\")"
+      },
+      {
+       "column": "B",
+       "header": "الكود",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6=\"\",\"\",'الموظفون'!$A6&\"\")"
+      },
+      {
+       "column": "C",
+       "header": "الاسم",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6=\"\",\"\",'الموظفون'!$B6&\"\")"
+      },
+      {
+       "column": "D",
+       "header": "الوظيفة",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6=\"\",\"\",'الموظفون'!$C6&\"\")"
+      },
+      {
+       "column": "E",
+       "header": "الأساسي",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6=\"\",\"\",N('الموظفون'!$D6))"
+      },
+      {
+       "column": "F",
+       "header": "البدلات",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6=\"\",\"\",N('الموظفون'!$E6))"
+      },
+      {
+       "column": "G",
+       "header": "أيام الغياب",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6=\"\",\"\",COUNTIFS('الحضور'!$B$6:$B$2005,$B6&\"\",'الحضور'!$C$6:$C$2005,\"غياب\",'الحضور'!$G$6:$G$2005,1))"
+      },
+      {
+       "column": "H",
+       "header": "خصم الغياب",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6=\"\",\"\",ROUND(G6*'الموظفون'!$H6,2))"
+      },
+      {
+       "column": "I",
+       "header": "ساعات الإضافي",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6=\"\",\"\",SUMIFS('الحضور'!$D$6:$D$2005,'الحضور'!$B$6:$B$2005,$B6&\"\",'الحضور'!$C$6:$C$2005,\"إضافي\",'الحضور'!$G$6:$G$2005,1))"
+      },
+      {
+       "column": "J",
+       "header": "قيمة الإضافي",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6=\"\",\"\",ROUND(I6*'الموظفون'!$I6*'الإعدادات'!$B$10,2))"
+      },
+      {
+       "column": "K",
+       "header": "ساعات التأخير",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6=\"\",\"\",SUMIFS('الحضور'!$D$6:$D$2005,'الحضور'!$B$6:$B$2005,$B6&\"\",'الحضور'!$C$6:$C$2005,\"تأخير\",'الحضور'!$G$6:$G$2005,1))"
+      },
+      {
+       "column": "L",
+       "header": "خصم التأخير",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6=\"\",\"\",ROUND(K6*'الموظفون'!$I6,2))"
+      },
+      {
+       "column": "M",
+       "header": "مكافآت",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6=\"\",\"\",SUMIFS('السلف والخصومات'!$D$6:$D$1005,'السلف والخصومات'!$B$6:$B$1005,$B6&\"\",'السلف والخصومات'!$C$6:$C$1005,\"مكافأة\",'السلف والخصومات'!$G$6:$G$1005,1))"
+      },
+      {
+       "column": "N",
+       "header": "سلف وخصومات",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6=\"\",\"\",SUMIFS('السلف والخصومات'!$D$6:$D$1005,'السلف والخصومات'!$B$6:$B$1005,$B6&\"\",'السلف والخصومات'!$C$6:$C$1005,\"سلفة\",'السلف والخصومات'!$G$6:$G$1005,1)+SUMIFS('السلف والخصومات'!$D$6:$D$1005,'السلف والخصومات'!$B$6:$B$1005,$B6&\"\",'السلف والخصومات'!$C$6:$C$1005,\"خصم\",'السلف والخصومات'!$G$6:$G$1005,1))"
+      },
+      {
+       "column": "O",
+       "header": "إجمالي الاستحقاق",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6=\"\",\"\",E6+F6+J6+M6)"
+      },
+      {
+       "column": "P",
+       "header": "صافي المرتب",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6=\"\",\"\",ROUND(O6-H6-L6-N6,2))"
+      },
+      {
+       "column": "Q",
+       "header": "التوقيع",
+       "kind": "input"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "الملخص",
+   "formula_cells": 20,
+   "results": [
+    {
+     "label": "الشهر",
+     "cell": "B3",
+     "formula": "='الإعدادات'!B12"
+    },
+    {
+     "label": "عدد الموظفين في الكشف",
+     "cell": "B5",
+     "formula": "=COUNT('كشف المرتبات'!$A$6:$A$205)"
+    },
+    {
+     "label": "إجمالي الأساسي",
+     "cell": "B6",
+     "formula": "=SUM('كشف المرتبات'!$E$6:$E$205)"
+    },
+    {
+     "label": "إجمالي البدلات",
+     "cell": "B7",
+     "formula": "=SUM('كشف المرتبات'!$F$6:$F$205)"
+    },
+    {
+     "label": "قيمة الإضافي",
+     "cell": "B8",
+     "formula": "=SUM('كشف المرتبات'!$J$6:$J$205)"
+    },
+    {
+     "label": "المكافآت",
+     "cell": "B9",
+     "formula": "=SUM('كشف المرتبات'!$M$6:$M$205)"
+    },
+    {
+     "label": "إجمالي الاستحقاق (قبل الخصومات، بدون تأمينات)",
+     "cell": "B10",
+     "formula": "=SUM(B6:B9)"
+    },
+    {
+     "label": "خصم الغياب",
+     "cell": "B13",
+     "formula": "=SUM('كشف المرتبات'!$H$6:$H$205)"
+    },
+    {
+     "label": "خصم التأخير",
+     "cell": "B14",
+     "formula": "=SUM('كشف المرتبات'!$L$6:$L$205)"
+    },
+    {
+     "label": "السلف والخصومات",
+     "cell": "B15",
+     "formula": "=SUM('كشف المرتبات'!$N$6:$N$205)"
+    },
+    {
+     "label": "إجمالي الخصومات",
+     "cell": "B16",
+     "formula": "=SUM(B13:B15)"
+    },
+    {
+     "label": "صافي المرتبات المطلوب دفعه",
+     "cell": "B19",
+     "formula": "=B10-B16"
+    },
+    {
+     "label": "متوسط الصافي للموظف",
+     "cell": "B20",
+     "formula": "=IF(B5=0,\"\",B19/B5)"
+    },
+    {
+     "label": "الإضافي كنسبة من الأساسي",
+     "cell": "B21",
+     "formula": "=IF(B6=0,\"\",B8/B6)"
+    },
+    {
+     "label": "إجمالي أيام الغياب",
+     "cell": "B24",
+     "formula": "=SUM('كشف المرتبات'!$G$6:$G$205)"
+    },
+    {
+     "label": "إجمالي ساعات الإضافي",
+     "cell": "B25",
+     "formula": "=SUM('كشف المرتبات'!$I$6:$I$205)"
+    },
+    {
+     "label": "إجمالي ساعات التأخير",
+     "cell": "B26",
+     "formula": "=SUM('كشف المرتبات'!$K$6:$K$205)"
+    },
+    {
+     "label": "سجلات بكود غير موجود",
+     "cell": "B29",
+     "formula": "=COUNTIF('الحضور'!$F$6:$F$2005,\"كود غير موجود\")+COUNTIF('السلف والخصومات'!$F$6:$F$1005,\"كود غير موجود\")"
+    },
+    {
+     "label": "موظفون بصافي سالب",
+     "cell": "B30",
+     "formula": "=COUNTIF('كشف المرتبات'!$P$6:$P$205,\"<0\")"
+    },
+    {
+     "label": "موظفون متوقفون (خارج الكشف)",
+     "cell": "B31",
+     "formula": "=COUNTIF('الموظفون'!$F$6:$F$205,\"متوقف\")"
+    }
+   ]
+  },
+  {
+   "name": "لماذا ما زلت على إكسل؟",
+   "formula_cells": 0
+  }
+ ]
+}

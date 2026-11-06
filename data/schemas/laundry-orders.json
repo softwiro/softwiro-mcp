@@ -1,0 +1,425 @@
+{
+ "id": "laundry-orders",
+ "file": "softwiro-laundry-orders.xlsx",
+ "title": "شيت طلبات المغسلة",
+ "language": "ar",
+ "direction": "rtl",
+ "how_it_works": "White cells are typed input; cells whose kind is \"formula\" are calculated and must not be overwritten. Add one record per row under the header row of a record table, keeping the columns in order.",
+ "sheets": [
+  {
+   "name": "ابدأ هنا",
+   "formula_cells": 0
+  },
+  {
+   "name": "الإعدادات",
+   "formula_cells": 2,
+   "settings": [
+    {
+     "label": "تاريخ اليوم",
+     "cell": "B4",
+     "value": "2026-11-01"
+    },
+    {
+     "label": "متأخر الاستلام بعد موعد التسليم بـ (يوم)",
+     "cell": "B5",
+     "value": 7
+    },
+    {
+     "label": "أي تاريخ داخل شهر الملخص",
+     "cell": "B6",
+     "value": "2026-10-15"
+    }
+   ],
+   "results": [
+    {
+     "label": "بداية شهر الملخص",
+     "cell": "B7",
+     "formula": "=DATE(YEAR(B6),MONTH(B6),1)"
+    },
+    {
+     "label": "بداية الشهر التالي",
+     "cell": "B8",
+     "formula": "=EDATE(B7,1)"
+    }
+   ]
+  },
+  {
+   "name": "الخدمات",
+   "formula_cells": 150,
+   "record_tables": [
+    {
+     "header_row": 5,
+     "first_record_row": 6,
+     "sample_rows_filled": 7,
+     "capacity_last_row": 55,
+     "columns": [
+      {
+       "column": "A",
+       "header": "الخدمة",
+       "kind": "input",
+       "examples": [
+        "قميص",
+        "بنطلون",
+        "بدلة"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "سعر القطعة",
+       "kind": "input",
+       "examples": [
+        20,
+        25,
+        90
+       ]
+      },
+      {
+       "column": "C",
+       "header": "عدد الطلبات",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",COUNTIFS('الطلبات'!$E$6:$E$1505,A6&\"\"))"
+      },
+      {
+       "column": "D",
+       "header": "عدد القطع",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",SUMIFS('الطلبات'!$F$6:$F$1505,'الطلبات'!$E$6:$E$1505,A6&\"\"))"
+      },
+      {
+       "column": "E",
+       "header": "قيمة الطلبات",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",SUMIFS('الطلبات'!$L$6:$L$1505,'الطلبات'!$E$6:$E$1505,A6&\"\"))"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "الطلبات",
+   "formula_cells": 9000,
+   "record_tables": [
+    {
+     "header_row": 5,
+     "first_record_row": 6,
+     "sample_rows_filled": 15,
+     "capacity_last_row": 1505,
+     "columns": [
+      {
+       "column": "A",
+       "header": "رقم الطلب",
+       "kind": "input",
+       "examples": [
+        "L1001",
+        "L1002",
+        "L1003"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "تاريخ الاستلام",
+       "kind": "input",
+       "examples": [
+        "2026-10-05",
+        "2026-10-07",
+        "2026-10-10"
+       ]
+      },
+      {
+       "column": "C",
+       "header": "العميل",
+       "kind": "input",
+       "examples": [
+        "منى سعيد",
+        "كريم عادل",
+        "هبة فؤاد"
+       ]
+      },
+      {
+       "column": "D",
+       "header": "الجوال",
+       "kind": "input",
+       "examples": [
+        "01010000001",
+        "01010000002",
+        "01010000003"
+       ]
+      },
+      {
+       "column": "E",
+       "header": "الخدمة",
+       "kind": "input",
+       "examples": [
+        "بدلة",
+        "قميص",
+        "فستان"
+       ],
+       "allowed_values": {
+        "from_range": "'الخدمات'!$A$6:$A$55"
+       }
+      },
+      {
+       "column": "F",
+       "header": "عدد القطع",
+       "kind": "input",
+       "examples": [
+        2,
+        10,
+        3
+       ]
+      },
+      {
+       "column": "G",
+       "header": "موعد التسليم",
+       "kind": "input",
+       "examples": [
+        "2026-10-08",
+        "2026-10-10",
+        "2026-10-14"
+       ]
+      },
+      {
+       "column": "H",
+       "header": "الحالة",
+       "kind": "input",
+       "examples": [
+        "تم التسليم",
+        "تم التسليم",
+        "جاهز"
+       ],
+       "allowed_values": [
+        "قيد الغسيل",
+        "جاهز",
+        "تم التسليم"
+       ]
+      },
+      {
+       "column": "I",
+       "header": "المدفوع",
+       "kind": "input",
+       "examples": [
+        180,
+        200,
+        0
+       ]
+      },
+      {
+       "column": "J",
+       "header": "ملاحظة",
+       "kind": "input"
+      },
+      {
+       "column": "K",
+       "header": "سعر القطعة",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",IFERROR(INDEX('الخدمات'!$B$6:$B$55,MATCH(E6&\"\",'الخدمات'!$A$6:$A$55,0)),\"غير مسعّرة\"))"
+      },
+      {
+       "column": "L",
+       "header": "إجمالي الطلب",
+       "kind": "formula",
+       "formula_row_1": "=IF(ISNUMBER(K6),ROUND(N(F6)*K6,2),\"\")"
+      },
+      {
+       "column": "M",
+       "header": "المتبقي",
+       "kind": "formula",
+       "formula_row_1": "=IF(L6=\"\",\"\",ROUND(L6-N(I6),2))"
+      },
+      {
+       "column": "N",
+       "header": "أيام منذ الموعد",
+       "kind": "formula",
+       "formula_row_1": "=IF(OR(A6&\"\"=\"\",H6=\"تم التسليم\",NOT(ISNUMBER(G6))),\"\",'الإعدادات'!$B$4-G6)"
+      },
+      {
+       "column": "O",
+       "header": "التنبيه",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",IF(NOT(ISNUMBER(K6)),\"خدمة غير مسعّرة\",IF(H6=\"تم التسليم\",IF(M6>0,\"مسلّم وعليه متبقي\",\"\"),IF(N6=\"\",\"\",IF(H6=\"جاهز\",IF(N6>='الإعدادات'!$B$5,\"متأخر الاستلام\",\"\"),IF(N6>0,\"متأخر الغسيل\",\"\"))))))"
+      },
+      {
+       "column": "P",
+       "header": "ترتيب المتابعة",
+       "kind": "formula",
+       "formula_row_1": "=IF(O6=\"متأخر الاستلام\",COUNTIFS($O$6:$O$1505,\"متأخر الاستلام\",$N$6:$N$1505,\">\"&N6)+COUNTIFS($O$6:O6,\"متأخر الاستلام\",$N$6:N6,N6),\"\")"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "للمتابعة",
+   "formula_cells": 211,
+   "record_tables": [
+    {
+     "header_row": 6,
+     "first_record_row": 7,
+     "sample_rows_filled": 0,
+     "capacity_last_row": 36,
+     "columns": [
+      {
+       "column": "A",
+       "header": "م",
+       "kind": "formula",
+       "formula_row_1": "=IF(1<=$B$4,1,\"\")"
+      },
+      {
+       "column": "B",
+       "header": "رقم الطلب",
+       "kind": "formula",
+       "formula_row_1": "=IF($A7=\"\",\"\",INDEX('الطلبات'!$A$6:$A$1505,MATCH($A7,'الطلبات'!$P$6:$P$1505,0))&\"\")"
+      },
+      {
+       "column": "C",
+       "header": "العميل",
+       "kind": "formula",
+       "formula_row_1": "=IF($A7=\"\",\"\",INDEX('الطلبات'!$C$6:$C$1505,MATCH($A7,'الطلبات'!$P$6:$P$1505,0))&\"\")"
+      },
+      {
+       "column": "D",
+       "header": "الجوال",
+       "kind": "formula",
+       "formula_row_1": "=IF($A7=\"\",\"\",INDEX('الطلبات'!$D$6:$D$1505,MATCH($A7,'الطلبات'!$P$6:$P$1505,0))&\"\")"
+      },
+      {
+       "column": "E",
+       "header": "القطع",
+       "kind": "formula",
+       "formula_row_1": "=IF($A7=\"\",\"\",INDEX('الطلبات'!$F$6:$F$1505,MATCH($A7,'الطلبات'!$P$6:$P$1505,0)))"
+      },
+      {
+       "column": "F",
+       "header": "المتبقي",
+       "kind": "formula",
+       "formula_row_1": "=IF($A7=\"\",\"\",INDEX('الطلبات'!$M$6:$M$1505,MATCH($A7,'الطلبات'!$P$6:$P$1505,0)))"
+      },
+      {
+       "column": "G",
+       "header": "أيام منذ الموعد",
+       "kind": "formula",
+       "formula_row_1": "=IF($A7=\"\",\"\",INDEX('الطلبات'!$N$6:$N$1505,MATCH($A7,'الطلبات'!$P$6:$P$1505,0)))"
+      }
+     ]
+    }
+   ],
+   "results": [
+    {
+     "label": "طلبات متأخرة الاستلام",
+     "cell": "B4",
+     "formula": "=COUNTIF('الطلبات'!$O$6:$O$1505,\"متأخر الاستلام\")"
+    }
+   ]
+  },
+  {
+   "name": "الملخص",
+   "formula_cells": 20,
+   "results": [
+    {
+     "label": "إجمالي الطلبات",
+     "cell": "B5",
+     "formula": "=COUNTIF('الطلبات'!$A$6:$A$1505,\"?*\")"
+    },
+    {
+     "label": "قيد الغسيل",
+     "cell": "B6",
+     "formula": "=COUNTIF('الطلبات'!$H$6:$H$1505,\"قيد الغسيل\")"
+    },
+    {
+     "label": "جاهزة للاستلام",
+     "cell": "B7",
+     "formula": "=COUNTIF('الطلبات'!$H$6:$H$1505,\"جاهز\")"
+    },
+    {
+     "label": "تم تسليمها",
+     "cell": "B8",
+     "formula": "=COUNTIF('الطلبات'!$H$6:$H$1505,\"تم التسليم\")"
+    },
+    {
+     "label": "قطع داخل المغسلة (لم تُسلَّم)",
+     "cell": "B9",
+     "formula": "=SUM('الطلبات'!$F$6:$F$1505)-SUMIFS('الطلبات'!$F$6:$F$1505,'الطلبات'!$H$6:$H$1505,\"تم التسليم\")"
+    },
+    {
+     "label": "إجمالي قيمة الطلبات",
+     "cell": "B12",
+     "formula": "=SUM('الطلبات'!$L$6:$L$1505)"
+    },
+    {
+     "label": "إجمالي المدفوع",
+     "cell": "B13",
+     "formula": "=SUM('الطلبات'!$I$6:$I$1505)"
+    },
+    {
+     "label": "المتبقي عند العملاء",
+     "cell": "B14",
+     "formula": "=SUMIF('الطلبات'!$M$6:$M$1505,\">0\")"
+    },
+    {
+     "label": "قيمة الطلبات المسلّمة",
+     "cell": "B15",
+     "formula": "=SUMIFS('الطلبات'!$L$6:$L$1505,'الطلبات'!$H$6:$H$1505,\"تم التسليم\")"
+    },
+    {
+     "label": "قيمة الطلبات داخل المغسلة",
+     "cell": "B16",
+     "formula": "=B12-B15"
+    },
+    {
+     "label": "عدد طلبات الشهر",
+     "cell": "B19",
+     "formula": "=COUNTIFS('الطلبات'!$B$6:$B$1505,\">=\"&'الإعدادات'!$B$7,'الطلبات'!$B$6:$B$1505,\"<\"&'الإعدادات'!$B$8)"
+    },
+    {
+     "label": "قطع الشهر",
+     "cell": "B20",
+     "formula": "=SUMIFS('الطلبات'!$F$6:$F$1505,'الطلبات'!$B$6:$B$1505,\">=\"&'الإعدادات'!$B$7,'الطلبات'!$B$6:$B$1505,\"<\"&'الإعدادات'!$B$8)"
+    },
+    {
+     "label": "إيراد الشهر (قيمة الطلبات المستلمة فيه)",
+     "cell": "B21",
+     "formula": "=SUMIFS('الطلبات'!$L$6:$L$1505,'الطلبات'!$B$6:$B$1505,\">=\"&'الإعدادات'!$B$7,'الطلبات'!$B$6:$B$1505,\"<\"&'الإعدادات'!$B$8)"
+    },
+    {
+     "label": "المدفوع من طلبات الشهر",
+     "cell": "B22",
+     "formula": "=SUMIFS('الطلبات'!$I$6:$I$1505,'الطلبات'!$B$6:$B$1505,\">=\"&'الإعدادات'!$B$7,'الطلبات'!$B$6:$B$1505,\"<\"&'الإعدادات'!$B$8)"
+    },
+    {
+     "label": "متوسط قيمة الطلب",
+     "cell": "B23",
+     "formula": "=IF(B19=0,\"\",B21/B19)"
+    },
+    {
+     "label": "طلبات متأخرة الاستلام",
+     "cell": "B26",
+     "formula": "=COUNTIF('الطلبات'!$O$6:$O$1505,\"متأخر الاستلام\")"
+    },
+    {
+     "label": "قيمة الطلبات المتأخرة الاستلام",
+     "cell": "B27",
+     "formula": "=SUMIFS('الطلبات'!$L$6:$L$1505,'الطلبات'!$O$6:$O$1505,\"متأخر الاستلام\")"
+    },
+    {
+     "label": "طلبات متأخرة الغسيل",
+     "cell": "B28",
+     "formula": "=COUNTIF('الطلبات'!$O$6:$O$1505,\"متأخر الغسيل\")"
+    },
+    {
+     "label": "مسلّمة وعليها متبقي",
+     "cell": "B29",
+     "formula": "=COUNTIF('الطلبات'!$O$6:$O$1505,\"مسلّم وعليه متبقي\")"
+    },
+    {
+     "label": "طلبات بخدمة غير مسعّرة",
+     "cell": "B30",
+     "formula": "=COUNTIF('الطلبات'!$O$6:$O$1505,\"خدمة غير مسعّرة\")"
+    }
+   ]
+  },
+  {
+   "name": "لماذا ما زلت على إكسل؟",
+   "formula_cells": 0
+  }
+ ]
+}

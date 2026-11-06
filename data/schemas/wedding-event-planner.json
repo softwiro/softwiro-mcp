@@ -1,0 +1,475 @@
+{
+ "id": "wedding-event-planner",
+ "file": "softwiro-wedding-event-planner.xlsx",
+ "title": "شيت ميزانية الفرح والمناسبات",
+ "language": "ar",
+ "direction": "rtl",
+ "how_it_works": "White cells are typed input; cells whose kind is \"formula\" are calculated and must not be overwritten. Add one record per row under the header row of a record table, keeping the columns in order.",
+ "sheets": [
+  {
+   "name": "ابدأ هنا",
+   "formula_cells": 0
+  },
+  {
+   "name": "الإعدادات",
+   "formula_cells": 0,
+   "settings": [
+    {
+     "label": "تاريخ اليوم",
+     "cell": "B4",
+     "value": "2026-11-01"
+    },
+    {
+     "label": "ميزانية المناسبة",
+     "cell": "B5",
+     "value": 150000
+    },
+    {
+     "label": "تاريخ المناسبة",
+     "cell": "B6",
+     "value": "2026-12-18"
+    },
+    {
+     "label": "تنبيه موعد السداد قبل (يوم)",
+     "cell": "B7",
+     "value": 7
+    }
+   ]
+  },
+  {
+   "name": "الموردون",
+   "formula_cells": 1000,
+   "record_tables": [
+    {
+     "header_row": 5,
+     "first_record_row": 6,
+     "sample_rows_filled": 9,
+     "capacity_last_row": 205,
+     "columns": [
+      {
+       "column": "A",
+       "header": "كود المورد",
+       "kind": "input",
+       "examples": [
+        "V01",
+        "V02",
+        "V03"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "المورد",
+       "kind": "input",
+       "examples": [
+        "قاعة الورد",
+        "استوديو لمسة",
+        "ديكور الأحلام"
+       ]
+      },
+      {
+       "column": "C",
+       "header": "الفئة",
+       "kind": "input",
+       "examples": [
+        "قاعة",
+        "تصوير",
+        "ديكور وكوش"
+       ],
+       "allowed_values": [
+        "قاعة",
+        "تصوير",
+        "فستان وبدلة",
+        "ديكور وكوش",
+        "طعام وضيافة",
+        "موسيقى ودي جي",
+        "سيارات",
+        "دعوات وتذكارات",
+        "مكياج وتجميل",
+        "أخرى"
+       ]
+      },
+      {
+       "column": "D",
+       "header": "الجوال",
+       "kind": "input",
+       "examples": [
+        "01010000011",
+        "01010000012",
+        "01010000013"
+       ]
+      },
+      {
+       "column": "E",
+       "header": "المتفق عليه",
+       "kind": "input",
+       "examples": [
+        60000,
+        15000,
+        18000
+       ]
+      },
+      {
+       "column": "F",
+       "header": "موعد السداد النهائي",
+       "kind": "input",
+       "examples": [
+        "2026-12-15",
+        "2026-12-18",
+        "2026-11-05"
+       ]
+      },
+      {
+       "column": "G",
+       "header": "العربون المدفوع",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",SUMIFS('الدفعات'!$C$6:$C$2005,'الدفعات'!$B$6:$B$2005,A6&\"\",'الدفعات'!$D$6:$D$2005,\"عربون\"))"
+      },
+      {
+       "column": "H",
+       "header": "إجمالي المدفوع",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",SUMIFS('الدفعات'!$C$6:$C$2005,'الدفعات'!$B$6:$B$2005,A6&\"\"))"
+      },
+      {
+       "column": "I",
+       "header": "المتبقي",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",IF(ISNUMBER(E6),ROUND(E6-H6,2),\"\"))"
+      },
+      {
+       "column": "J",
+       "header": "أيام حتى السداد",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",IF(NOT(ISNUMBER(F6)),\"\",IF(I6=\"\",\"\",IF(I6<=0,\"\",F6-'الإعدادات'!$B$4))))"
+      },
+      {
+       "column": "K",
+       "header": "الحالة",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",IF(I6=\"\",\"بدون سعر\",IF(I6<0,\"مدفوع زيادة\",IF(I6=0,\"مسدد\",IF(J6=\"\",\"متبقي\",IF(J6<0,\"متأخر\",IF(J6<='الإعدادات'!$B$7,\"يقترب السداد\",\"متبقي\")))))))"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "الدفعات",
+   "formula_cells": 2000,
+   "record_tables": [
+    {
+     "header_row": 5,
+     "first_record_row": 6,
+     "sample_rows_filled": 10,
+     "capacity_last_row": 2005,
+     "columns": [
+      {
+       "column": "A",
+       "header": "التاريخ",
+       "kind": "input",
+       "examples": [
+        "2026-09-01",
+        "2026-09-10",
+        "2026-09-20"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "كود المورد",
+       "kind": "input",
+       "examples": [
+        "V01",
+        "V04",
+        "V02"
+       ],
+       "allowed_values": {
+        "from_range": "'الموردون'!$A$6:$A$205"
+       }
+      },
+      {
+       "column": "C",
+       "header": "المبلغ",
+       "kind": "input",
+       "examples": [
+        20000,
+        15000,
+        5000
+       ]
+      },
+      {
+       "column": "D",
+       "header": "نوع الدفعة",
+       "kind": "input",
+       "examples": [
+        "عربون",
+        "عربون",
+        "عربون"
+       ],
+       "allowed_values": [
+        "عربون",
+        "دفعة",
+        "سداد نهائي"
+       ]
+      },
+      {
+       "column": "E",
+       "header": "ملاحظة",
+       "kind": "input",
+       "examples": [
+        "تثبيت الحجز",
+        "الدفعة الثانية",
+        "زاد عن المتفق عليه"
+       ]
+      },
+      {
+       "column": "F",
+       "header": "المورد",
+       "kind": "formula",
+       "formula_row_1": "=IF(B6&\"\"=\"\",\"\",IFERROR(INDEX('الموردون'!$B$6:$B$205,MATCH(B6&\"\",'الموردون'!$A$6:$A$205,0))&\"\",\"كود غير موجود\"))"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "المدعوون",
+   "formula_cells": 1000,
+   "record_tables": [
+    {
+     "header_row": 5,
+     "first_record_row": 6,
+     "sample_rows_filled": 14,
+     "capacity_last_row": 505,
+     "columns": [
+      {
+       "column": "A",
+       "header": "اسم المدعو",
+       "kind": "input",
+       "examples": [
+        "أسرة محمود حسن",
+        "أسرة سعيد عمر",
+        "عم خالد وأسرته"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "المجموعة",
+       "kind": "input",
+       "examples": [
+        "أهل العريس",
+        "أهل العريس",
+        "أهل العريس"
+       ],
+       "allowed_values": [
+        "أهل العريس",
+        "أهل العروسة",
+        "أصدقاء",
+        "زملاء عمل",
+        "أخرى"
+       ]
+      },
+      {
+       "column": "C",
+       "header": "عدد الأفراد",
+       "kind": "input",
+       "examples": [
+        5,
+        4,
+        6
+       ]
+      },
+      {
+       "column": "D",
+       "header": "الجوال",
+       "kind": "input",
+       "examples": [
+        "01010000021",
+        "01010000022",
+        "01010000023"
+       ]
+      },
+      {
+       "column": "E",
+       "header": "حالة الرد",
+       "kind": "input",
+       "examples": [
+        "سيحضر",
+        "سيحضر",
+        "لم يرد"
+       ],
+       "allowed_values": [
+        "سيحضر",
+        "اعتذر",
+        "لم يرد"
+       ]
+      },
+      {
+       "column": "F",
+       "header": "رقم الطاولة",
+       "kind": "input",
+       "examples": [
+        1,
+        1,
+        2
+       ]
+      },
+      {
+       "column": "G",
+       "header": "الحضور المؤكد",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",IF(E6=\"سيحضر\",N(C6),0))"
+      },
+      {
+       "column": "H",
+       "header": "الموقف",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",IF(E6=\"سيحضر\",IF(F6&\"\"=\"\",\"بدون طاولة\",\"مؤكد\"),IF(E6=\"اعتذر\",\"اعتذر\",\"بانتظار الرد\")))"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "الملخص",
+   "formula_cells": 64,
+   "record_tables": [
+    {
+     "header_row": 30,
+     "first_record_row": 31,
+     "sample_rows_filled": 17,
+     "capacity_last_row": 48,
+     "columns": [
+      {
+       "column": "A",
+       "header": "الفئة",
+       "kind": "input",
+       "examples": [
+        "قاعة",
+        "تصوير",
+        "فستان وبدلة"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "المتفق عليه",
+       "kind": "formula",
+       "formula_row_1": "=SUMIFS('الموردون'!$E$6:$E$205,'الموردون'!$C$6:$C$205,A31)"
+      },
+      {
+       "column": "C",
+       "header": "المدفوع",
+       "kind": "formula",
+       "formula_row_1": "=SUMIFS('الموردون'!$H$6:$H$205,'الموردون'!$C$6:$C$205,A31)"
+      },
+      {
+       "column": "D",
+       "header": "المتبقي",
+       "kind": "formula",
+       "formula_row_1": "=SUMIFS('الموردون'!$I$6:$I$205,'الموردون'!$C$6:$C$205,A31)"
+      }
+     ]
+    }
+   ],
+   "results": [
+    {
+     "label": "ميزانية المناسبة",
+     "cell": "B5",
+     "formula": "='الإعدادات'!$B$5"
+    },
+    {
+     "label": "إجمالي المتفق عليه مع الموردين",
+     "cell": "B6",
+     "formula": "=SUM('الموردون'!$E$6:$E$205)"
+    },
+    {
+     "label": "المتبقي من الميزانية",
+     "cell": "B7",
+     "formula": "=B5-B6"
+    },
+    {
+     "label": "إجمالي المدفوع للموردين",
+     "cell": "B8",
+     "formula": "=SUM('الموردون'!$H$6:$H$205)"
+    },
+    {
+     "label": "المتبقي على الموردين",
+     "cell": "B9",
+     "formula": "=SUMIF('الموردون'!$I$6:$I$205,\">0\")"
+    },
+    {
+     "label": "مدفوع زيادة عن المتفق عليه",
+     "cell": "B10",
+     "formula": "=-SUMIF('الموردون'!$I$6:$I$205,\"<0\")"
+    },
+    {
+     "label": "نسبة المسدد من المتفق عليه",
+     "cell": "B11",
+     "formula": "=IF(B6=0,\"\",(B6-B9)/B6)"
+    },
+    {
+     "label": "أيام حتى المناسبة",
+     "cell": "B12",
+     "formula": "=IF(ISNUMBER('الإعدادات'!$B$6),'الإعدادات'!$B$6-'الإعدادات'!$B$4,\"\")"
+    },
+    {
+     "label": "موردون متأخرون في السداد",
+     "cell": "B15",
+     "formula": "=COUNTIF('الموردون'!$K$6:$K$205,\"متأخر\")"
+    },
+    {
+     "label": "موردون يقترب سدادهم",
+     "cell": "B16",
+     "formula": "=COUNTIF('الموردون'!$K$6:$K$205,\"يقترب السداد\")"
+    },
+    {
+     "label": "موردون مسددون",
+     "cell": "B17",
+     "formula": "=COUNTIF('الموردون'!$K$6:$K$205,\"مسدد\")"
+    },
+    {
+     "label": "موردون بدون سعر مكتوب",
+     "cell": "B18",
+     "formula": "=COUNTIF('الموردون'!$K$6:$K$205,\"بدون سعر\")"
+    },
+    {
+     "label": "عدد الدعوات",
+     "cell": "B21",
+     "formula": "=COUNTIF('المدعوون'!$A$6:$A$505,\"?*\")"
+    },
+    {
+     "label": "إجمالي الأفراد المدعوين",
+     "cell": "B22",
+     "formula": "=SUM('المدعوون'!$C$6:$C$505)"
+    },
+    {
+     "label": "الحضور المؤكد (أفراد)",
+     "cell": "B23",
+     "formula": "=SUM('المدعوون'!$G$6:$G$505)"
+    },
+    {
+     "label": "المعتذرون (أفراد)",
+     "cell": "B24",
+     "formula": "=SUMIFS('المدعوون'!$C$6:$C$505,'المدعوون'!$E$6:$E$505,\"اعتذر\")"
+    },
+    {
+     "label": "بانتظار الرد (أفراد)",
+     "cell": "B25",
+     "formula": "=B22-B23-B24"
+    },
+    {
+     "label": "دعوات مؤكدة بدون طاولة",
+     "cell": "B26",
+     "formula": "=COUNTIF('المدعوون'!$H$6:$H$505,\"بدون طاولة\")"
+    },
+    {
+     "label": "متوسط المتفق عليه لكل فرد مؤكد",
+     "cell": "B27",
+     "formula": "=IF(B23=0,\"\",ROUND(B6/B23,2))"
+    }
+   ]
+  },
+  {
+   "name": "لماذا ما زلت على إكسل؟",
+   "formula_cells": 0
+  }
+ ]
+}

@@ -1,0 +1,271 @@
+{
+ "id": "study-planner",
+ "file": "softwiro-study-planner.xlsx",
+ "title": "شيت خطة المذاكرة ومتابعة الدروس",
+ "language": "ar",
+ "direction": "rtl",
+ "how_it_works": "White cells are typed input; cells whose kind is \"formula\" are calculated and must not be overwritten. Add one record per row under the header row of a record table, keeping the columns in order.",
+ "sheets": [
+  {
+   "name": "ابدأ هنا",
+   "formula_cells": 0
+  },
+  {
+   "name": "الإعدادات",
+   "formula_cells": 1,
+   "settings": [
+    {
+     "label": "عدد الدروس التي أقدر على مذاكرتها يوميًا",
+     "cell": "B5",
+     "value": 3
+    },
+    {
+     "label": "الدرجة التي ما دونها ضعيف (من 10)",
+     "cell": "B6",
+     "value": 6
+    }
+   ],
+   "results": [
+    {
+     "label": "تاريخ اليوم",
+     "cell": "B4",
+     "formula": "=TODAY()"
+    }
+   ]
+  },
+  {
+   "name": "المواد",
+   "formula_cells": 0,
+   "settings": [
+    {
+     "label": "المادة",
+     "cell": "B5",
+     "value": "تاريخ الامتحان"
+    },
+    {
+     "label": "الرياضيات",
+     "cell": "B6",
+     "value": "2026-11-08"
+    },
+    {
+     "label": "الدراسات الاجتماعية",
+     "cell": "B7",
+     "value": "2026-11-08"
+    },
+    {
+     "label": "اللغة العربية",
+     "cell": "B8",
+     "value": "2026-11-15"
+    },
+    {
+     "label": "العلوم",
+     "cell": "B9",
+     "value": "2026-11-23"
+    },
+    {
+     "label": "اللغة الإنجليزية",
+     "cell": "B10",
+     "value": "2026-12-13"
+    },
+    {
+     "label": "التربية الدينية",
+     "cell": "B11",
+     "value": "2026-10-31"
+    }
+   ]
+  },
+  {
+   "name": "الدروس",
+   "formula_cells": 2501,
+   "record_tables": [
+    {
+     "header_row": 5,
+     "first_record_row": 6,
+     "sample_rows_filled": 50,
+     "capacity_last_row": 505,
+     "columns": [
+      {
+       "column": "A",
+       "header": "المادة",
+       "kind": "input",
+       "examples": [
+        "الرياضيات",
+        "الرياضيات",
+        "الرياضيات"
+       ],
+       "allowed_values": {
+        "from_range": "'المواد'!$A$6:$A$20"
+       }
+      },
+      {
+       "column": "B",
+       "header": "اسم الدرس",
+       "kind": "input",
+       "examples": [
+        "المعادلات الخطية",
+        "درس الرياضيات 2",
+        "درس الرياضيات 3"
+       ]
+      },
+      {
+       "column": "C",
+       "header": "الحالة",
+       "kind": "input",
+       "examples": [
+        "ذاكرته",
+        "لم أبدأ",
+        "لم أبدأ"
+       ],
+       "allowed_values": [
+        "لم أبدأ",
+        "ذاكرته",
+        "راجعته"
+       ]
+      },
+      {
+       "column": "D",
+       "header": "الدرجة من 10",
+       "kind": "input",
+       "examples": [
+        5,
+        9,
+        8
+       ]
+      },
+      {
+       "column": "E",
+       "header": "تاريخ آخر مذاكرة",
+       "kind": "input",
+       "examples": [
+        "2026-10-30",
+        "2026-11-01",
+        "2026-11-02"
+       ]
+      },
+      {
+       "column": "F",
+       "header": "الأيام إلى الامتحان",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",IFERROR(IF(INDEX('المواد'!$B$6:$B$20,MATCH(A6,'المواد'!$A$6:$A$20,0))>0,INDEX('المواد'!$B$6:$B$20,MATCH(A6,'المواد'!$A$6:$A$20,0))-'الإعدادات'!$B$4,\"\"),\"\"))"
+      },
+      {
+       "column": "G",
+       "header": "الأيام منذ آخر مذاكرة",
+       "kind": "formula",
+       "formula_row_1": "=IF(OR(A6&\"\"=\"\",E6&\"\"=\"\"),\"\",'الإعدادات'!$B$4-E6)"
+      },
+      {
+       "column": "H",
+       "header": "يحتاج مراجعة",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",IF(OR(AND(ISNUMBER(D6),D6>=0,D6<=10,D6<$B$4),AND(C6=\"ذاكرته\",ISNUMBER(F6),F6>=0,F6<=7)),\"نعم\",\"\"))"
+      },
+      {
+       "column": "I",
+       "header": "تنبيه",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&B6=\"\",\"\",IF(A6&\"\"=\"\",\"اختر المادة\",IF(ISNUMBER(MATCH(A6,'المواد'!$A$6:$A$20,0)),IF(AND(D6&\"\"<>\"\",OR(NOT(ISNUMBER(D6)),D6<0,D6>10)),\"الدرجة من 0 إلى 10\",IF(C6&\"\"=\"\",\"اختر الحالة\",\"\")),\"المادة غير موجودة\")))"
+      },
+      {
+       "column": "J",
+       "header": "مفتاح الترتيب (مساعد)",
+       "kind": "formula",
+       "formula_row_1": "=IF(AND(A6&\"\"<>\"\",ISNUMBER(D6),D6>=0,D6<=10),D6+ROW()/100000,\"\")"
+      }
+     ]
+    }
+   ],
+   "results": [
+    {
+     "label": "حد الدرجة الضعيفة",
+     "cell": "B4",
+     "formula": "='الإعدادات'!$B$6"
+    }
+   ]
+  },
+  {
+   "name": "لوحة المتابعة",
+   "formula_cells": 225,
+   "record_tables": [
+    {
+     "header_row": 5,
+     "first_record_row": 6,
+     "sample_rows_filled": 0,
+     "capacity_last_row": 34,
+     "columns": [
+      {
+       "column": "A",
+       "header": "المادة",
+       "kind": "formula",
+       "formula_row_1": "=IF('المواد'!A6&\"\"=\"\",\"\",'المواد'!A6)"
+      },
+      {
+       "column": "B",
+       "header": "إجمالي الدروس",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6=\"\",\"\",COUNTIF('الدروس'!$A$6:$A$505,A6))"
+      },
+      {
+       "column": "C",
+       "header": "ما ذاكرته",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6=\"\",\"\",COUNTIFS('الدروس'!$A$6:$A$505,A6,'الدروس'!$C$6:$C$505,\"ذاكرته\")+COUNTIFS('الدروس'!$A$6:$A$505,A6,'الدروس'!$C$6:$C$505,\"راجعته\"))"
+      },
+      {
+       "column": "D",
+       "header": "ما راجعته",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6=\"\",\"\",COUNTIFS('الدروس'!$A$6:$A$505,A6,'الدروس'!$C$6:$C$505,\"راجعته\"))"
+      },
+      {
+       "column": "E",
+       "header": "نسبة الإنجاز",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6=\"\",\"\",IF(B6=0,\"\",C6/B6))"
+      },
+      {
+       "column": "F",
+       "header": "متوسط الدرجات",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6=\"\",\"\",IF(COUNTIFS('الدروس'!$A$6:$A$505,A6,'الدروس'!$D$6:$D$505,\">=0\",'الدروس'!$D$6:$D$505,\"<=10\")=0,\"\",AVERAGEIFS('الدروس'!$D$6:$D$505,'الدروس'!$A$6:$A$505,A6,'الدروس'!$D$6:$D$505,\">=0\",'الدروس'!$D$6:$D$505,\"<=10\")))"
+      },
+      {
+       "column": "G",
+       "header": "دروس ضعيفة",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6=\"\",\"\",COUNTIFS('الدروس'!$A$6:$A$505,A6,'الدروس'!$D$6:$D$505,\">=0\",'الدروس'!$D$6:$D$505,\"<\"&'الإعدادات'!$B$6))"
+      },
+      {
+       "column": "H",
+       "header": "الأيام إلى الامتحان",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6=\"\",\"\",IF(ISNUMBER('المواد'!B6),'المواد'!B6-'الإعدادات'!$B$4,\"\"))"
+      },
+      {
+       "column": "I",
+       "header": "الدروس المتبقية",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6=\"\",\"\",B6-C6)"
+      },
+      {
+       "column": "J",
+       "header": "دروس لازمة يوميًا",
+       "kind": "formula",
+       "formula_row_1": "=IF(OR(A6=\"\",H6=\"\"),\"\",IF(H6<=0,\"انتهى\",ROUND(I6/H6,2)))"
+      },
+      {
+       "column": "K",
+       "header": "الحالة",
+       "kind": "formula",
+       "formula_row_1": "=IF(OR(A6=\"\",H6=\"\"),\"\",IF(H6<=0,\"انتهى الامتحان\",IF(I6/H6>'الإعدادات'!$B$5,\"متأخر\",IF(I6/H6>0.7*'الإعدادات'!$B$5,\"انتبه\",\"على المسار\"))))"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "لماذا ما زلت على إكسل؟",
+   "formula_cells": 0
+  }
+ ]
+}

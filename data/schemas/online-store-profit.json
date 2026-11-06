@@ -1,0 +1,539 @@
+{
+ "id": "online-store-profit",
+ "file": "softwiro-online-store-profit.xlsx",
+ "title": "شيت طلبات وأرباح المتجر الإلكتروني",
+ "language": "ar",
+ "direction": "rtl",
+ "how_it_works": "White cells are typed input; cells whose kind is \"formula\" are calculated and must not be overwritten. Add one record per row under the header row of a record table, keeping the columns in order.",
+ "sheets": [
+  {
+   "name": "ابدأ هنا",
+   "formula_cells": 0
+  },
+  {
+   "name": "المنتجات",
+   "formula_cells": 800,
+   "record_tables": [
+    {
+     "header_row": 4,
+     "first_record_row": 5,
+     "sample_rows_filled": 8,
+     "capacity_last_row": 204,
+     "columns": [
+      {
+       "column": "A",
+       "header": "الكود",
+       "kind": "input",
+       "examples": [
+        "P01",
+        "P02",
+        "P03"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "اسم المنتج",
+       "kind": "input",
+       "examples": [
+        "حقيبة جلد صغيرة",
+        "ساعة يد رجالي",
+        "سماعة بلوتوث"
+       ]
+      },
+      {
+       "column": "C",
+       "header": "تكلفة القطعة",
+       "kind": "input",
+       "examples": [
+        180,
+        220,
+        150
+       ]
+      },
+      {
+       "column": "D",
+       "header": "سعر البيع",
+       "kind": "input",
+       "examples": [
+        350,
+        420,
+        300
+       ]
+      },
+      {
+       "column": "E",
+       "header": "رصيد أول المدة",
+       "kind": "input",
+       "examples": [
+        40,
+        30,
+        60
+       ]
+      },
+      {
+       "column": "F",
+       "header": "حد إعادة الطلب",
+       "kind": "input",
+       "examples": [
+        10,
+        20,
+        15
+       ]
+      },
+      {
+       "column": "G",
+       "header": "قطع مسلَّمة",
+       "kind": "formula",
+       "formula_row_1": "=IF(A5&\"\"=\"\",\"\",SUMIFS('الطلبات'!$G$5:$G$3004,'الطلبات'!$F$5:$F$3004,A5&\"\",'الطلبات'!$I$5:$I$3004,\"تم التسليم\"))"
+      },
+      {
+       "column": "H",
+       "header": "قطع مع طلبات مفتوحة",
+       "kind": "formula",
+       "formula_row_1": "=IF(A5&\"\"=\"\",\"\",SUMIFS('الطلبات'!$G$5:$G$3004,'الطلبات'!$F$5:$F$3004,A5&\"\",'الطلبات'!$I$5:$I$3004,\"قيد التجهيز\")+SUMIFS('الطلبات'!$G$5:$G$3004,'الطلبات'!$F$5:$F$3004,A5&\"\",'الطلبات'!$I$5:$I$3004,\"تم الشحن\"))"
+      },
+      {
+       "column": "I",
+       "header": "الرصيد الحالي",
+       "kind": "formula",
+       "formula_row_1": "=IF(A5&\"\"=\"\",\"\",E5-G5-H5)"
+      },
+      {
+       "column": "J",
+       "header": "تنبيه المخزون",
+       "kind": "formula",
+       "formula_row_1": "=IF(A5&\"\"=\"\",\"\",IF(I5<0,\"رصيد سالب: راجع الأرقام\",IF(AND(ISNUMBER(F5),I5<F5),\"أعد الطلب: الرصيد أقل من الحد\",\"\")))"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "المحافظات",
+   "formula_cells": 0,
+   "record_tables": [
+    {
+     "header_row": 4,
+     "first_record_row": 5,
+     "sample_rows_filled": 6,
+     "capacity_last_row": 10,
+     "columns": [
+      {
+       "column": "A",
+       "header": "المنطقة",
+       "kind": "input",
+       "examples": [
+        "القاهرة",
+        "الجيزة",
+        "الإسكندرية"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "رسوم الشحن على العميل",
+       "kind": "input",
+       "examples": [
+        50,
+        50,
+        65
+       ]
+      },
+      {
+       "column": "C",
+       "header": "تكلفة الشركة عن الطلب المسلَّم",
+       "kind": "input",
+       "examples": [
+        35,
+        35,
+        45
+       ]
+      },
+      {
+       "column": "D",
+       "header": "رسوم الشركة عن المرتجع",
+       "kind": "input",
+       "examples": [
+        20,
+        20,
+        25
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "الطلبات",
+   "formula_cells": 21000,
+   "record_tables": [
+    {
+     "header_row": 4,
+     "first_record_row": 5,
+     "sample_rows_filled": 65,
+     "capacity_last_row": 3004,
+     "columns": [
+      {
+       "column": "A",
+       "header": "التاريخ",
+       "kind": "input",
+       "examples": [
+        "2026-09-01",
+        "2026-09-01",
+        "2026-09-02"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "رقم الطلب",
+       "kind": "input",
+       "examples": [
+        "A1001",
+        "A1002",
+        "A1003"
+       ]
+      },
+      {
+       "column": "C",
+       "header": "اسم العميل",
+       "kind": "input",
+       "examples": [
+        "عميل 1",
+        "عميل 2",
+        "عميل 3"
+       ]
+      },
+      {
+       "column": "D",
+       "header": "التليفون",
+       "kind": "input",
+       "examples": [
+        "01105007919",
+        "01205015838",
+        "01005023757"
+       ]
+      },
+      {
+       "column": "E",
+       "header": "المنطقة",
+       "kind": "input",
+       "examples": [
+        "الإسكندرية",
+        "الإسكندرية",
+        "الإسكندرية"
+       ],
+       "allowed_values": {
+        "from_range": "'المحافظات'!$A$5:$A$44"
+       }
+      },
+      {
+       "column": "F",
+       "header": "كود المنتج",
+       "kind": "input",
+       "examples": [
+        "P02",
+        "P05",
+        "P08"
+       ],
+       "allowed_values": {
+        "from_range": "'المنتجات'!$A$5:$A$204"
+       }
+      },
+      {
+       "column": "G",
+       "header": "الكمية",
+       "kind": "input",
+       "examples": [
+        3,
+        1,
+        1
+       ]
+      },
+      {
+       "column": "H",
+       "header": "الخصم",
+       "kind": "input",
+       "examples": [
+        20,
+        0,
+        0
+       ]
+      },
+      {
+       "column": "I",
+       "header": "الحالة",
+       "kind": "input",
+       "examples": [
+        "تم التسليم",
+        "تم التسليم",
+        "تم التسليم"
+       ],
+       "allowed_values": [
+        "قيد التجهيز",
+        "تم الشحن",
+        "تم التسليم",
+        "مرتجع",
+        "ملغي"
+       ]
+      },
+      {
+       "column": "J",
+       "header": "اسم المنتج",
+       "kind": "formula",
+       "formula_row_1": "=IF(AND(B5&\"\"=\"\",F5&\"\"=\"\"),\"\",IFERROR(INDEX('المنتجات'!$B$5:$B$204,MATCH($F5,'المنتجات'!$A$5:$A$204,0))&\"\",\"\"))"
+      },
+      {
+       "column": "K",
+       "header": "قيمة الطلب",
+       "kind": "formula",
+       "formula_row_1": "=IF(AND(B5&\"\"=\"\",F5&\"\"=\"\"),\"\",IFERROR(INDEX('المنتجات'!$D$5:$D$204,MATCH($F5,'المنتجات'!$A$5:$A$204,0))*G5-H5,0))"
+      },
+      {
+       "column": "L",
+       "header": "الشحن المحصَّل",
+       "kind": "formula",
+       "formula_row_1": "=IF(AND(B5&\"\"=\"\",F5&\"\"=\"\"),\"\",IF(I5=\"تم التسليم\",IFERROR(INDEX('المحافظات'!$B$5:$B$44,MATCH($E5,'المحافظات'!$A$5:$A$44,0)),0),0))"
+      },
+      {
+       "column": "M",
+       "header": "تكلفة المنتج",
+       "kind": "formula",
+       "formula_row_1": "=IF(AND(B5&\"\"=\"\",F5&\"\"=\"\"),\"\",IFERROR(INDEX('المنتجات'!$C$5:$C$204,MATCH($F5,'المنتجات'!$A$5:$A$204,0))*G5,0))"
+      },
+      {
+       "column": "N",
+       "header": "تكلفة الشحن",
+       "kind": "formula",
+       "formula_row_1": "=IF(AND(B5&\"\"=\"\",F5&\"\"=\"\"),\"\",IF(I5=\"تم التسليم\",IFERROR(INDEX('المحافظات'!$C$5:$C$44,MATCH($E5,'المحافظات'!$A$5:$A$44,0)),0),IF(I5=\"مرتجع\",IFERROR(INDEX('المحافظات'!$D$5:$D$44,MATCH($E5,'المحافظات'!$A$5:$A$44,0)),0),0)))"
+      },
+      {
+       "column": "O",
+       "header": "ربح الطلب",
+       "kind": "formula",
+       "formula_row_1": "=IF(AND(B5&\"\"=\"\",F5&\"\"=\"\"),\"\",IF(I5=\"تم التسليم\",K5+L5-M5-N5,IF(I5=\"مرتجع\",-N5,IF(I5=\"ملغي\",0,\"\"))))"
+      },
+      {
+       "column": "P",
+       "header": "تنبيه",
+       "kind": "formula",
+       "formula_row_1": "=IF(AND(B5&\"\"=\"\",F5&\"\"=\"\"),\"\",IF(NOT(ISNUMBER(MATCH(F5,'المنتجات'!$A$5:$A$204,0))),\"كود المنتج غير معروف\",IF(NOT(ISNUMBER(MATCH(E5,'المحافظات'!$A$5:$A$44,0))),\"المنطقة غير معروفة\",IF(K5<0,\"الخصم أكبر من قيمة الطلب\",IF(I5&\"\"=\"\",\"اكتب الحالة\",\"\")))))"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "الإعلانات",
+   "formula_cells": 0,
+   "record_tables": [
+    {
+     "header_row": 4,
+     "first_record_row": 5,
+     "sample_rows_filled": 8,
+     "capacity_last_row": 12,
+     "columns": [
+      {
+       "column": "A",
+       "header": "التاريخ",
+       "kind": "input",
+       "examples": [
+        "2026-09-01",
+        "2026-09-10",
+        "2026-09-18"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "المنصة",
+       "kind": "input",
+       "examples": [
+        "فيسبوك",
+        "إنستجرام",
+        "تيك توك"
+       ],
+       "allowed_values": [
+        "فيسبوك",
+        "إنستجرام",
+        "تيك توك",
+        "جوجل",
+        "أخرى"
+       ]
+      },
+      {
+       "column": "C",
+       "header": "المبلغ المنفق",
+       "kind": "input",
+       "examples": [
+        800,
+        600,
+        450
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "الملخص الشهري",
+   "formula_cells": 130,
+   "record_tables": [
+    {
+     "header_row": 5,
+     "first_record_row": 6,
+     "sample_rows_filled": 13,
+     "capacity_last_row": 18,
+     "columns": [
+      {
+       "column": "A",
+       "header": "الشهر",
+       "kind": "input",
+       "examples": [
+        "يناير",
+        "فبراير",
+        "مارس"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "عدد الطلبات",
+       "kind": "formula",
+       "formula_row_1": "=COUNTIFS('الطلبات'!$A$5:$A$3004,\">=\"&DATE($B$3,1,1),'الطلبات'!$A$5:$A$3004,\"<\"&DATE($B$3,2,1))"
+      },
+      {
+       "column": "C",
+       "header": "مسلَّم",
+       "kind": "formula",
+       "formula_row_1": "=COUNTIFS('الطلبات'!$I$5:$I$3004,\"تم التسليم\",'الطلبات'!$A$5:$A$3004,\">=\"&DATE($B$3,1,1),'الطلبات'!$A$5:$A$3004,\"<\"&DATE($B$3,2,1))"
+      },
+      {
+       "column": "D",
+       "header": "مرتجع",
+       "kind": "formula",
+       "formula_row_1": "=COUNTIFS('الطلبات'!$I$5:$I$3004,\"مرتجع\",'الطلبات'!$A$5:$A$3004,\">=\"&DATE($B$3,1,1),'الطلبات'!$A$5:$A$3004,\"<\"&DATE($B$3,2,1))"
+      },
+      {
+       "column": "E",
+       "header": "ملغي",
+       "kind": "formula",
+       "formula_row_1": "=COUNTIFS('الطلبات'!$I$5:$I$3004,\"ملغي\",'الطلبات'!$A$5:$A$3004,\">=\"&DATE($B$3,1,1),'الطلبات'!$A$5:$A$3004,\"<\"&DATE($B$3,2,1))"
+      },
+      {
+       "column": "F",
+       "header": "نسبة التسليم",
+       "kind": "formula",
+       "formula_row_1": "=IF(C6+D6=0,\"\",C6/(C6+D6))"
+      },
+      {
+       "column": "G",
+       "header": "مبيعات المسلَّم",
+       "kind": "formula",
+       "formula_row_1": "=SUMIFS('الطلبات'!$K$5:$K$3004,'الطلبات'!$I$5:$I$3004,\"تم التسليم\",'الطلبات'!$A$5:$A$3004,\">=\"&DATE($B$3,1,1),'الطلبات'!$A$5:$A$3004,\"<\"&DATE($B$3,2,1))"
+      },
+      {
+       "column": "H",
+       "header": "الربح قبل الإعلانات",
+       "kind": "formula",
+       "formula_row_1": "=SUMIFS('الطلبات'!$O$5:$O$3004,'الطلبات'!$A$5:$A$3004,\">=\"&DATE($B$3,1,1),'الطلبات'!$A$5:$A$3004,\"<\"&DATE($B$3,2,1))"
+      },
+      {
+       "column": "I",
+       "header": "الإنفاق الإعلاني",
+       "kind": "formula",
+       "formula_row_1": "=SUMIFS('الإعلانات'!$C$5:$C$1004,'الإعلانات'!$A$5:$A$1004,\">=\"&DATE($B$3,1,1),'الإعلانات'!$A$5:$A$1004,\"<\"&DATE($B$3,2,1))"
+      },
+      {
+       "column": "J",
+       "header": "صافي الربح بعد الإعلانات",
+       "kind": "formula",
+       "formula_row_1": "=H6-I6"
+      },
+      {
+       "column": "K",
+       "header": "تكلفة الإعلان لكل مسلَّم",
+       "kind": "formula",
+       "formula_row_1": "=IF(C6=0,\"\",I6/C6)"
+      }
+     ]
+    }
+   ],
+   "settings": [
+    {
+     "label": "السنة",
+     "cell": "B3",
+     "value": 2026
+    }
+   ]
+  },
+  {
+   "name": "أرباح المنتجات",
+   "formula_cells": 1800,
+   "record_tables": [
+    {
+     "header_row": 4,
+     "first_record_row": 5,
+     "sample_rows_filled": 0,
+     "capacity_last_row": 204,
+     "columns": [
+      {
+       "column": "A",
+       "header": "الكود",
+       "kind": "formula",
+       "formula_row_1": "=IF('المنتجات'!A5&\"\"=\"\",\"\",'المنتجات'!A5)"
+      },
+      {
+       "column": "B",
+       "header": "اسم المنتج",
+       "kind": "formula",
+       "formula_row_1": "=IF(A5&\"\"=\"\",\"\",'المنتجات'!B5&\"\")"
+      },
+      {
+       "column": "C",
+       "header": "قطع مسلَّمة",
+       "kind": "formula",
+       "formula_row_1": "=IF(A5&\"\"=\"\",\"\",SUMIFS('الطلبات'!$G$5:$G$3004,'الطلبات'!$F$5:$F$3004,A5&\"\",'الطلبات'!$I$5:$I$3004,\"تم التسليم\"))"
+      },
+      {
+       "column": "D",
+       "header": "قطع مرتجعة",
+       "kind": "formula",
+       "formula_row_1": "=IF(A5&\"\"=\"\",\"\",SUMIFS('الطلبات'!$G$5:$G$3004,'الطلبات'!$F$5:$F$3004,A5&\"\",'الطلبات'!$I$5:$I$3004,\"مرتجع\"))"
+      },
+      {
+       "column": "E",
+       "header": "نسبة المرتجع",
+       "kind": "formula",
+       "formula_row_1": "=IF(A5&\"\"=\"\",\"\",IF(C5+D5=0,\"\",D5/(C5+D5)))"
+      },
+      {
+       "column": "F",
+       "header": "ربح الطلبات المسلَّمة",
+       "kind": "formula",
+       "formula_row_1": "=IF(A5&\"\"=\"\",\"\",SUMIFS('الطلبات'!$O$5:$O$3004,'الطلبات'!$F$5:$F$3004,A5&\"\",'الطلبات'!$I$5:$I$3004,\"تم التسليم\"))"
+      },
+      {
+       "column": "G",
+       "header": "خسارة المرتجع",
+       "kind": "formula",
+       "formula_row_1": "=IF(A5&\"\"=\"\",\"\",-SUMIFS('الطلبات'!$O$5:$O$3004,'الطلبات'!$F$5:$F$3004,A5&\"\",'الطلبات'!$I$5:$I$3004,\"مرتجع\"))"
+      },
+      {
+       "column": "H",
+       "header": "الربح الصافي",
+       "kind": "formula",
+       "formula_row_1": "=IF(A5&\"\"=\"\",\"\",F5-G5)"
+      },
+      {
+       "column": "I",
+       "header": "الترتيب",
+       "kind": "formula",
+       "formula_row_1": "=IF(A5&\"\"=\"\",\"\",COUNTIF($H$5:$H$204,\">\"&H5)+1)"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "لماذا ما زلت على إكسل؟",
+   "formula_cells": 0
+  }
+ ]
+}

@@ -1,0 +1,602 @@
+{
+ "id": "homework-behavior-tracker",
+ "file": "softwiro-homework-behavior-tracker.xlsx",
+ "title": "شيت متابعة الواجبات والسلوك للمعلم",
+ "language": "ar",
+ "direction": "rtl",
+ "how_it_works": "White cells are typed input; cells whose kind is \"formula\" are calculated and must not be overwritten. Add one record per row under the header row of a record table, keeping the columns in order.",
+ "sheets": [
+  {
+   "name": "ابدأ هنا",
+   "formula_cells": 0
+  },
+  {
+   "name": "الإعدادات",
+   "formula_cells": 0,
+   "settings": [
+    {
+     "label": "المعلم",
+     "cell": "B4",
+     "value": "أ. سامي"
+    },
+    {
+     "label": "العام الدراسي",
+     "cell": "B5",
+     "value": "2026/2027"
+    },
+    {
+     "label": "حد نسبة التسليم (تحته يظهر التنبيه)",
+     "cell": "B6",
+     "value": 0.7
+    },
+    {
+     "label": "عدد التنبيهات السلوكية للمراجعة",
+     "cell": "B7",
+     "value": 2
+    }
+   ]
+  },
+  {
+   "name": "الطلاب",
+   "formula_cells": 3000,
+   "record_tables": [
+    {
+     "header_row": 5,
+     "first_record_row": 6,
+     "sample_rows_filled": 10,
+     "capacity_last_row": 305,
+     "columns": [
+      {
+       "column": "A",
+       "header": "كود الطالب",
+       "kind": "input",
+       "examples": [
+        "S01",
+        "S02",
+        "S03"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "الاسم",
+       "kind": "input",
+       "examples": [
+        "أحمد علي",
+        "سلمى حسن",
+        "عمر خالد"
+       ]
+      },
+      {
+       "column": "C",
+       "header": "الفصل",
+       "kind": "input",
+       "examples": [
+        "فصل 1",
+        "فصل 1",
+        "فصل 1"
+       ],
+       "allowed_values": {
+        "from_range": "'الإعدادات'!$A$10:$A$29"
+       }
+      },
+      {
+       "column": "D",
+       "header": "واجبات مسجلة",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",COUNTIFS('التسليم'!$B$6:$B$2005,A6&\"\"))"
+      },
+      {
+       "column": "E",
+       "header": "سلّم في الموعد",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",COUNTIFS('التسليم'!$B$6:$B$2005,A6&\"\",'التسليم'!$C$6:$C$2005,\"سلّم في الموعد\"))"
+      },
+      {
+       "column": "F",
+       "header": "سلّم متأخرًا",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",COUNTIFS('التسليم'!$B$6:$B$2005,A6&\"\",'التسليم'!$C$6:$C$2005,\"سلّم متأخرًا\"))"
+      },
+      {
+       "column": "G",
+       "header": "لم يسلّم",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",COUNTIFS('التسليم'!$B$6:$B$2005,A6&\"\",'التسليم'!$C$6:$C$2005,\"لم يسلّم\"))"
+      },
+      {
+       "column": "H",
+       "header": "نسبة التسليم",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",IF(D6=0,\"\",ROUND((E6+F6)/D6,4)))"
+      },
+      {
+       "column": "I",
+       "header": "ملاحظات إيجابية",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",COUNTIFS('السلوك'!$B$6:$B$1005,A6&\"\",'السلوك'!$C$6:$C$1005,\"إيجابي\"))"
+      },
+      {
+       "column": "J",
+       "header": "تنبيهات سلوك",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",COUNTIFS('السلوك'!$B$6:$B$1005,A6&\"\",'السلوك'!$C$6:$C$1005,\"تنبيه\"))"
+      },
+      {
+       "column": "K",
+       "header": "حالة التسليم",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",IF(D6=0,\"لا واجبات\",IF(H6<'الإعدادات'!$B$6,\"يحتاج متابعة\",\"منتظم\")))"
+      },
+      {
+       "column": "L",
+       "header": "السلوك",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",IF(J6>='الإعدادات'!$B$7,\"متابعة سلوك\",\"\"))"
+      },
+      {
+       "column": "M",
+       "header": "ترتيب المتابعة",
+       "kind": "formula",
+       "formula_row_1": "=IF(K6=\"يحتاج متابعة\",COUNTIFS($H$6:$H$305,\"<\"&H6,$K$6:$K$305,\"يحتاج متابعة\")+COUNTIFS($H$6:H6,H6,$K$6:K6,\"يحتاج متابعة\"),\"\")"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "الواجبات",
+   "formula_cells": 1800,
+   "record_tables": [
+    {
+     "header_row": 5,
+     "first_record_row": 6,
+     "sample_rows_filled": 5,
+     "capacity_last_row": 305,
+     "columns": [
+      {
+       "column": "A",
+       "header": "كود الواجب",
+       "kind": "input",
+       "examples": [
+        "H01",
+        "H02",
+        "H03"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "تاريخ الواجب",
+       "kind": "input",
+       "examples": [
+        "2026-10-04",
+        "2026-10-11",
+        "2026-10-12"
+       ]
+      },
+      {
+       "column": "C",
+       "header": "الفصل",
+       "kind": "input",
+       "examples": [
+        "فصل 1",
+        "فصل 1",
+        "فصل 2"
+       ],
+       "allowed_values": {
+        "from_range": "'الإعدادات'!$A$10:$A$29"
+       }
+      },
+      {
+       "column": "D",
+       "header": "المادة",
+       "kind": "input",
+       "examples": [
+        "رياضيات",
+        "لغة عربية",
+        "علوم"
+       ]
+      },
+      {
+       "column": "E",
+       "header": "الواجب",
+       "kind": "input",
+       "examples": [
+        "تمارين الدرس الثالث",
+        "كتابة فقرة وصفية",
+        "ورقة عمل الدرس الثاني"
+       ]
+      },
+      {
+       "column": "F",
+       "header": "موعد التسليم",
+       "kind": "input",
+       "examples": [
+        "2026-10-06",
+        "2026-10-13",
+        "2026-10-14"
+       ]
+      },
+      {
+       "column": "G",
+       "header": "طلاب الفصل",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",COUNTIFS('الطلاب'!$C$6:$C$305,C6&\"\"))"
+      },
+      {
+       "column": "H",
+       "header": "سطور مسجلة",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",COUNTIFS('التسليم'!$A$6:$A$2005,A6&\"\"))"
+      },
+      {
+       "column": "I",
+       "header": "سلّم",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",COUNTIFS('التسليم'!$A$6:$A$2005,A6&\"\",'التسليم'!$C$6:$C$2005,\"سلّم في الموعد\")+COUNTIFS('التسليم'!$A$6:$A$2005,A6&\"\",'التسليم'!$C$6:$C$2005,\"سلّم متأخرًا\"))"
+      },
+      {
+       "column": "J",
+       "header": "لم يسلّم",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",COUNTIFS('التسليم'!$A$6:$A$2005,A6&\"\",'التسليم'!$C$6:$C$2005,\"لم يسلّم\"))"
+      },
+      {
+       "column": "K",
+       "header": "نسبة التسليم",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",IF(H6=0,\"\",ROUND(I6/H6,4)))"
+      },
+      {
+       "column": "L",
+       "header": "غير مسجّل",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",MAX(0,G6-H6))"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "التسليم",
+   "formula_cells": 4000,
+   "record_tables": [
+    {
+     "header_row": 5,
+     "first_record_row": 6,
+     "sample_rows_filled": 24,
+     "capacity_last_row": 2005,
+     "columns": [
+      {
+       "column": "A",
+       "header": "كود الواجب",
+       "kind": "input",
+       "examples": [
+        "H01",
+        "H01",
+        "H01"
+       ],
+       "allowed_values": {
+        "from_range": "'الواجبات'!$A$6:$A$305"
+       }
+      },
+      {
+       "column": "B",
+       "header": "كود الطالب",
+       "kind": "input",
+       "examples": [
+        "S01",
+        "S02",
+        "S03"
+       ],
+       "allowed_values": {
+        "from_range": "'الطلاب'!$A$6:$A$305"
+       }
+      },
+      {
+       "column": "C",
+       "header": "الحالة",
+       "kind": "input",
+       "examples": [
+        "سلّم في الموعد",
+        "سلّم في الموعد",
+        "لم يسلّم"
+       ],
+       "allowed_values": [
+        "سلّم في الموعد",
+        "سلّم متأخرًا",
+        "لم يسلّم"
+       ]
+      },
+      {
+       "column": "D",
+       "header": "ملاحظة",
+       "kind": "input"
+      },
+      {
+       "column": "E",
+       "header": "الطالب",
+       "kind": "formula",
+       "formula_row_1": "=IF(B6&\"\"=\"\",\"\",IFERROR(INDEX('الطلاب'!$B$6:$B$305,MATCH(B6&\"\",'الطلاب'!$A$6:$A$305,0))&\"\",\"كود غير موجود\"))"
+      },
+      {
+       "column": "F",
+       "header": "الفصل",
+       "kind": "formula",
+       "formula_row_1": "=IF(B6&\"\"=\"\",\"\",IFERROR(INDEX('الطلاب'!$C$6:$C$305,MATCH(B6&\"\",'الطلاب'!$A$6:$A$305,0))&\"\",\"\"))"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "السلوك",
+   "formula_cells": 2000,
+   "record_tables": [
+    {
+     "header_row": 5,
+     "first_record_row": 6,
+     "sample_rows_filled": 13,
+     "capacity_last_row": 1005,
+     "columns": [
+      {
+       "column": "A",
+       "header": "التاريخ",
+       "kind": "input",
+       "examples": [
+        "2026-10-05",
+        "2026-10-06",
+        "2026-10-08"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "كود الطالب",
+       "kind": "input",
+       "examples": [
+        "S01",
+        "S03",
+        "S03"
+       ],
+       "allowed_values": {
+        "from_range": "'الطلاب'!$A$6:$A$305"
+       }
+      },
+      {
+       "column": "C",
+       "header": "النوع",
+       "kind": "input",
+       "examples": [
+        "إيجابي",
+        "تنبيه",
+        "تنبيه"
+       ],
+       "allowed_values": [
+        "إيجابي",
+        "تنبيه"
+       ]
+      },
+      {
+       "column": "D",
+       "header": "الملاحظة",
+       "kind": "input",
+       "examples": [
+        "شارك بفاعلية في الحصة",
+        "نسي أدواته",
+        "تكرر الحديث أثناء الشرح"
+       ]
+      },
+      {
+       "column": "E",
+       "header": "الطالب",
+       "kind": "formula",
+       "formula_row_1": "=IF(B6&\"\"=\"\",\"\",IFERROR(INDEX('الطلاب'!$B$6:$B$305,MATCH(B6&\"\",'الطلاب'!$A$6:$A$305,0))&\"\",\"كود غير موجود\"))"
+      },
+      {
+       "column": "F",
+       "header": "الفصل",
+       "kind": "formula",
+       "formula_row_1": "=IF(B6&\"\"=\"\",\"\",IFERROR(INDEX('الطلاب'!$C$6:$C$305,MATCH(B6&\"\",'الطلاب'!$A$6:$A$305,0))&\"\",\"\"))"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "للمتابعة",
+   "formula_cells": 401,
+   "record_tables": [
+    {
+     "header_row": 6,
+     "first_record_row": 7,
+     "sample_rows_filled": 0,
+     "capacity_last_row": 56,
+     "columns": [
+      {
+       "column": "A",
+       "header": "م",
+       "kind": "formula",
+       "formula_row_1": "=IF(1<=$B$4,1,\"\")"
+      },
+      {
+       "column": "B",
+       "header": "الكود",
+       "kind": "formula",
+       "formula_row_1": "=IF($A7=\"\",\"\",INDEX('الطلاب'!$A$6:$A$305,MATCH($A7,'الطلاب'!$M$6:$M$305,0))&\"\")"
+      },
+      {
+       "column": "C",
+       "header": "الطالب",
+       "kind": "formula",
+       "formula_row_1": "=IF($A7=\"\",\"\",INDEX('الطلاب'!$B$6:$B$305,MATCH($A7,'الطلاب'!$M$6:$M$305,0))&\"\")"
+      },
+      {
+       "column": "D",
+       "header": "الفصل",
+       "kind": "formula",
+       "formula_row_1": "=IF($A7=\"\",\"\",INDEX('الطلاب'!$C$6:$C$305,MATCH($A7,'الطلاب'!$M$6:$M$305,0))&\"\")"
+      },
+      {
+       "column": "E",
+       "header": "نسبة التسليم",
+       "kind": "formula",
+       "formula_row_1": "=IF($A7=\"\",\"\",INDEX('الطلاب'!$H$6:$H$305,MATCH($A7,'الطلاب'!$M$6:$M$305,0)))"
+      },
+      {
+       "column": "F",
+       "header": "لم يسلّم",
+       "kind": "formula",
+       "formula_row_1": "=IF($A7=\"\",\"\",INDEX('الطلاب'!$G$6:$G$305,MATCH($A7,'الطلاب'!$M$6:$M$305,0)))"
+      },
+      {
+       "column": "G",
+       "header": "تنبيهات سلوك",
+       "kind": "formula",
+       "formula_row_1": "=IF($A7=\"\",\"\",INDEX('الطلاب'!$J$6:$J$305,MATCH($A7,'الطلاب'!$M$6:$M$305,0)))"
+      },
+      {
+       "column": "H",
+       "header": "السلوك",
+       "kind": "formula",
+       "formula_row_1": "=IF($A7=\"\",\"\",INDEX('الطلاب'!$L$6:$L$305,MATCH($A7,'الطلاب'!$M$6:$M$305,0))&\"\")"
+      }
+     ]
+    }
+   ],
+   "results": [
+    {
+     "label": "طلاب يحتاجون متابعة",
+     "cell": "B4",
+     "formula": "=COUNTIF('الطلاب'!$K$6:$K$305,\"يحتاج متابعة\")"
+    }
+   ]
+  },
+  {
+   "name": "الملخص",
+   "formula_cells": 92,
+   "record_tables": [
+    {
+     "header_row": 21,
+     "first_record_row": 22,
+     "sample_rows_filled": 0,
+     "capacity_last_row": 31,
+     "columns": [
+      {
+       "column": "A",
+       "header": "الفصل",
+       "kind": "formula",
+       "formula_row_1": "=IF('الإعدادات'!$A$10=\"\",\"\",'الإعدادات'!$A$10)"
+      },
+      {
+       "column": "B",
+       "header": "الطلاب",
+       "kind": "formula",
+       "formula_row_1": "=IF($A22=\"\",\"\",COUNTIFS('الطلاب'!$C$6:$C$305,$A22))"
+      },
+      {
+       "column": "C",
+       "header": "سطور التسليم",
+       "kind": "formula",
+       "formula_row_1": "=IF($A22=\"\",\"\",COUNTIFS('التسليم'!$F$6:$F$2005,$A22))"
+      },
+      {
+       "column": "D",
+       "header": "سلّم",
+       "kind": "formula",
+       "formula_row_1": "=IF($A22=\"\",\"\",COUNTIFS('التسليم'!$F$6:$F$2005,$A22,'التسليم'!$C$6:$C$2005,\"سلّم في الموعد\")+COUNTIFS('التسليم'!$F$6:$F$2005,$A22,'التسليم'!$C$6:$C$2005,\"سلّم متأخرًا\"))"
+      },
+      {
+       "column": "E",
+       "header": "نسبة التسليم",
+       "kind": "formula",
+       "formula_row_1": "=IF($A22=\"\",\"\",IF(C22=0,\"\",ROUND(D22/C22,4)))"
+      },
+      {
+       "column": "F",
+       "header": "يحتاجون متابعة",
+       "kind": "formula",
+       "formula_row_1": "=IF($A22=\"\",\"\",COUNTIFS('الطلاب'!$C$6:$C$305,$A22,'الطلاب'!$K$6:$K$305,\"يحتاج متابعة\"))"
+      },
+      {
+       "column": "G",
+       "header": "ملاحظات إيجابية",
+       "kind": "formula",
+       "formula_row_1": "=IF($A22=\"\",\"\",SUMIFS('الطلاب'!$I$6:$I$305,'الطلاب'!$C$6:$C$305,$A22))"
+      },
+      {
+       "column": "H",
+       "header": "تنبيهات",
+       "kind": "formula",
+       "formula_row_1": "=IF($A22=\"\",\"\",SUMIFS('الطلاب'!$J$6:$J$305,'الطلاب'!$C$6:$C$305,$A22))"
+      }
+     ]
+    }
+   ],
+   "results": [
+    {
+     "label": "عدد الطلاب",
+     "cell": "B5",
+     "formula": "=COUNTIF('الطلاب'!$A$6:$A$305,\"?*\")"
+    },
+    {
+     "label": "عدد الواجبات",
+     "cell": "B6",
+     "formula": "=COUNTIF('الواجبات'!$A$6:$A$305,\"?*\")"
+    },
+    {
+     "label": "سطور التسليم المسجلة",
+     "cell": "B7",
+     "formula": "=COUNTIF('التسليم'!$A$6:$A$2005,\"?*\")"
+    },
+    {
+     "label": "سلّم في الموعد",
+     "cell": "B8",
+     "formula": "=COUNTIF('التسليم'!$C$6:$C$2005,\"سلّم في الموعد\")"
+    },
+    {
+     "label": "سلّم متأخرًا",
+     "cell": "B9",
+     "formula": "=COUNTIF('التسليم'!$C$6:$C$2005,\"سلّم متأخرًا\")"
+    },
+    {
+     "label": "لم يسلّم",
+     "cell": "B10",
+     "formula": "=COUNTIF('التسليم'!$C$6:$C$2005,\"لم يسلّم\")"
+    },
+    {
+     "label": "نسبة التسليم العامة",
+     "cell": "B11",
+     "formula": "=IF(B7=0,\"\",ROUND((B8+B9)/B7,4))"
+    },
+    {
+     "label": "طلاب يحتاجون متابعة",
+     "cell": "B12",
+     "formula": "=COUNTIF('الطلاب'!$K$6:$K$305,\"يحتاج متابعة\")"
+    },
+    {
+     "label": "واجبات لم يكتمل تسجيلها",
+     "cell": "B13",
+     "formula": "=COUNTIF('الواجبات'!$L$6:$L$305,\">0\")"
+    },
+    {
+     "label": "ملاحظات إيجابية",
+     "cell": "B16",
+     "formula": "=COUNTIF('السلوك'!$C$6:$C$1005,\"إيجابي\")"
+    },
+    {
+     "label": "تنبيهات",
+     "cell": "B17",
+     "formula": "=COUNTIF('السلوك'!$C$6:$C$1005,\"تنبيه\")"
+    },
+    {
+     "label": "طلاب في متابعة السلوك",
+     "cell": "B18",
+     "formula": "=COUNTIF('الطلاب'!$L$6:$L$305,\"متابعة سلوك\")"
+    }
+   ]
+  },
+  {
+   "name": "لماذا ما زلت على إكسل؟",
+   "formula_cells": 0
+  }
+ ]
+}

@@ -1,0 +1,458 @@
+{
+ "id": "general-inventory",
+ "file": "softwiro-general-inventory.xlsx",
+ "title": "شيت مخزون محل عام",
+ "language": "ar",
+ "direction": "rtl",
+ "how_it_works": "White cells are typed input; cells whose kind is \"formula\" are calculated and must not be overwritten. Add one record per row under the header row of a record table, keeping the columns in order.",
+ "sheets": [
+  {
+   "name": "ابدأ هنا",
+   "formula_cells": 0
+  },
+  {
+   "name": "الإعدادات",
+   "formula_cells": 0,
+   "settings": [
+    {
+     "label": "تاريخ اليوم",
+     "cell": "B4",
+     "value": "2026-11-01"
+    },
+    {
+     "label": "الصنف الراكد: عدد الأيام بلا حركة",
+     "cell": "B5",
+     "value": 60
+    },
+    {
+     "label": "مضاعف الحد الأدنى لإعادة الطلب",
+     "cell": "B6",
+     "value": 2
+    }
+   ]
+  },
+  {
+   "name": "الأصناف",
+   "formula_cells": 2600,
+   "record_tables": [
+    {
+     "header_row": 5,
+     "first_record_row": 6,
+     "sample_rows_filled": 12,
+     "capacity_last_row": 205,
+     "columns": [
+      {
+       "column": "A",
+       "header": "الكود",
+       "kind": "input",
+       "examples": [
+        "A01",
+        "A02",
+        "A03"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "اسم الصنف",
+       "kind": "input",
+       "examples": [
+        "أرز كيس 5 كجم",
+        "سكر",
+        "زيت عباد الشمس 1 لتر"
+       ]
+      },
+      {
+       "column": "C",
+       "header": "الوحدة",
+       "kind": "input",
+       "examples": [
+        "كيس",
+        "كيلو",
+        "زجاجة"
+       ]
+      },
+      {
+       "column": "D",
+       "header": "سعر الشراء",
+       "kind": "input",
+       "examples": [
+        200,
+        25,
+        60
+       ]
+      },
+      {
+       "column": "E",
+       "header": "سعر البيع",
+       "kind": "input",
+       "examples": [
+        240,
+        30,
+        72
+       ]
+      },
+      {
+       "column": "F",
+       "header": "الحد الأدنى",
+       "kind": "input",
+       "examples": [
+        10,
+        20,
+        15
+       ]
+      },
+      {
+       "column": "G",
+       "header": "إجمالي الوارد",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",SUMIFS('الحركات'!$C$6:$C$1505,'الحركات'!$B$6:$B$1505,A6&\"\",'الحركات'!$D$6:$D$1505,\"وارد\"))"
+      },
+      {
+       "column": "H",
+       "header": "إجمالي المنصرف",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",SUMIFS('الحركات'!$C$6:$C$1505,'الحركات'!$B$6:$B$1505,A6&\"\",'الحركات'!$D$6:$D$1505,\"منصرف\"))"
+      },
+      {
+       "column": "I",
+       "header": "الرصيد الحالي",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",G6-H6)"
+      },
+      {
+       "column": "J",
+       "header": "قيمة المخزون (شراء)",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",ROUND(I6*N(D6),2))"
+      },
+      {
+       "column": "K",
+       "header": "ربح الوحدة",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",E6-D6)"
+      },
+      {
+       "column": "L",
+       "header": "هامش الربح",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",IF(N(E6)>0,(E6-D6)/E6,\"\"))"
+      },
+      {
+       "column": "M",
+       "header": "الربح المتوقع للرصيد",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",ROUND(I6*K6,2))"
+      },
+      {
+       "column": "N",
+       "header": "آخر حركة",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",IFERROR(SUMIFS('الحركات'!$A$6:$A$1505,'الحركات'!$B$6:$B$1505,A6&\"\",'الحركات'!$G$6:$G$1505,1)/COUNTIFS('الحركات'!$B$6:$B$1505,A6&\"\",'الحركات'!$G$6:$G$1505,1),\"\"))"
+      },
+      {
+       "column": "O",
+       "header": "أيام بلا حركة",
+       "kind": "formula",
+       "formula_row_1": "=IF(OR(A6&\"\"=\"\",N6=\"\"),\"\",'الإعدادات'!$B$4-N6)"
+      },
+      {
+       "column": "P",
+       "header": "الحالة",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",IF(N6=\"\",\"بلا حركة\",IF(I6<=0,\"نفد\",IF(I6<N(F6),\"اطلب\",\"متوفر\"))))"
+      },
+      {
+       "column": "Q",
+       "header": "راكد؟",
+       "kind": "formula",
+       "formula_row_1": "=IF(OR(A6&\"\"=\"\",O6=\"\",N(I6)<=0),\"\",IF(O6>='الإعدادات'!$B$5,\"راكد\",\"\"))"
+      },
+      {
+       "column": "R",
+       "header": "كمية الطلب المقترحة",
+       "kind": "formula",
+       "formula_row_1": "=IF(OR(P6=\"نفد\",P6=\"اطلب\"),MAX(0,ROUNDUP(N(F6)*'الإعدادات'!$B$6-I6,0)),\"\")"
+      },
+      {
+       "column": "S",
+       "header": "ترتيب إعادة الطلب",
+       "kind": "formula",
+       "formula_row_1": "=IF(N(R6)>0,COUNTIFS($R$6:$R$205,\">\"&R6)+COUNTIFS($R$6:R6,R6),\"\")"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "الحركات",
+   "formula_cells": 3000,
+   "record_tables": [
+    {
+     "header_row": 5,
+     "first_record_row": 6,
+     "sample_rows_filled": 33,
+     "capacity_last_row": 1505,
+     "columns": [
+      {
+       "column": "A",
+       "header": "التاريخ",
+       "kind": "input",
+       "examples": [
+        "2026-05-01",
+        "2026-05-20",
+        "2026-07-01"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "كود الصنف",
+       "kind": "input",
+       "examples": [
+        "A10",
+        "A10",
+        "A07"
+       ],
+       "allowed_values": {
+        "from_range": "'الأصناف'!$A$6:$A$205"
+       }
+      },
+      {
+       "column": "C",
+       "header": "الكمية",
+       "kind": "input",
+       "examples": [
+        10,
+        2,
+        20
+       ]
+      },
+      {
+       "column": "D",
+       "header": "نوع الحركة",
+       "kind": "input",
+       "examples": [
+        "وارد",
+        "منصرف",
+        "وارد"
+       ],
+       "allowed_values": [
+        "وارد",
+        "منصرف"
+       ]
+      },
+      {
+       "column": "E",
+       "header": "ملاحظة",
+       "kind": "input",
+       "examples": [
+        "رصيد افتتاحي",
+        "بيع",
+        "رصيد افتتاحي"
+       ]
+      },
+      {
+       "column": "F",
+       "header": "اسم الصنف",
+       "kind": "formula",
+       "formula_row_1": "=IF(B6&\"\"=\"\",\"\",IFERROR(INDEX('الأصناف'!$B$6:$B$205,MATCH(B6&\"\",'الأصناف'!$A$6:$A$205,0))&\"\",\"كود غير موجود\"))"
+      },
+      {
+       "column": "G",
+       "header": "آخر حركة للصنف",
+       "kind": "formula",
+       "formula_row_1": "=IF(OR(B6&\"\"=\"\",NOT(ISNUMBER(A6))),\"\",IF(COUNTIFS($B$6:$B$1505,B6&\"\",$A$6:$A$1505,\">\"&A6)=0,1,0))"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "إعادة الطلب",
+   "formula_cells": 502,
+   "record_tables": [
+    {
+     "header_row": 6,
+     "first_record_row": 7,
+     "sample_rows_filled": 0,
+     "capacity_last_row": 56,
+     "columns": [
+      {
+       "column": "A",
+       "header": "م",
+       "kind": "formula",
+       "formula_row_1": "=IF(1<=$B$4,1,\"\")"
+      },
+      {
+       "column": "B",
+       "header": "الكود",
+       "kind": "formula",
+       "formula_row_1": "=IF($A7=\"\",\"\",INDEX('الأصناف'!$A$6:$A$205,MATCH($A7,'الأصناف'!$S$6:$S$205,0))&\"\")"
+      },
+      {
+       "column": "C",
+       "header": "الصنف",
+       "kind": "formula",
+       "formula_row_1": "=IF($A7=\"\",\"\",INDEX('الأصناف'!$B$6:$B$205,MATCH($A7,'الأصناف'!$S$6:$S$205,0))&\"\")"
+      },
+      {
+       "column": "D",
+       "header": "الوحدة",
+       "kind": "formula",
+       "formula_row_1": "=IF($A7=\"\",\"\",INDEX('الأصناف'!$C$6:$C$205,MATCH($A7,'الأصناف'!$S$6:$S$205,0))&\"\")"
+      },
+      {
+       "column": "E",
+       "header": "الرصيد",
+       "kind": "formula",
+       "formula_row_1": "=IF($A7=\"\",\"\",INDEX('الأصناف'!$I$6:$I$205,MATCH($A7,'الأصناف'!$S$6:$S$205,0)))"
+      },
+      {
+       "column": "F",
+       "header": "الحد الأدنى",
+       "kind": "formula",
+       "formula_row_1": "=IF($A7=\"\",\"\",INDEX('الأصناف'!$F$6:$F$205,MATCH($A7,'الأصناف'!$S$6:$S$205,0)))"
+      },
+      {
+       "column": "G",
+       "header": "الكمية المقترحة",
+       "kind": "formula",
+       "formula_row_1": "=IF($A7=\"\",\"\",INDEX('الأصناف'!$R$6:$R$205,MATCH($A7,'الأصناف'!$S$6:$S$205,0)))"
+      },
+      {
+       "column": "H",
+       "header": "سعر الشراء",
+       "kind": "formula",
+       "formula_row_1": "=IF($A7=\"\",\"\",INDEX('الأصناف'!$D$6:$D$205,MATCH($A7,'الأصناف'!$S$6:$S$205,0)))"
+      },
+      {
+       "column": "I",
+       "header": "تكلفة الطلب",
+       "kind": "formula",
+       "formula_row_1": "=IF($A7=\"\",\"\",ROUND(G7*H7,2))"
+      },
+      {
+       "column": "J",
+       "header": "الحالة",
+       "kind": "formula",
+       "formula_row_1": "=IF($A7=\"\",\"\",INDEX('الأصناف'!$P$6:$P$205,MATCH($A7,'الأصناف'!$S$6:$S$205,0))&\"\")"
+      }
+     ]
+    }
+   ],
+   "results": [
+    {
+     "label": "عدد الأصناف المطلوب طلبها",
+     "cell": "B4",
+     "formula": "=COUNT('الأصناف'!$S$6:$S$205)"
+    },
+    {
+     "label": "تكلفة الطلب بسعر الشراء",
+     "cell": "B5",
+     "formula": "=SUM(I7:I56)"
+    }
+   ]
+  },
+  {
+   "name": "الملخص",
+   "formula_cells": 20,
+   "record_tables": [
+    {
+     "header_row": 21,
+     "first_record_row": 22,
+     "sample_rows_filled": 4,
+     "capacity_last_row": 25,
+     "columns": [
+      {
+       "column": "A",
+       "header": "الحالة",
+       "kind": "input",
+       "examples": [
+        "متوفر",
+        "اطلب",
+        "نفد"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "عدد الأصناف",
+       "kind": "formula",
+       "formula_row_1": "=COUNTIF('الأصناف'!$P$6:$P$205,A22)"
+      },
+      {
+       "column": "C",
+       "header": "القيمة (شراء)",
+       "kind": "formula",
+       "formula_row_1": "=SUMIFS('الأصناف'!$J$6:$J$205,'الأصناف'!$P$6:$P$205,A22)"
+      }
+     ]
+    }
+   ],
+   "results": [
+    {
+     "label": "عدد الأصناف",
+     "cell": "B5",
+     "formula": "=COUNTIF('الأصناف'!$A$6:$A$205,\"?*\")"
+    },
+    {
+     "label": "قيمة المخزون بسعر الشراء",
+     "cell": "B6",
+     "formula": "=SUM('الأصناف'!$J$6:$J$205)"
+    },
+    {
+     "label": "الربح المتوقع إذا بيع الرصيد كله",
+     "cell": "B7",
+     "formula": "=SUM('الأصناف'!$M$6:$M$205)"
+    },
+    {
+     "label": "قيمة المخزون بسعر البيع",
+     "cell": "B8",
+     "formula": "=B6+B7"
+    },
+    {
+     "label": "هامش الربح المتوقع",
+     "cell": "B9",
+     "formula": "=IF(B8=0,\"\",B7/B8)"
+    },
+    {
+     "label": "أصناف تحت الحد الأدنى (اطلب)",
+     "cell": "B12",
+     "formula": "=COUNTIF('الأصناف'!$P$6:$P$205,\"اطلب\")"
+    },
+    {
+     "label": "أصناف نفدت",
+     "cell": "B13",
+     "formula": "=COUNTIF('الأصناف'!$P$6:$P$205,\"نفد\")"
+    },
+    {
+     "label": "تكلفة إعادة طلبها بسعر الشراء",
+     "cell": "B14",
+     "formula": "='إعادة الطلب'!B5"
+    },
+    {
+     "label": "أصناف راكدة",
+     "cell": "B15",
+     "formula": "=COUNTIF('الأصناف'!$Q$6:$Q$205,\"راكد\")"
+    },
+    {
+     "label": "قيمة الأصناف الراكدة (شراء)",
+     "cell": "B16",
+     "formula": "=SUMIFS('الأصناف'!$J$6:$J$205,'الأصناف'!$Q$6:$Q$205,\"راكد\")"
+    },
+    {
+     "label": "نسبة الراكد من قيمة المخزون",
+     "cell": "B17",
+     "formula": "=IF(B6=0,\"\",B16/B6)"
+    },
+    {
+     "label": "عدد الحركات المسجلة",
+     "cell": "B18",
+     "formula": "=COUNT('الحركات'!$A$6:$A$1505)"
+    }
+   ]
+  },
+  {
+   "name": "لماذا ما زلت على إكسل؟",
+   "formula_cells": 0
+  }
+ ]
+}

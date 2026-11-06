@@ -1,0 +1,534 @@
+{
+ "id": "class-timetable",
+ "file": "softwiro-class-timetable.xlsx",
+ "title": "شيت جدول حصص المدرسة",
+ "language": "ar",
+ "direction": "rtl",
+ "how_it_works": "White cells are typed input; cells whose kind is \"formula\" are calculated and must not be overwritten. Add one record per row under the header row of a record table, keeping the columns in order.",
+ "sheets": [
+  {
+   "name": "ابدأ هنا",
+   "formula_cells": 0
+  },
+  {
+   "name": "الإعدادات",
+   "formula_cells": 0,
+   "settings": [
+    {
+     "label": "اسم المدرسة",
+     "cell": "B4",
+     "value": "مدرسة المثال الإعدادية"
+    },
+    {
+     "label": "أيام الدراسة في الأسبوع",
+     "cell": "B5",
+     "value": 5
+    },
+    {
+     "label": "عدد الحصص في اليوم",
+     "cell": "B6",
+     "value": 6
+    }
+   ]
+  },
+  {
+   "name": "المعلمون",
+   "formula_cells": 800,
+   "record_tables": [
+    {
+     "header_row": 5,
+     "first_record_row": 6,
+     "sample_rows_filled": 6,
+     "capacity_last_row": 205,
+     "columns": [
+      {
+       "column": "A",
+       "header": "كود المعلم",
+       "kind": "input",
+       "examples": [
+        "M01",
+        "M02",
+        "M03"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "اسم المعلم",
+       "kind": "input",
+       "examples": [
+        "أ. سامي رضا",
+        "أ. نهى فؤاد",
+        "أ. وائل صبحي"
+       ]
+      },
+      {
+       "column": "C",
+       "header": "المادة",
+       "kind": "input",
+       "examples": [
+        "عربي",
+        "رياضيات",
+        "علوم"
+       ]
+      },
+      {
+       "column": "D",
+       "header": "النصاب الأسبوعي",
+       "kind": "input",
+       "examples": [
+        12,
+        12,
+        12
+       ]
+      },
+      {
+       "column": "E",
+       "header": "الحصص المسجلة",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",COUNTIFS('الحصص'!$E$6:$E$405,A6&\"\"))"
+      },
+      {
+       "column": "F",
+       "header": "الفرق عن النصاب",
+       "kind": "formula",
+       "formula_row_1": "=IF(OR(E6=\"\",NOT(ISNUMBER(D6))),\"\",E6-D6)"
+      },
+      {
+       "column": "G",
+       "header": "الحالة",
+       "kind": "formula",
+       "formula_row_1": "=IF(F6=\"\",\"\",IF(F6>0,\"فوق النصاب\",IF(F6<0,\"أقل من النصاب\",\"مكتمل\")))"
+      },
+      {
+       "column": "H",
+       "header": "حصص متعارضة",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",COUNTIFS('الحصص'!$E$6:$E$405,A6&\"\",'الحصص'!$G$6:$G$405,\"تعارض معلم\"))"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "الفصول",
+   "formula_cells": 1000,
+   "record_tables": [
+    {
+     "header_row": 5,
+     "first_record_row": 6,
+     "sample_rows_filled": 3,
+     "capacity_last_row": 205,
+     "columns": [
+      {
+       "column": "A",
+       "header": "كود الفصل",
+       "kind": "input",
+       "examples": [
+        "ف1",
+        "ف2",
+        "ف3"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "اسم الفصل",
+       "kind": "input",
+       "examples": [
+        "الصف الأول - أ",
+        "الصف الأول - ب",
+        "الصف الثاني - أ"
+       ]
+      },
+      {
+       "column": "C",
+       "header": "حصص مسجلة",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",COUNTIFS('الحصص'!$C$6:$C$405,A6&\"\"))"
+      },
+      {
+       "column": "D",
+       "header": "خانات مشغولة",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",SUMIFS('الحصص'!$L$6:$L$405,'الحصص'!$C$6:$C$405,A6&\"\"))"
+      },
+      {
+       "column": "E",
+       "header": "خانات فارغة",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",MAX(0,'الإعدادات'!$B$5*'الإعدادات'!$B$6-D6))"
+      },
+      {
+       "column": "F",
+       "header": "حصص متعارضة",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",COUNTIFS('الحصص'!$C$6:$C$405,A6&\"\",'الحصص'!$H$6:$H$405,\"تعارض فصل\"))"
+      },
+      {
+       "column": "G",
+       "header": "الحالة",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",IF(F6>0,\"فيه تعارض\",IF(E6=0,\"مكتمل\",\"فيه خانات فارغة\")))"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "الحصص",
+   "formula_cells": 2800,
+   "record_tables": [
+    {
+     "header_row": 5,
+     "first_record_row": 6,
+     "sample_rows_filled": 60,
+     "capacity_last_row": 405,
+     "columns": [
+      {
+       "column": "A",
+       "header": "اليوم",
+       "kind": "input",
+       "examples": [
+        "الأحد",
+        "الأحد",
+        "الأحد"
+       ],
+       "allowed_values": [
+        "الأحد",
+        "الاثنين",
+        "الثلاثاء",
+        "الأربعاء",
+        "الخميس"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "الفترة",
+       "kind": "input",
+       "examples": [
+        1,
+        2,
+        3
+       ],
+       "allowed_values": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8"
+       ]
+      },
+      {
+       "column": "C",
+       "header": "كود الفصل",
+       "kind": "input",
+       "examples": [
+        "ف1",
+        "ف1",
+        "ف1"
+       ],
+       "allowed_values": {
+        "from_range": "'الفصول'!$A$6:$A$205"
+       }
+      },
+      {
+       "column": "D",
+       "header": "المادة",
+       "kind": "input",
+       "examples": [
+        "رياضيات",
+        "علوم",
+        "إنجليزي"
+       ]
+      },
+      {
+       "column": "E",
+       "header": "كود المعلم",
+       "kind": "input",
+       "examples": [
+        "M02",
+        "M03",
+        "M04"
+       ],
+       "allowed_values": {
+        "from_range": "'المعلمون'!$A$6:$A$205"
+       }
+      },
+      {
+       "column": "F",
+       "header": "اسم المعلم",
+       "kind": "formula",
+       "formula_row_1": "=IF(E6&\"\"=\"\",\"\",IFERROR(INDEX('المعلمون'!$B$6:$B$205,MATCH(E6&\"\",'المعلمون'!$A$6:$A$205,0))&\"\",\"كود غير موجود\"))"
+      },
+      {
+       "column": "G",
+       "header": "تعارض معلم",
+       "kind": "formula",
+       "formula_row_1": "=IF(K6=\"\",\"\",IF(COUNTIFS($K$6:$K$405,K6)>1,\"تعارض معلم\",\"\"))"
+      },
+      {
+       "column": "H",
+       "header": "تعارض فصل",
+       "kind": "formula",
+       "formula_row_1": "=IF(J6=\"\",\"\",IF(COUNTIFS($J$6:$J$405,J6)>1,\"تعارض فصل\",\"\"))"
+      },
+      {
+       "column": "I",
+       "header": "الحالة",
+       "kind": "formula",
+       "formula_row_1": "=IF(OR(J6=\"\",K6=\"\"),\"\",IF(AND(G6<>\"\",H6<>\"\"),\"تعارض معلم وفصل\",IF(G6<>\"\",G6,IF(H6<>\"\",H6,\"سليم\"))))"
+      },
+      {
+       "column": "J",
+       "header": "مفتاح الفصل",
+       "kind": "formula",
+       "formula_row_1": "=IF(OR(C6&\"\"=\"\",A6&\"\"=\"\",B6&\"\"=\"\"),\"\",C6&\"|\"&A6&\"|\"&B6)"
+      },
+      {
+       "column": "K",
+       "header": "مفتاح المعلم",
+       "kind": "formula",
+       "formula_row_1": "=IF(OR(E6&\"\"=\"\",A6&\"\"=\"\",B6&\"\"=\"\"),\"\",E6&\"|\"&A6&\"|\"&B6)"
+      },
+      {
+       "column": "L",
+       "header": "أول ظهور للخانة",
+       "kind": "formula",
+       "formula_row_1": "=IF(J6=\"\",\"\",IF(COUNTIFS($J$6:J6,J6)=1,1,0))"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "جدول فصل",
+   "formula_cells": 41,
+   "record_tables": [
+    {
+     "header_row": 6,
+     "first_record_row": 7,
+     "sample_rows_filled": 8,
+     "capacity_last_row": 14,
+     "columns": [
+      {
+       "column": "A",
+       "header": "الفترة",
+       "kind": "input",
+       "examples": [
+        1,
+        2,
+        3
+       ]
+      },
+      {
+       "column": "B",
+       "header": "الأحد",
+       "kind": "formula",
+       "formula_row_1": "=IF($B$3&\"\"=\"\",\"\",IFERROR(INDEX('الحصص'!$D$6:$D$405,MATCH($B$3&\"|\"&B$6&\"|\"&$A7,'الحصص'!$J$6:$J$405,0))&\" - \"&INDEX('الحصص'!$F$6:$F$405,MATCH($B$3&\"|\"&B$6&\"|\"&$A7,'الحصص'!$J$6:$J$405,0))&IF(COUNTIFS('الحصص'!$J$6:$J$405,$B$3&\"|\"&B$6&\"|\"&$A7)>1,\" (تعارض)\",\"\"),\"\"))"
+      },
+      {
+       "column": "C",
+       "header": "الاثنين",
+       "kind": "formula",
+       "formula_row_1": "=IF($B$3&\"\"=\"\",\"\",IFERROR(INDEX('الحصص'!$D$6:$D$405,MATCH($B$3&\"|\"&C$6&\"|\"&$A7,'الحصص'!$J$6:$J$405,0))&\" - \"&INDEX('الحصص'!$F$6:$F$405,MATCH($B$3&\"|\"&C$6&\"|\"&$A7,'الحصص'!$J$6:$J$405,0))&IF(COUNTIFS('الحصص'!$J$6:$J$405,$B$3&\"|\"&C$6&\"|\"&$A7)>1,\" (تعارض)\",\"\"),\"\"))"
+      },
+      {
+       "column": "D",
+       "header": "الثلاثاء",
+       "kind": "formula",
+       "formula_row_1": "=IF($B$3&\"\"=\"\",\"\",IFERROR(INDEX('الحصص'!$D$6:$D$405,MATCH($B$3&\"|\"&D$6&\"|\"&$A7,'الحصص'!$J$6:$J$405,0))&\" - \"&INDEX('الحصص'!$F$6:$F$405,MATCH($B$3&\"|\"&D$6&\"|\"&$A7,'الحصص'!$J$6:$J$405,0))&IF(COUNTIFS('الحصص'!$J$6:$J$405,$B$3&\"|\"&D$6&\"|\"&$A7)>1,\" (تعارض)\",\"\"),\"\"))"
+      },
+      {
+       "column": "E",
+       "header": "الأربعاء",
+       "kind": "formula",
+       "formula_row_1": "=IF($B$3&\"\"=\"\",\"\",IFERROR(INDEX('الحصص'!$D$6:$D$405,MATCH($B$3&\"|\"&E$6&\"|\"&$A7,'الحصص'!$J$6:$J$405,0))&\" - \"&INDEX('الحصص'!$F$6:$F$405,MATCH($B$3&\"|\"&E$6&\"|\"&$A7,'الحصص'!$J$6:$J$405,0))&IF(COUNTIFS('الحصص'!$J$6:$J$405,$B$3&\"|\"&E$6&\"|\"&$A7)>1,\" (تعارض)\",\"\"),\"\"))"
+      },
+      {
+       "column": "F",
+       "header": "الخميس",
+       "kind": "formula",
+       "formula_row_1": "=IF($B$3&\"\"=\"\",\"\",IFERROR(INDEX('الحصص'!$D$6:$D$405,MATCH($B$3&\"|\"&F$6&\"|\"&$A7,'الحصص'!$J$6:$J$405,0))&\" - \"&INDEX('الحصص'!$F$6:$F$405,MATCH($B$3&\"|\"&F$6&\"|\"&$A7,'الحصص'!$J$6:$J$405,0))&IF(COUNTIFS('الحصص'!$J$6:$J$405,$B$3&\"|\"&F$6&\"|\"&$A7)>1,\" (تعارض)\",\"\"),\"\"))"
+      }
+     ]
+    }
+   ],
+   "settings": [
+    {
+     "label": "كود الفصل",
+     "cell": "B3",
+     "value": "ف1"
+    }
+   ],
+   "results": [
+    {
+     "label": "الاسم",
+     "cell": "B4",
+     "formula": "=IF(B3&\"\"=\"\",\"\",IFERROR(INDEX(الفصول!$B$6:$B$205,MATCH(B3&\"\",الفصول!$A$6:$A$205,0)),\"كود غير موجود\"))"
+    }
+   ]
+  },
+  {
+   "name": "جدول معلم",
+   "formula_cells": 41,
+   "record_tables": [
+    {
+     "header_row": 6,
+     "first_record_row": 7,
+     "sample_rows_filled": 8,
+     "capacity_last_row": 14,
+     "columns": [
+      {
+       "column": "A",
+       "header": "الفترة",
+       "kind": "input",
+       "examples": [
+        1,
+        2,
+        3
+       ]
+      },
+      {
+       "column": "B",
+       "header": "الأحد",
+       "kind": "formula",
+       "formula_row_1": "=IF($B$3&\"\"=\"\",\"\",IFERROR(INDEX('الحصص'!$C$6:$C$405,MATCH($B$3&\"|\"&B$6&\"|\"&$A7,'الحصص'!$K$6:$K$405,0))&\" - \"&INDEX('الحصص'!$D$6:$D$405,MATCH($B$3&\"|\"&B$6&\"|\"&$A7,'الحصص'!$K$6:$K$405,0))&IF(COUNTIFS('الحصص'!$K$6:$K$405,$B$3&\"|\"&B$6&\"|\"&$A7)>1,\" (تعارض)\",\"\"),\"\"))"
+      },
+      {
+       "column": "C",
+       "header": "الاثنين",
+       "kind": "formula",
+       "formula_row_1": "=IF($B$3&\"\"=\"\",\"\",IFERROR(INDEX('الحصص'!$C$6:$C$405,MATCH($B$3&\"|\"&C$6&\"|\"&$A7,'الحصص'!$K$6:$K$405,0))&\" - \"&INDEX('الحصص'!$D$6:$D$405,MATCH($B$3&\"|\"&C$6&\"|\"&$A7,'الحصص'!$K$6:$K$405,0))&IF(COUNTIFS('الحصص'!$K$6:$K$405,$B$3&\"|\"&C$6&\"|\"&$A7)>1,\" (تعارض)\",\"\"),\"\"))"
+      },
+      {
+       "column": "D",
+       "header": "الثلاثاء",
+       "kind": "formula",
+       "formula_row_1": "=IF($B$3&\"\"=\"\",\"\",IFERROR(INDEX('الحصص'!$C$6:$C$405,MATCH($B$3&\"|\"&D$6&\"|\"&$A7,'الحصص'!$K$6:$K$405,0))&\" - \"&INDEX('الحصص'!$D$6:$D$405,MATCH($B$3&\"|\"&D$6&\"|\"&$A7,'الحصص'!$K$6:$K$405,0))&IF(COUNTIFS('الحصص'!$K$6:$K$405,$B$3&\"|\"&D$6&\"|\"&$A7)>1,\" (تعارض)\",\"\"),\"\"))"
+      },
+      {
+       "column": "E",
+       "header": "الأربعاء",
+       "kind": "formula",
+       "formula_row_1": "=IF($B$3&\"\"=\"\",\"\",IFERROR(INDEX('الحصص'!$C$6:$C$405,MATCH($B$3&\"|\"&E$6&\"|\"&$A7,'الحصص'!$K$6:$K$405,0))&\" - \"&INDEX('الحصص'!$D$6:$D$405,MATCH($B$3&\"|\"&E$6&\"|\"&$A7,'الحصص'!$K$6:$K$405,0))&IF(COUNTIFS('الحصص'!$K$6:$K$405,$B$3&\"|\"&E$6&\"|\"&$A7)>1,\" (تعارض)\",\"\"),\"\"))"
+      },
+      {
+       "column": "F",
+       "header": "الخميس",
+       "kind": "formula",
+       "formula_row_1": "=IF($B$3&\"\"=\"\",\"\",IFERROR(INDEX('الحصص'!$C$6:$C$405,MATCH($B$3&\"|\"&F$6&\"|\"&$A7,'الحصص'!$K$6:$K$405,0))&\" - \"&INDEX('الحصص'!$D$6:$D$405,MATCH($B$3&\"|\"&F$6&\"|\"&$A7,'الحصص'!$K$6:$K$405,0))&IF(COUNTIFS('الحصص'!$K$6:$K$405,$B$3&\"|\"&F$6&\"|\"&$A7)>1,\" (تعارض)\",\"\"),\"\"))"
+      }
+     ]
+    }
+   ],
+   "settings": [
+    {
+     "label": "كود المعلم",
+     "cell": "B3",
+     "value": "M02"
+    }
+   ],
+   "results": [
+    {
+     "label": "الاسم",
+     "cell": "B4",
+     "formula": "=IF(B3&\"\"=\"\",\"\",IFERROR(INDEX(المعلمون!$B$6:$B$205,MATCH(B3&\"\",المعلمون!$A$6:$A$205,0)),\"كود غير موجود\"))"
+    }
+   ]
+  },
+  {
+   "name": "الملخص",
+   "formula_cells": 20,
+   "record_tables": [
+    {
+     "header_row": 19,
+     "first_record_row": 20,
+     "sample_rows_filled": 5,
+     "capacity_last_row": 24,
+     "columns": [
+      {
+       "column": "A",
+       "header": "اليوم",
+       "kind": "input",
+       "examples": [
+        "الأحد",
+        "الاثنين",
+        "الثلاثاء"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "عدد الحصص",
+       "kind": "formula",
+       "formula_row_1": "=COUNTIF('الحصص'!$A$6:$A$405,A20)"
+      },
+      {
+       "column": "C",
+       "header": "فيها تعارض",
+       "kind": "formula",
+       "formula_row_1": "=COUNTIFS('الحصص'!$A$6:$A$405,A20,'الحصص'!$I$6:$I$405,\"<>سليم\")"
+      }
+     ]
+    }
+   ],
+   "results": [
+    {
+     "label": "الحصص المسجلة",
+     "cell": "B5",
+     "formula": "=COUNTIF('الحصص'!$A$6:$A$405,\"?*\")"
+    },
+    {
+     "label": "حصص سليمة",
+     "cell": "B6",
+     "formula": "=COUNTIF('الحصص'!$I$6:$I$405,\"سليم\")"
+    },
+    {
+     "label": "حصص فيها تعارض معلم",
+     "cell": "B7",
+     "formula": "=COUNTIF('الحصص'!$G$6:$G$405,\"تعارض معلم\")"
+    },
+    {
+     "label": "حصص فيها تعارض فصل",
+     "cell": "B8",
+     "formula": "=COUNTIF('الحصص'!$H$6:$H$405,\"تعارض فصل\")"
+    },
+    {
+     "label": "الخانات الفارغة في كل الفصول",
+     "cell": "B9",
+     "formula": "=SUM('الفصول'!$E$6:$E$205)"
+    },
+    {
+     "label": "عدد المعلمين",
+     "cell": "B12",
+     "formula": "=COUNTIF('المعلمون'!$A$6:$A$205,\"?*\")"
+    },
+    {
+     "label": "معلمون فوق النصاب",
+     "cell": "B13",
+     "formula": "=COUNTIF('المعلمون'!$G$6:$G$205,\"فوق النصاب\")"
+    },
+    {
+     "label": "معلمون أقل من النصاب",
+     "cell": "B14",
+     "formula": "=COUNTIF('المعلمون'!$G$6:$G$205,\"أقل من النصاب\")"
+    },
+    {
+     "label": "عدد الفصول",
+     "cell": "B15",
+     "formula": "=COUNTIF('الفصول'!$A$6:$A$205,\"?*\")"
+    },
+    {
+     "label": "فصول فيها تعارض",
+     "cell": "B16",
+     "formula": "=COUNTIF('الفصول'!$G$6:$G$205,\"فيه تعارض\")"
+    }
+   ]
+  },
+  {
+   "name": "لماذا ما زلت على إكسل؟",
+   "formula_cells": 0
+  }
+ ]
+}

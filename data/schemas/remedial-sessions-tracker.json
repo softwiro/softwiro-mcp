@@ -1,0 +1,461 @@
+{
+ "id": "remedial-sessions-tracker",
+ "file": "softwiro-remedial-sessions-tracker.xlsx",
+ "title": "شيت متابعة حصص التقوية",
+ "language": "ar",
+ "direction": "rtl",
+ "how_it_works": "White cells are typed input; cells whose kind is \"formula\" are calculated and must not be overwritten. Add one record per row under the header row of a record table, keeping the columns in order.",
+ "sheets": [
+  {
+   "name": "ابدأ هنا",
+   "formula_cells": 0
+  },
+  {
+   "name": "الإعدادات",
+   "formula_cells": 0,
+   "settings": [
+    {
+     "label": "أقل فرق درجات يُعدّ تحسنًا",
+     "cell": "B4",
+     "value": 5
+    },
+    {
+     "label": "تنبيه الحضور تحت نسبة",
+     "cell": "B5",
+     "value": 0.5
+    }
+   ]
+  },
+  {
+   "name": "الطلاب",
+   "formula_cells": 2000,
+   "record_tables": [
+    {
+     "header_row": 5,
+     "first_record_row": 6,
+     "sample_rows_filled": 11,
+     "capacity_last_row": 205,
+     "columns": [
+      {
+       "column": "A",
+       "header": "كود الطالب",
+       "kind": "input",
+       "examples": [
+        "R01",
+        "R02",
+        "R03"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "الاسم الأول",
+       "kind": "input",
+       "examples": [
+        "أحمد",
+        "منى",
+        "كريم"
+       ]
+      },
+      {
+       "column": "C",
+       "header": "المادة",
+       "kind": "input",
+       "examples": [
+        "الرياضيات",
+        "الرياضيات",
+        "اللغة العربية"
+       ],
+       "allowed_values": [
+        "الرياضيات",
+        "اللغة العربية",
+        "اللغة الإنجليزية",
+        "العلوم",
+        "الفيزياء"
+       ]
+      },
+      {
+       "column": "D",
+       "header": "سبب التقوية",
+       "kind": "input",
+       "examples": [
+        "ضعف في الأساسيات",
+        "صعوبة في فهم الدرس",
+        "ضعف في الأساسيات"
+       ],
+       "allowed_values": [
+        "ضعف في الأساسيات",
+        "غياب سابق",
+        "صعوبة في فهم الدرس",
+        "بطء في الحل",
+        "استعداد للامتحان"
+       ]
+      },
+      {
+       "column": "E",
+       "header": "الدرجة قبل",
+       "kind": "input",
+       "examples": [
+        45,
+        50,
+        40
+       ]
+      },
+      {
+       "column": "F",
+       "header": "الدرجة بعد",
+       "kind": "input",
+       "examples": [
+        62,
+        53,
+        58
+       ]
+      },
+      {
+       "column": "G",
+       "header": "الحصص المسجلة",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",COUNTIFS('الحصص'!$B$6:$B$3005,A6&\"\"))"
+      },
+      {
+       "column": "H",
+       "header": "الحصص المحضورة",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",COUNTIFS('الحصص'!$B$6:$B$3005,A6&\"\",'الحصص'!$D$6:$D$3005,\"حضر\"))"
+      },
+      {
+       "column": "I",
+       "header": "حصص الغياب",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",COUNTIFS('الحصص'!$B$6:$B$3005,A6&\"\",'الحصص'!$D$6:$D$3005,\"غاب\"))"
+      },
+      {
+       "column": "J",
+       "header": "دقائق الحضور",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",SUMIFS('الحصص'!$C$6:$C$3005,'الحصص'!$B$6:$B$3005,A6&\"\",'الحصص'!$D$6:$D$3005,\"حضر\"))"
+      },
+      {
+       "column": "K",
+       "header": "نسبة الحضور",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",IF(H6+I6=0,\"\",H6/(H6+I6)))"
+      },
+      {
+       "column": "L",
+       "header": "فرق التحسن",
+       "kind": "formula",
+       "formula_row_1": "=IF(OR(A6&\"\"=\"\",NOT(ISNUMBER(E6)),NOT(ISNUMBER(F6))),\"\",F6-E6)"
+      },
+      {
+       "column": "M",
+       "header": "الحالة",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",IF(L6=\"\",\"بانتظار الدرجة\",IF(L6>='الإعدادات'!$B$4,\"تحسّن\",\"لم يتحسن\")))"
+      },
+      {
+       "column": "N",
+       "header": "مكتمل",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",IF(L6=\"\",0,1))"
+      },
+      {
+       "column": "O",
+       "header": "ترتيب المتابعة",
+       "kind": "formula",
+       "formula_row_1": "=IF(M6=\"لم يتحسن\",COUNTIFS($M$6:$M$205,\"لم يتحسن\",$L$6:$L$205,\"<\"&L6)+COUNTIFS($M$6:M6,\"لم يتحسن\",$L$6:L6,L6),\"\")"
+      },
+      {
+       "column": "P",
+       "header": "تنبيه الحضور",
+       "kind": "formula",
+       "formula_row_1": "=IF(K6=\"\",\"\",IF(K6<'الإعدادات'!$B$5,\"حضور ضعيف\",\"\"))"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "الحصص",
+   "formula_cells": 6000,
+   "record_tables": [
+    {
+     "header_row": 5,
+     "first_record_row": 6,
+     "sample_rows_filled": 29,
+     "capacity_last_row": 3005,
+     "columns": [
+      {
+       "column": "A",
+       "header": "التاريخ",
+       "kind": "input",
+       "examples": [
+        "2026-10-04",
+        "2026-10-04",
+        "2026-10-05"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "كود الطالب",
+       "kind": "input",
+       "examples": [
+        "R01",
+        "R07",
+        "R02"
+       ],
+       "allowed_values": {
+        "from_range": "'الطلاب'!$A$6:$A$205"
+       }
+      },
+      {
+       "column": "C",
+       "header": "المدة (دقيقة)",
+       "kind": "input",
+       "examples": [
+        60,
+        90,
+        45
+       ]
+      },
+      {
+       "column": "D",
+       "header": "الحضور",
+       "kind": "input",
+       "examples": [
+        "حضر",
+        "حضر",
+        "حضر"
+       ],
+       "allowed_values": [
+        "حضر",
+        "غاب"
+       ]
+      },
+      {
+       "column": "E",
+       "header": "ملاحظة",
+       "kind": "input"
+      },
+      {
+       "column": "F",
+       "header": "الاسم الأول",
+       "kind": "formula",
+       "formula_row_1": "=IF(B6&\"\"=\"\",\"\",IFERROR(INDEX('الطلاب'!$B$6:$B$205,MATCH(B6&\"\",'الطلاب'!$A$6:$A$205,0))&\"\",\"كود غير موجود\"))"
+      },
+      {
+       "column": "G",
+       "header": "المادة",
+       "kind": "formula",
+       "formula_row_1": "=IF(B6&\"\"=\"\",\"\",IFERROR(INDEX('الطلاب'!$C$6:$C$205,MATCH(B6&\"\",'الطلاب'!$A$6:$A$205,0))&\"\",\"\"))"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "للمتابعة",
+   "formula_cells": 401,
+   "record_tables": [
+    {
+     "header_row": 6,
+     "first_record_row": 7,
+     "sample_rows_filled": 0,
+     "capacity_last_row": 56,
+     "columns": [
+      {
+       "column": "A",
+       "header": "م",
+       "kind": "formula",
+       "formula_row_1": "=IF(1<=$B$4,1,\"\")"
+      },
+      {
+       "column": "B",
+       "header": "الكود",
+       "kind": "formula",
+       "formula_row_1": "=IF($A7=\"\",\"\",INDEX('الطلاب'!$A$6:$A$205,MATCH($A7,'الطلاب'!$O$6:$O$205,0))&\"\")"
+      },
+      {
+       "column": "C",
+       "header": "الاسم الأول",
+       "kind": "formula",
+       "formula_row_1": "=IF($A7=\"\",\"\",INDEX('الطلاب'!$B$6:$B$205,MATCH($A7,'الطلاب'!$O$6:$O$205,0))&\"\")"
+      },
+      {
+       "column": "D",
+       "header": "المادة",
+       "kind": "formula",
+       "formula_row_1": "=IF($A7=\"\",\"\",INDEX('الطلاب'!$C$6:$C$205,MATCH($A7,'الطلاب'!$O$6:$O$205,0))&\"\")"
+      },
+      {
+       "column": "E",
+       "header": "السبب",
+       "kind": "formula",
+       "formula_row_1": "=IF($A7=\"\",\"\",INDEX('الطلاب'!$D$6:$D$205,MATCH($A7,'الطلاب'!$O$6:$O$205,0))&\"\")"
+      },
+      {
+       "column": "F",
+       "header": "الحصص المحضورة",
+       "kind": "formula",
+       "formula_row_1": "=IF($A7=\"\",\"\",INDEX('الطلاب'!$H$6:$H$205,MATCH($A7,'الطلاب'!$O$6:$O$205,0)))"
+      },
+      {
+       "column": "G",
+       "header": "فرق التحسن",
+       "kind": "formula",
+       "formula_row_1": "=IF($A7=\"\",\"\",INDEX('الطلاب'!$L$6:$L$205,MATCH($A7,'الطلاب'!$O$6:$O$205,0)))"
+      },
+      {
+       "column": "H",
+       "header": "نسبة الحضور",
+       "kind": "formula",
+       "formula_row_1": "=IF($A7=\"\",\"\",INDEX('الطلاب'!$K$6:$K$205,MATCH($A7,'الطلاب'!$O$6:$O$205,0)))"
+      }
+     ]
+    }
+   ],
+   "results": [
+    {
+     "label": "عدد من لم يتحسنوا",
+     "cell": "B4",
+     "formula": "=COUNTIF('الطلاب'!$M$6:$M$205,\"لم يتحسن\")"
+    }
+   ]
+  },
+  {
+   "name": "الملخص",
+   "formula_cells": 44,
+   "record_tables": [
+    {
+     "header_row": 25,
+     "first_record_row": 26,
+     "sample_rows_filled": 5,
+     "capacity_last_row": 30,
+     "columns": [
+      {
+       "column": "A",
+       "header": "المادة",
+       "kind": "input",
+       "examples": [
+        "الرياضيات",
+        "اللغة العربية",
+        "اللغة الإنجليزية"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "الطلاب",
+       "kind": "formula",
+       "formula_row_1": "=COUNTIFS('الطلاب'!$C$6:$C$205,A26)"
+      },
+      {
+       "column": "C",
+       "header": "الحصص المحضورة",
+       "kind": "formula",
+       "formula_row_1": "=SUMIFS('الطلاب'!$H$6:$H$205,'الطلاب'!$C$6:$C$205,A26)"
+      },
+      {
+       "column": "D",
+       "header": "متوسط قبل",
+       "kind": "formula",
+       "formula_row_1": "=IF(COUNTIFS('الطلاب'!$C$6:$C$205,A26,'الطلاب'!$N$6:$N$205,1)=0,\"\",SUMIFS('الطلاب'!$E$6:$E$205,'الطلاب'!$C$6:$C$205,A26,'الطلاب'!$N$6:$N$205,1)/COUNTIFS('الطلاب'!$C$6:$C$205,A26,'الطلاب'!$N$6:$N$205,1))"
+      },
+      {
+       "column": "E",
+       "header": "متوسط بعد",
+       "kind": "formula",
+       "formula_row_1": "=IF(COUNTIFS('الطلاب'!$C$6:$C$205,A26,'الطلاب'!$N$6:$N$205,1)=0,\"\",SUMIFS('الطلاب'!$F$6:$F$205,'الطلاب'!$C$6:$C$205,A26,'الطلاب'!$N$6:$N$205,1)/COUNTIFS('الطلاب'!$C$6:$C$205,A26,'الطلاب'!$N$6:$N$205,1))"
+      },
+      {
+       "column": "F",
+       "header": "متوسط التحسن",
+       "kind": "formula",
+       "formula_row_1": "=IF(D26=\"\",\"\",E26-D26)"
+      },
+      {
+       "column": "G",
+       "header": "لم يتحسنوا",
+       "kind": "formula",
+       "formula_row_1": "=COUNTIFS('الطلاب'!$C$6:$C$205,A26,'الطلاب'!$M$6:$M$205,\"لم يتحسن\")"
+      }
+     ]
+    }
+   ],
+   "results": [
+    {
+     "label": "عدد الطلاب (صفوف التقوية)",
+     "cell": "B5",
+     "formula": "=COUNTIF('الطلاب'!$A$6:$A$205,\"?*\")"
+    },
+    {
+     "label": "تحسّنوا",
+     "cell": "B6",
+     "formula": "=COUNTIF('الطلاب'!$M$6:$M$205,\"تحسّن\")"
+    },
+    {
+     "label": "لم يتحسنوا",
+     "cell": "B7",
+     "formula": "=COUNTIF('الطلاب'!$M$6:$M$205,\"لم يتحسن\")"
+    },
+    {
+     "label": "بانتظار الدرجة",
+     "cell": "B8",
+     "formula": "=COUNTIF('الطلاب'!$M$6:$M$205,\"بانتظار الدرجة\")"
+    },
+    {
+     "label": "حضورهم ضعيف",
+     "cell": "B9",
+     "formula": "=COUNTIF('الطلاب'!$P$6:$P$205,\"حضور ضعيف\")"
+    },
+    {
+     "label": "الحصص المسجلة",
+     "cell": "B12",
+     "formula": "=COUNT('الحصص'!$C$6:$C$3005)"
+    },
+    {
+     "label": "الحصص المحضورة",
+     "cell": "B13",
+     "formula": "=COUNTIF('الحصص'!$D$6:$D$3005,\"حضر\")"
+    },
+    {
+     "label": "حصص الغياب",
+     "cell": "B14",
+     "formula": "=COUNTIF('الحصص'!$D$6:$D$3005,\"غاب\")"
+    },
+    {
+     "label": "نسبة الحضور",
+     "cell": "B15",
+     "formula": "=IF(B13+B14=0,\"\",B13/(B13+B14))"
+    },
+    {
+     "label": "دقائق الحضور",
+     "cell": "B16",
+     "formula": "=SUMIFS('الحصص'!$C$6:$C$3005,'الحصص'!$D$6:$D$3005,\"حضر\")"
+    },
+    {
+     "label": "متوسط الدرجة قبل",
+     "cell": "B19",
+     "formula": "=IF(COUNTIF('الطلاب'!$N$6:$N$205,1)=0,\"\",SUMIFS('الطلاب'!$E$6:$E$205,'الطلاب'!$N$6:$N$205,1)/COUNTIF('الطلاب'!$N$6:$N$205,1))"
+    },
+    {
+     "label": "متوسط الدرجة بعد",
+     "cell": "B20",
+     "formula": "=IF(COUNTIF('الطلاب'!$N$6:$N$205,1)=0,\"\",SUMIFS('الطلاب'!$F$6:$F$205,'الطلاب'!$N$6:$N$205,1)/COUNTIF('الطلاب'!$N$6:$N$205,1))"
+    },
+    {
+     "label": "متوسط فرق التحسن",
+     "cell": "B21",
+     "formula": "=IF(B19=\"\",\"\",B20-B19)"
+    },
+    {
+     "label": "نسبة من تحسنوا من المكتملين",
+     "cell": "B22",
+     "formula": "=IF(B6+B7=0,\"\",B6/(B6+B7))"
+    }
+   ]
+  },
+  {
+   "name": "لماذا ما زلت على إكسل؟",
+   "formula_cells": 0
+  }
+ ]
+}

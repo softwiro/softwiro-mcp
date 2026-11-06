@@ -1,0 +1,525 @@
+{
+ "id": "contracting-projects-tracker",
+ "file": "softwiro-contracting-projects-tracker.xlsx",
+ "title": "شيت متابعة مشاريع التشطيب والمقاولات",
+ "language": "ar",
+ "direction": "rtl",
+ "how_it_works": "White cells are typed input; cells whose kind is \"formula\" are calculated and must not be overwritten. Add one record per row under the header row of a record table, keeping the columns in order.",
+ "sheets": [
+  {
+   "name": "ابدأ هنا",
+   "formula_cells": 0
+  },
+  {
+   "name": "الإعدادات",
+   "formula_cells": 0,
+   "settings": [
+    {
+     "label": "تاريخ اليوم",
+     "cell": "B4",
+     "value": "2026-11-01"
+    },
+    {
+     "label": "تنبيه الميزانية عند بلوغ نسبة",
+     "cell": "B5",
+     "value": 0.9
+    }
+   ]
+  },
+  {
+   "name": "المشاريع",
+   "formula_cells": 2000,
+   "record_tables": [
+    {
+     "header_row": 5,
+     "first_record_row": 6,
+     "sample_rows_filled": 5,
+     "capacity_last_row": 205,
+     "columns": [
+      {
+       "column": "A",
+       "header": "كود المشروع",
+       "kind": "input",
+       "examples": [
+        "P01",
+        "P02",
+        "P03"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "المشروع",
+       "kind": "input",
+       "examples": [
+        "تشطيب فيلا - التجمع",
+        "تشطيب شقة - مدينة نصر",
+        "تجديد مكتب - الدقي"
+       ]
+      },
+      {
+       "column": "C",
+       "header": "العميل",
+       "kind": "input",
+       "examples": [
+        "عادل رشاد",
+        "منى فؤاد",
+        "شركة المثال للتجارة"
+       ]
+      },
+      {
+       "column": "D",
+       "header": "قيمة التعاقد",
+       "kind": "input",
+       "examples": [
+        1200000,
+        350000,
+        480000
+       ]
+      },
+      {
+       "column": "E",
+       "header": "ميزانية التكلفة",
+       "kind": "input",
+       "examples": [
+        900000,
+        260000,
+        340000
+       ]
+      },
+      {
+       "column": "F",
+       "header": "تاريخ البدء",
+       "kind": "input",
+       "examples": [
+        "2026-03-01",
+        "2026-06-01",
+        "2026-04-01"
+       ]
+      },
+      {
+       "column": "G",
+       "header": "التسليم المتفق عليه",
+       "kind": "input",
+       "examples": [
+        "2026-10-15",
+        "2026-12-15",
+        "2026-09-30"
+       ]
+      },
+      {
+       "column": "H",
+       "header": "التسليم الفعلي",
+       "kind": "input",
+       "examples": [
+        "2026-09-28"
+       ]
+      },
+      {
+       "column": "I",
+       "header": "نسبة الإنجاز",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",IF(SUMIFS('المراحل'!$C$6:$C$1005,'المراحل'!$A$6:$A$1005,A6&\"\")=0,\"\",SUMIFS('المراحل'!$F$6:$F$1005,'المراحل'!$A$6:$A$1005,A6&\"\")/SUMIFS('المراحل'!$C$6:$C$1005,'المراحل'!$A$6:$A$1005,A6&\"\")))"
+      },
+      {
+       "column": "J",
+       "header": "المصروف الفعلي",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",ROUND(SUMIFS('المصروفات'!$D$6:$D$2005,'المصروفات'!$B$6:$B$2005,A6&\"\"),2))"
+      },
+      {
+       "column": "K",
+       "header": "نسبة صرف الميزانية",
+       "kind": "formula",
+       "formula_row_1": "=IF(OR(J6=\"\",N(E6)=0),\"\",J6/E6)"
+      },
+      {
+       "column": "L",
+       "header": "الربح المتوقع",
+       "kind": "formula",
+       "formula_row_1": "=IF(OR(A6&\"\"=\"\",NOT(ISNUMBER(D6))),\"\",ROUND(D6-MAX(N(E6),J6),2))"
+      },
+      {
+       "column": "M",
+       "header": "المحصّل من العميل",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",ROUND(SUMIFS('الدفعات'!$C$6:$C$1005,'الدفعات'!$B$6:$B$1005,A6&\"\"),2))"
+      },
+      {
+       "column": "N",
+       "header": "المستحق على العميل",
+       "kind": "formula",
+       "formula_row_1": "=IF(OR(A6&\"\"=\"\",NOT(ISNUMBER(D6))),\"\",MAX(0,ROUND(D6*N(I6)-M6,2)))"
+      },
+      {
+       "column": "O",
+       "header": "المتبقي من العقد",
+       "kind": "formula",
+       "formula_row_1": "=IF(OR(A6&\"\"=\"\",NOT(ISNUMBER(D6))),\"\",ROUND(D6-M6,2))"
+      },
+      {
+       "column": "P",
+       "header": "أيام التأخر",
+       "kind": "formula",
+       "formula_row_1": "=IF(OR(A6&\"\"=\"\",NOT(ISNUMBER(G6))),\"\",IF(ISNUMBER(H6),MAX(0,H6-G6),MAX(0,'الإعدادات'!$B$4-G6)))"
+      },
+      {
+       "column": "Q",
+       "header": "الحالة",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",IF(ISNUMBER(H6),\"مسلّم\",IF(N(P6)>0,\"متأخر\",\"في الموعد\")))"
+      },
+      {
+       "column": "R",
+       "header": "تنبيه الميزانية",
+       "kind": "formula",
+       "formula_row_1": "=IF(OR(A6&\"\"=\"\",NOT(ISNUMBER(E6))),\"\",IF(J6>E6,\"تجاوز الميزانية\",IF(J6>=E6*'الإعدادات'!$B$5,\"قريب من الحد\",\"\")))"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "المراحل",
+   "formula_cells": 2000,
+   "record_tables": [
+    {
+     "header_row": 5,
+     "first_record_row": 6,
+     "sample_rows_filled": 17,
+     "capacity_last_row": 1005,
+     "columns": [
+      {
+       "column": "A",
+       "header": "كود المشروع",
+       "kind": "input",
+       "examples": [
+        "P01",
+        "P01",
+        "P01"
+       ],
+       "allowed_values": {
+        "from_range": "'المشاريع'!$A$6:$A$205"
+       }
+      },
+      {
+       "column": "B",
+       "header": "المرحلة",
+       "kind": "input",
+       "examples": [
+        "التأسيس والمباني",
+        "الكهرباء والسباكة",
+        "المحارة والأرضيات"
+       ]
+      },
+      {
+       "column": "C",
+       "header": "وزن المرحلة",
+       "kind": "input",
+       "examples": [
+        0.25,
+        0.2,
+        0.25
+       ]
+      },
+      {
+       "column": "D",
+       "header": "نسبة الإنجاز",
+       "kind": "input",
+       "examples": [
+        1,
+        1,
+        1
+       ]
+      },
+      {
+       "column": "E",
+       "header": "المشروع",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",IFERROR(INDEX('المشاريع'!$B$6:$B$205,MATCH(A6&\"\",'المشاريع'!$A$6:$A$205,0))&\"\",\"كود غير موجود\"))"
+      },
+      {
+       "column": "F",
+       "header": "المساهمة في الإنجاز",
+       "kind": "formula",
+       "formula_row_1": "=IF(OR(A6&\"\"=\"\",NOT(ISNUMBER(C6))),\"\",C6*N(D6))"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "المصروفات",
+   "formula_cells": 2000,
+   "record_tables": [
+    {
+     "header_row": 5,
+     "first_record_row": 6,
+     "sample_rows_filled": 35,
+     "capacity_last_row": 2005,
+     "columns": [
+      {
+       "column": "A",
+       "header": "التاريخ",
+       "kind": "input",
+       "examples": [
+        "2026-03-20",
+        "2026-05-10",
+        "2026-08-05"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "كود المشروع",
+       "kind": "input",
+       "examples": [
+        "P01",
+        "P01",
+        "P01"
+       ],
+       "allowed_values": {
+        "from_range": "'المشاريع'!$A$6:$A$205"
+       }
+      },
+      {
+       "column": "C",
+       "header": "البند",
+       "kind": "input",
+       "examples": [
+        "خامات",
+        "خامات",
+        "خامات"
+       ],
+       "allowed_values": [
+        "خامات",
+        "عمالة",
+        "مقاول باطن",
+        "نقل"
+       ]
+      },
+      {
+       "column": "D",
+       "header": "المبلغ",
+       "kind": "input",
+       "examples": [
+        150000,
+        120000,
+        110000
+       ]
+      },
+      {
+       "column": "E",
+       "header": "ملاحظة",
+       "kind": "input",
+       "examples": [
+        "حديد وأسمنت",
+        "سيراميك وأدوات صحية",
+        "دهانات وأبواب"
+       ]
+      },
+      {
+       "column": "F",
+       "header": "المشروع",
+       "kind": "formula",
+       "formula_row_1": "=IF(B6&\"\"=\"\",\"\",IFERROR(INDEX('المشاريع'!$B$6:$B$205,MATCH(B6&\"\",'المشاريع'!$A$6:$A$205,0))&\"\",\"كود غير موجود\"))"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "الدفعات",
+   "formula_cells": 1000,
+   "record_tables": [
+    {
+     "header_row": 5,
+     "first_record_row": 6,
+     "sample_rows_filled": 12,
+     "capacity_last_row": 1005,
+     "columns": [
+      {
+       "column": "A",
+       "header": "التاريخ",
+       "kind": "input",
+       "examples": [
+        "2026-01-10",
+        "2026-03-01",
+        "2026-04-01"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "كود المشروع",
+       "kind": "input",
+       "examples": [
+        "P04",
+        "P01",
+        "P03"
+       ],
+       "allowed_values": {
+        "from_range": "'المشاريع'!$A$6:$A$205"
+       }
+      },
+      {
+       "column": "C",
+       "header": "المبلغ",
+       "kind": "input",
+       "examples": [
+        750000,
+        360000,
+        144000
+       ]
+      },
+      {
+       "column": "D",
+       "header": "طريقة الدفع",
+       "kind": "input",
+       "examples": [
+        "تحويل بنكي",
+        "تحويل بنكي",
+        "شيك"
+       ],
+       "allowed_values": [
+        "نقدًا",
+        "تحويل بنكي",
+        "شيك"
+       ]
+      },
+      {
+       "column": "E",
+       "header": "ملاحظة",
+       "kind": "input"
+      },
+      {
+       "column": "F",
+       "header": "المشروع",
+       "kind": "formula",
+       "formula_row_1": "=IF(B6&\"\"=\"\",\"\",IFERROR(INDEX('المشاريع'!$B$6:$B$205,MATCH(B6&\"\",'المشاريع'!$A$6:$A$205,0))&\"\",\"كود غير موجود\"))"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "الملخص",
+   "formula_cells": 26,
+   "record_tables": [
+    {
+     "header_row": 25,
+     "first_record_row": 26,
+     "sample_rows_filled": 5,
+     "capacity_last_row": 30,
+     "columns": [
+      {
+       "column": "A",
+       "header": "البند",
+       "kind": "input",
+       "examples": [
+        "خامات",
+        "عمالة",
+        "مقاول باطن"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "المبلغ",
+       "kind": "formula",
+       "formula_row_1": "=SUMIFS('المصروفات'!$D$6:$D$2005,'المصروفات'!$C$6:$C$2005,A26)"
+      },
+      {
+       "column": "C",
+       "header": "النسبة",
+       "kind": "formula",
+       "formula_row_1": "=IF($B$30=0,\"\",B26/$B$30)"
+      }
+     ]
+    }
+   ],
+   "results": [
+    {
+     "label": "عدد المشاريع",
+     "cell": "B5",
+     "formula": "=COUNTIF('المشاريع'!$A$6:$A$205,\"?*\")"
+    },
+    {
+     "label": "مشاريع مسلّمة",
+     "cell": "B6",
+     "formula": "=COUNTIF('المشاريع'!$Q$6:$Q$205,\"مسلّم\")"
+    },
+    {
+     "label": "مشاريع جارية في الموعد",
+     "cell": "B7",
+     "formula": "=COUNTIF('المشاريع'!$Q$6:$Q$205,\"في الموعد\")"
+    },
+    {
+     "label": "مشاريع متأخرة عن التسليم",
+     "cell": "B8",
+     "formula": "=COUNTIF('المشاريع'!$Q$6:$Q$205,\"متأخر\")"
+    },
+    {
+     "label": "مشاريع تجاوزت ميزانيتها",
+     "cell": "B9",
+     "formula": "=COUNTIF('المشاريع'!$R$6:$R$205,\"تجاوز الميزانية\")"
+    },
+    {
+     "label": "مشاريع قريبة من حد الميزانية",
+     "cell": "B10",
+     "formula": "=COUNTIF('المشاريع'!$R$6:$R$205,\"قريب من الحد\")"
+    },
+    {
+     "label": "إجمالي قيمة التعاقدات",
+     "cell": "B13",
+     "formula": "=SUM('المشاريع'!$D$6:$D$205)"
+    },
+    {
+     "label": "إجمالي ميزانيات التكلفة",
+     "cell": "B14",
+     "formula": "=SUM('المشاريع'!$E$6:$E$205)"
+    },
+    {
+     "label": "إجمالي المصروف الفعلي",
+     "cell": "B15",
+     "formula": "=SUM('المشاريع'!$J$6:$J$205)"
+    },
+    {
+     "label": "نسبة صرف الميزانيات",
+     "cell": "B16",
+     "formula": "=IF(B14=0,\"\",B15/B14)"
+    },
+    {
+     "label": "إجمالي الربح المتوقع",
+     "cell": "B17",
+     "formula": "=SUM('المشاريع'!$L$6:$L$205)"
+    },
+    {
+     "label": "هامش الربح المتوقع",
+     "cell": "B18",
+     "formula": "=IF(B13=0,\"\",B17/B13)"
+    },
+    {
+     "label": "إجمالي المحصّل من العملاء",
+     "cell": "B19",
+     "formula": "=SUM('المشاريع'!$M$6:$M$205)"
+    },
+    {
+     "label": "المستحق على العملاء حسب الإنجاز",
+     "cell": "B20",
+     "formula": "=SUM('المشاريع'!$N$6:$N$205)"
+    },
+    {
+     "label": "المتبقي من قيمة العقود",
+     "cell": "B21",
+     "formula": "=SUM('المشاريع'!$O$6:$O$205)"
+    },
+    {
+     "label": "مجموع أيام التأخر",
+     "cell": "B22",
+     "formula": "=SUM('المشاريع'!$P$6:$P$205)"
+    }
+   ]
+  },
+  {
+   "name": "لماذا ما زلت على إكسل؟",
+   "formula_cells": 0
+  }
+ ]
+}

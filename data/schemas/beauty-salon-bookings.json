@@ -1,0 +1,491 @@
+{
+ "id": "beauty-salon-bookings",
+ "file": "softwiro-beauty-salon-bookings.xlsx",
+ "title": "شيت حجوزات صالون التجميل",
+ "language": "ar",
+ "direction": "rtl",
+ "how_it_works": "White cells are typed input; cells whose kind is \"formula\" are calculated and must not be overwritten. Add one record per row under the header row of a record table, keeping the columns in order.",
+ "sheets": [
+  {
+   "name": "ابدأ هنا",
+   "formula_cells": 0
+  },
+  {
+   "name": "الإعدادات",
+   "formula_cells": 0,
+   "settings": [
+    {
+     "label": "تاريخ اليوم",
+     "cell": "B4",
+     "value": "2026-11-01"
+    },
+    {
+     "label": "أي تاريخ داخل شهر الملخص",
+     "cell": "B5",
+     "value": "2026-10-15"
+    }
+   ]
+  },
+  {
+   "name": "الخدمات",
+   "formula_cells": 0,
+   "record_tables": [
+    {
+     "header_row": 5,
+     "first_record_row": 6,
+     "sample_rows_filled": 6,
+     "capacity_last_row": 11,
+     "columns": [
+      {
+       "column": "A",
+       "header": "الخدمة",
+       "kind": "input",
+       "examples": [
+        "قص شعر",
+        "سشوار",
+        "صبغة شعر"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "السعر",
+       "kind": "input",
+       "examples": [
+        250,
+        150,
+        900
+       ]
+      },
+      {
+       "column": "C",
+       "header": "المدة (دقيقة)",
+       "kind": "input",
+       "examples": [
+        45,
+        30,
+        120
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "الموظفات",
+   "formula_cells": 1000,
+   "record_tables": [
+    {
+     "header_row": 5,
+     "first_record_row": 6,
+     "sample_rows_filled": 4,
+     "capacity_last_row": 205,
+     "columns": [
+      {
+       "column": "A",
+       "header": "الموظفة",
+       "kind": "input",
+       "examples": [
+        "منى",
+        "سلمى",
+        "رنا"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "التخصص",
+       "kind": "input",
+       "examples": [
+        "شعر",
+        "مكياج",
+        "أظافر"
+       ]
+      },
+      {
+       "column": "C",
+       "header": "نسبة العمولة",
+       "kind": "input",
+       "examples": [
+        0.3,
+        0.35,
+        0.25
+       ]
+      },
+      {
+       "column": "D",
+       "header": "خدمات الشهر",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",COUNTIFS('الحجوزات'!$F$6:$F$2005,A6&\"\",'الحجوزات'!$M$6:$M$2005,\"تم\",'الحجوزات'!$A$6:$A$2005,\">=\"&DATE(YEAR('الإعدادات'!$B$5),MONTH('الإعدادات'!$B$5),1),'الحجوزات'!$A$6:$A$2005,\"<=\"&EOMONTH('الإعدادات'!$B$5,0)))"
+      },
+      {
+       "column": "E",
+       "header": "إيراد الشهر",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",SUMIFS('الحجوزات'!$K$6:$K$2005,'الحجوزات'!$F$6:$F$2005,A6&\"\",'الحجوزات'!$A$6:$A$2005,\">=\"&DATE(YEAR('الإعدادات'!$B$5),MONTH('الإعدادات'!$B$5),1),'الحجوزات'!$A$6:$A$2005,\"<=\"&EOMONTH('الإعدادات'!$B$5,0)))"
+      },
+      {
+       "column": "F",
+       "header": "عمولة الشهر",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",SUMIFS('الحجوزات'!$L$6:$L$2005,'الحجوزات'!$F$6:$F$2005,A6&\"\",'الحجوزات'!$A$6:$A$2005,\">=\"&DATE(YEAR('الإعدادات'!$B$5),MONTH('الإعدادات'!$B$5),1),'الحجوزات'!$A$6:$A$2005,\"<=\"&EOMONTH('الإعدادات'!$B$5,0)))"
+      },
+      {
+       "column": "G",
+       "header": "حجوزات اليوم",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",COUNTIFS('الحجوزات'!$F$6:$F$2005,A6&\"\",'الحجوزات'!$A$6:$A$2005,'الإعدادات'!$B$4,'الحجوزات'!$M$6:$M$2005,\"محجوز\")+COUNTIFS('الحجوزات'!$F$6:$F$2005,A6&\"\",'الحجوزات'!$A$6:$A$2005,'الإعدادات'!$B$4,'الحجوزات'!$M$6:$M$2005,\"تم\"))"
+      },
+      {
+       "column": "H",
+       "header": "إيراد اليوم",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",SUMIFS('الحجوزات'!$K$6:$K$2005,'الحجوزات'!$F$6:$F$2005,A6&\"\",'الحجوزات'!$A$6:$A$2005,'الإعدادات'!$B$4))"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "الحجوزات",
+   "formula_cells": 12000,
+   "record_tables": [
+    {
+     "header_row": 5,
+     "first_record_row": 6,
+     "sample_rows_filled": 26,
+     "capacity_last_row": 2005,
+     "columns": [
+      {
+       "column": "A",
+       "header": "التاريخ",
+       "kind": "input",
+       "examples": [
+        "2026-10-03",
+        "2026-10-03",
+        "2026-10-05"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "الوقت",
+       "kind": "input",
+       "examples": [
+        "10:00:00",
+        "12:00:00",
+        "11:00:00"
+       ]
+      },
+      {
+       "column": "C",
+       "header": "العميلة",
+       "kind": "input",
+       "examples": [
+        "ياسمين",
+        "سارة",
+        "مريم"
+       ]
+      },
+      {
+       "column": "D",
+       "header": "الجوال",
+       "kind": "input",
+       "examples": [
+        "01020000001",
+        "01020000002",
+        "01020000003"
+       ]
+      },
+      {
+       "column": "E",
+       "header": "الخدمة",
+       "kind": "input",
+       "examples": [
+        "قص شعر",
+        "مكياج سهرة",
+        "صبغة شعر"
+       ],
+       "allowed_values": {
+        "from_range": "'الخدمات'!$A$6:$A$205"
+       }
+      },
+      {
+       "column": "F",
+       "header": "الموظفة",
+       "kind": "input",
+       "examples": [
+        "منى",
+        "سلمى",
+        "منى"
+       ],
+       "allowed_values": {
+        "from_range": "'الموظفات'!$A$6:$A$205"
+       }
+      },
+      {
+       "column": "G",
+       "header": "الحالة",
+       "kind": "input",
+       "examples": [
+        "تم",
+        "تم",
+        "تم"
+       ],
+       "allowed_values": [
+        "تم",
+        "ملغي",
+        "لم تحضر"
+       ]
+      },
+      {
+       "column": "H",
+       "header": "الخصم",
+       "kind": "input",
+       "examples": [
+        100,
+        200,
+        50
+       ]
+      },
+      {
+       "column": "I",
+       "header": "طريقة الدفع",
+       "kind": "input",
+       "examples": [
+        "نقدًا",
+        "بطاقة",
+        "بطاقة"
+       ],
+       "allowed_values": [
+        "نقدًا",
+        "بطاقة",
+        "محفظة إلكترونية"
+       ]
+      },
+      {
+       "column": "J",
+       "header": "السعر",
+       "kind": "formula",
+       "formula_row_1": "=IF(E6&\"\"=\"\",\"\",IFERROR(INDEX('الخدمات'!$B$6:$B$205,MATCH(E6&\"\",'الخدمات'!$A$6:$A$205,0)),\"خدمة غير موجودة\"))"
+      },
+      {
+       "column": "K",
+       "header": "الإيراد",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",IF(AND(G6=\"تم\",ISNUMBER(J6)),ROUND(J6-N(H6),2),0))"
+      },
+      {
+       "column": "L",
+       "header": "العمولة",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",IFERROR(ROUND(K6*INDEX('الموظفات'!$C$6:$C$205,MATCH(F6&\"\",'الموظفات'!$A$6:$A$205,0)),2),0))"
+      },
+      {
+       "column": "M",
+       "header": "حالة الحجز",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",IF(G6&\"\"=\"\",\"محجوز\",G6))"
+      },
+      {
+       "column": "N",
+       "header": "الدقائق",
+       "kind": "formula",
+       "formula_row_1": "=IF(ISNUMBER(A6),IF(ISNUMBER(B6),HOUR(B6)*60+MINUTE(B6),0),\"\")"
+      },
+      {
+       "column": "O",
+       "header": "ترتيب اليوم",
+       "kind": "formula",
+       "formula_row_1": "=IF(AND(ISNUMBER(A6),A6='الإعدادات'!$B$4),COUNTIFS($A$6:$A$2005,'الإعدادات'!$B$4,$N$6:$N$2005,\"<\"&N6)+COUNTIFS($A$6:A6,'الإعدادات'!$B$4,$N$6:N6,N6),\"\")"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "اليوم",
+   "formula_cells": 483,
+   "record_tables": [
+    {
+     "header_row": 8,
+     "first_record_row": 9,
+     "sample_rows_filled": 0,
+     "capacity_last_row": 68,
+     "columns": [
+      {
+       "column": "A",
+       "header": "م",
+       "kind": "formula",
+       "formula_row_1": "=IF(1<=$B$4,1,\"\")"
+      },
+      {
+       "column": "B",
+       "header": "الوقت",
+       "kind": "formula",
+       "formula_row_1": "=IF($A9=\"\",\"\",INDEX('الحجوزات'!$B$6:$B$2005,MATCH($A9,'الحجوزات'!$O$6:$O$2005,0)))"
+      },
+      {
+       "column": "C",
+       "header": "العميلة",
+       "kind": "formula",
+       "formula_row_1": "=IF($A9=\"\",\"\",INDEX('الحجوزات'!$C$6:$C$2005,MATCH($A9,'الحجوزات'!$O$6:$O$2005,0))&\"\")"
+      },
+      {
+       "column": "D",
+       "header": "الجوال",
+       "kind": "formula",
+       "formula_row_1": "=IF($A9=\"\",\"\",INDEX('الحجوزات'!$D$6:$D$2005,MATCH($A9,'الحجوزات'!$O$6:$O$2005,0))&\"\")"
+      },
+      {
+       "column": "E",
+       "header": "الخدمة",
+       "kind": "formula",
+       "formula_row_1": "=IF($A9=\"\",\"\",INDEX('الحجوزات'!$E$6:$E$2005,MATCH($A9,'الحجوزات'!$O$6:$O$2005,0))&\"\")"
+      },
+      {
+       "column": "F",
+       "header": "الموظفة",
+       "kind": "formula",
+       "formula_row_1": "=IF($A9=\"\",\"\",INDEX('الحجوزات'!$F$6:$F$2005,MATCH($A9,'الحجوزات'!$O$6:$O$2005,0))&\"\")"
+      },
+      {
+       "column": "G",
+       "header": "الحالة",
+       "kind": "formula",
+       "formula_row_1": "=IF($A9=\"\",\"\",INDEX('الحجوزات'!$M$6:$M$2005,MATCH($A9,'الحجوزات'!$O$6:$O$2005,0))&\"\")"
+      },
+      {
+       "column": "H",
+       "header": "السعر",
+       "kind": "formula",
+       "formula_row_1": "=IF($A9=\"\",\"\",INDEX('الحجوزات'!$J$6:$J$2005,MATCH($A9,'الحجوزات'!$O$6:$O$2005,0)))"
+      }
+     ]
+    }
+   ],
+   "results": [
+    {
+     "label": "حجوزات اليوم",
+     "cell": "B4",
+     "formula": "=COUNTIFS('الحجوزات'!$A$6:$A$2005,'الإعدادات'!$B$4)"
+    },
+    {
+     "label": "إيراد اليوم (الخدمات التي تمت)",
+     "cell": "B5",
+     "formula": "=SUMIFS('الحجوزات'!$K$6:$K$2005,'الحجوزات'!$A$6:$A$2005,'الإعدادات'!$B$4)"
+    },
+    {
+     "label": "متوقع اليوم (حجوزات لم تتم)",
+     "cell": "B6",
+     "formula": "=SUMIFS('الحجوزات'!$J$6:$J$2005,'الحجوزات'!$A$6:$A$2005,'الإعدادات'!$B$4,'الحجوزات'!$M$6:$M$2005,\"محجوز\")-SUMIFS('الحجوزات'!$H$6:$H$2005,'الحجوزات'!$A$6:$A$2005,'الإعدادات'!$B$4,'الحجوزات'!$M$6:$M$2005,\"محجوز\")"
+    }
+   ]
+  },
+  {
+   "name": "الملخص",
+   "formula_cells": 44,
+   "record_tables": [
+    {
+     "header_row": 23,
+     "first_record_row": 24,
+     "sample_rows_filled": 0,
+     "capacity_last_row": 37,
+     "columns": [
+      {
+       "column": "A",
+       "header": "الخدمة",
+       "kind": "formula",
+       "formula_row_1": "=IF('الخدمات'!A6&\"\"=\"\",\"\",'الخدمات'!A6)"
+      },
+      {
+       "column": "B",
+       "header": "عدد الخدمات التي تمت",
+       "kind": "formula",
+       "formula_row_1": "=IF(A24=\"\",\"\",COUNTIFS('الحجوزات'!$E$6:$E$2005,A24,'الحجوزات'!$M$6:$M$2005,\"تم\",'الحجوزات'!$A$6:$A$2005,\">=\"&DATE(YEAR('الإعدادات'!$B$5),MONTH('الإعدادات'!$B$5),1),'الحجوزات'!$A$6:$A$2005,\"<=\"&EOMONTH('الإعدادات'!$B$5,0)))"
+      },
+      {
+       "column": "C",
+       "header": "الإيراد",
+       "kind": "formula",
+       "formula_row_1": "=IF(A24=\"\",\"\",SUMIFS('الحجوزات'!$K$6:$K$2005,'الحجوزات'!$E$6:$E$2005,A24,'الحجوزات'!$A$6:$A$2005,\">=\"&DATE(YEAR('الإعدادات'!$B$5),MONTH('الإعدادات'!$B$5),1),'الحجوزات'!$A$6:$A$2005,\"<=\"&EOMONTH('الإعدادات'!$B$5,0)))"
+      }
+     ]
+    }
+   ],
+   "results": [
+    {
+     "label": "حجوزات اليوم",
+     "cell": "B5",
+     "formula": "=COUNTIFS('الحجوزات'!$A$6:$A$2005,'الإعدادات'!$B$4)"
+    },
+    {
+     "label": "تمت",
+     "cell": "B6",
+     "formula": "=COUNTIFS('الحجوزات'!$A$6:$A$2005,'الإعدادات'!$B$4,'الحجوزات'!$M$6:$M$2005,\"تم\")"
+    },
+    {
+     "label": "محجوزة لم تتم",
+     "cell": "B7",
+     "formula": "=COUNTIFS('الحجوزات'!$A$6:$A$2005,'الإعدادات'!$B$4,'الحجوزات'!$M$6:$M$2005,\"محجوز\")"
+    },
+    {
+     "label": "ملغية أو لم تحضر",
+     "cell": "B8",
+     "formula": "=COUNTIFS('الحجوزات'!$A$6:$A$2005,'الإعدادات'!$B$4,'الحجوزات'!$M$6:$M$2005,\"ملغي\")+COUNTIFS('الحجوزات'!$A$6:$A$2005,'الإعدادات'!$B$4,'الحجوزات'!$M$6:$M$2005,\"لم تحضر\")"
+    },
+    {
+     "label": "إيراد اليوم",
+     "cell": "B9",
+     "formula": "=SUMIFS('الحجوزات'!$K$6:$K$2005,'الحجوزات'!$A$6:$A$2005,'الإعدادات'!$B$4)"
+    },
+    {
+     "label": "حجوزات الشهر",
+     "cell": "B12",
+     "formula": "=COUNTIFS('الحجوزات'!$A$6:$A$2005,\">=\"&DATE(YEAR('الإعدادات'!$B$5),MONTH('الإعدادات'!$B$5),1),'الحجوزات'!$A$6:$A$2005,\"<=\"&EOMONTH('الإعدادات'!$B$5,0))"
+    },
+    {
+     "label": "تمت",
+     "cell": "B13",
+     "formula": "=COUNTIFS('الحجوزات'!$M$6:$M$2005,\"تم\",'الحجوزات'!$A$6:$A$2005,\">=\"&DATE(YEAR('الإعدادات'!$B$5),MONTH('الإعدادات'!$B$5),1),'الحجوزات'!$A$6:$A$2005,\"<=\"&EOMONTH('الإعدادات'!$B$5,0))"
+    },
+    {
+     "label": "ملغية",
+     "cell": "B14",
+     "formula": "=COUNTIFS('الحجوزات'!$M$6:$M$2005,\"ملغي\",'الحجوزات'!$A$6:$A$2005,\">=\"&DATE(YEAR('الإعدادات'!$B$5),MONTH('الإعدادات'!$B$5),1),'الحجوزات'!$A$6:$A$2005,\"<=\"&EOMONTH('الإعدادات'!$B$5,0))"
+    },
+    {
+     "label": "لم تحضر",
+     "cell": "B15",
+     "formula": "=COUNTIFS('الحجوزات'!$M$6:$M$2005,\"لم تحضر\",'الحجوزات'!$A$6:$A$2005,\">=\"&DATE(YEAR('الإعدادات'!$B$5),MONTH('الإعدادات'!$B$5),1),'الحجوزات'!$A$6:$A$2005,\"<=\"&EOMONTH('الإعدادات'!$B$5,0))"
+    },
+    {
+     "label": "نسبة الإلغاء والغياب",
+     "cell": "B16",
+     "formula": "=IF(B12=0,\"\",(B14+B15)/B12)"
+    },
+    {
+     "label": "إيراد الشهر",
+     "cell": "B17",
+     "formula": "=SUMIFS('الحجوزات'!$K$6:$K$2005,'الحجوزات'!$A$6:$A$2005,\">=\"&DATE(YEAR('الإعدادات'!$B$5),MONTH('الإعدادات'!$B$5),1),'الحجوزات'!$A$6:$A$2005,\"<=\"&EOMONTH('الإعدادات'!$B$5,0))"
+    },
+    {
+     "label": "متوسط إيراد الخدمة",
+     "cell": "B18",
+     "formula": "=IF(B13=0,\"\",B17/B13)"
+    },
+    {
+     "label": "عمولات الموظفات",
+     "cell": "B19",
+     "formula": "=SUMIFS('الحجوزات'!$L$6:$L$2005,'الحجوزات'!$A$6:$A$2005,\">=\"&DATE(YEAR('الإعدادات'!$B$5),MONTH('الإعدادات'!$B$5),1),'الحجوزات'!$A$6:$A$2005,\"<=\"&EOMONTH('الإعدادات'!$B$5,0))"
+    },
+    {
+     "label": "الإيراد بعد العمولات",
+     "cell": "B20",
+     "formula": "=B17-B19"
+    }
+   ]
+  },
+  {
+   "name": "لماذا ما زلت على إكسل؟",
+   "formula_cells": 0
+  }
+ ]
+}

@@ -1,0 +1,414 @@
+{
+ "id": "household-budget-savings",
+ "file": "softwiro-household-budget-savings.xlsx",
+ "title": "شيت ميزانية البيت والادخار",
+ "language": "ar",
+ "direction": "rtl",
+ "how_it_works": "White cells are typed input; cells whose kind is \"formula\" are calculated and must not be overwritten. Add one record per row under the header row of a record table, keeping the columns in order.",
+ "sheets": [
+  {
+   "name": "ابدأ هنا",
+   "formula_cells": 0
+  },
+  {
+   "name": "الإعدادات",
+   "formula_cells": 2,
+   "settings": [
+    {
+     "label": "تاريخ اليوم",
+     "cell": "B4",
+     "value": "2026-11-01"
+    },
+    {
+     "label": "الشهر الذي تراجعه (أي يوم منه)",
+     "cell": "B5",
+     "value": "2026-10-01"
+    }
+   ],
+   "results": [
+    {
+     "label": "أول يوم في الشهر",
+     "cell": "B6",
+     "formula": "=DATE(YEAR(B5),MONTH(B5),1)"
+    },
+    {
+     "label": "أول يوم في الشهر التالي",
+     "cell": "B7",
+     "formula": "=EDATE(B6,1)"
+    }
+   ]
+  },
+  {
+   "name": "الدخل",
+   "formula_cells": 0,
+   "record_tables": [
+    {
+     "header_row": 5,
+     "first_record_row": 6,
+     "sample_rows_filled": 4,
+     "capacity_last_row": 9,
+     "columns": [
+      {
+       "column": "A",
+       "header": "التاريخ",
+       "kind": "input",
+       "examples": [
+        "2026-09-01",
+        "2026-10-01",
+        "2026-10-12"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "المصدر",
+       "kind": "input",
+       "examples": [
+        "راتب",
+        "راتب",
+        "عمل إضافي"
+       ],
+       "allowed_values": [
+        "راتب",
+        "عمل إضافي",
+        "إيجار عقار",
+        "أخرى"
+       ]
+      },
+      {
+       "column": "C",
+       "header": "المبلغ",
+       "kind": "input",
+       "examples": [
+        24000,
+        24000,
+        3000
+       ]
+      },
+      {
+       "column": "D",
+       "header": "ملاحظة",
+       "kind": "input",
+       "examples": [
+        "راتب سبتمبر",
+        "راتب أكتوبر",
+        "عمل حر"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "الميزانية",
+   "formula_cells": 200,
+   "record_tables": [
+    {
+     "header_row": 5,
+     "first_record_row": 6,
+     "sample_rows_filled": 11,
+     "capacity_last_row": 45,
+     "columns": [
+      {
+       "column": "A",
+       "header": "التصنيف",
+       "kind": "input",
+       "examples": [
+        "إيجار",
+        "فواتير",
+        "أكل"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "النوع",
+       "kind": "input",
+       "examples": [
+        "ثابت",
+        "ثابت",
+        "متغير"
+       ],
+       "allowed_values": [
+        "ثابت",
+        "متغير"
+       ]
+      },
+      {
+       "column": "C",
+       "header": "الميزانية الشهرية",
+       "kind": "input",
+       "examples": [
+        6000,
+        1800,
+        4500
+       ]
+      },
+      {
+       "column": "D",
+       "header": "الفعلي في الشهر",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",ROUND(SUMIFS('المصروفات'!$D$6:$D$2005,'المصروفات'!$B$6:$B$2005,A6&\"\",'المصروفات'!$A$6:$A$2005,\">=\"&'الإعدادات'!$B$6,'المصروفات'!$A$6:$A$2005,\"<\"&'الإعدادات'!$B$7),2))"
+      },
+      {
+       "column": "E",
+       "header": "الفرق",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",ROUND(N(C6)-D6,2))"
+      },
+      {
+       "column": "F",
+       "header": "نسبة الصرف",
+       "kind": "formula",
+       "formula_row_1": "=IF(OR(A6&\"\"=\"\",N(C6)=0),\"\",D6/C6)"
+      },
+      {
+       "column": "G",
+       "header": "الحالة",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",IF(D6=0,\"لم يُصرف\",IF(N(C6)=0,\"بدون ميزانية\",IF(D6>C6,\"تجاوز\",\"ضمن الميزانية\"))))"
+      },
+      {
+       "column": "H",
+       "header": "ترتيب الصرف",
+       "kind": "formula",
+       "formula_row_1": "=IF(ISNUMBER(D6),IF(D6>0,COUNTIFS($D$6:$D$45,\">\"&D6)+COUNTIFS($D$6:D6,D6),\"\"),\"\")"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "المصروفات",
+   "formula_cells": 2000,
+   "record_tables": [
+    {
+     "header_row": 5,
+     "first_record_row": 6,
+     "sample_rows_filled": 25,
+     "capacity_last_row": 2005,
+     "columns": [
+      {
+       "column": "A",
+       "header": "التاريخ",
+       "kind": "input",
+       "examples": [
+        "2026-09-01",
+        "2026-09-15",
+        "2026-10-01"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "التصنيف",
+       "kind": "input",
+       "examples": [
+        "إيجار",
+        "أكل",
+        "إيجار"
+       ],
+       "allowed_values": {
+        "from_range": "'الميزانية'!$A$6:$A$45"
+       }
+      },
+      {
+       "column": "C",
+       "header": "البيان",
+       "kind": "input",
+       "examples": [
+        "إيجار الشقة",
+        "سوبر ماركت",
+        "إيجار الشقة"
+       ]
+      },
+      {
+       "column": "D",
+       "header": "المبلغ",
+       "kind": "input",
+       "examples": [
+        6000,
+        2000,
+        6000
+       ]
+      },
+      {
+       "column": "E",
+       "header": "النوع",
+       "kind": "formula",
+       "formula_row_1": "=IF(B6&\"\"=\"\",\"\",IFERROR(INDEX('الميزانية'!$B$6:$B$45,MATCH(B6&\"\",'الميزانية'!$A$6:$A$45,0))&\"\",\"تصنيف غير موجود\"))"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "الأهداف",
+   "formula_cells": 500,
+   "record_tables": [
+    {
+     "header_row": 5,
+     "first_record_row": 6,
+     "sample_rows_filled": 5,
+     "capacity_last_row": 105,
+     "columns": [
+      {
+       "column": "A",
+       "header": "الهدف",
+       "kind": "input",
+       "examples": [
+        "صندوق الطوارئ",
+        "مصاريف مدارس العام القادم",
+        "سفر الصيف"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "المبلغ المطلوب",
+       "kind": "input",
+       "examples": [
+        60000,
+        30000,
+        25000
+       ]
+      },
+      {
+       "column": "C",
+       "header": "التاريخ المستهدف",
+       "kind": "input",
+       "examples": [
+        "2027-10-01",
+        "2027-08-01",
+        "2027-06-15"
+       ]
+      },
+      {
+       "column": "D",
+       "header": "المدخر حتى الآن",
+       "kind": "input",
+       "examples": [
+        24000,
+        6000,
+        5000
+       ]
+      },
+      {
+       "column": "E",
+       "header": "المتبقي",
+       "kind": "formula",
+       "formula_row_1": "=IF(OR(A6&\"\"=\"\",NOT(ISNUMBER(B6))),\"\",MAX(0,ROUND(B6-N(D6),2)))"
+      },
+      {
+       "column": "F",
+       "header": "نسبة الإنجاز",
+       "kind": "formula",
+       "formula_row_1": "=IF(OR(E6=\"\",N(B6)=0),\"\",MIN(1,N(D6)/B6))"
+      },
+      {
+       "column": "G",
+       "header": "الأشهر المتبقية",
+       "kind": "formula",
+       "formula_row_1": "=IF(OR(E6=\"\",NOT(ISNUMBER(C6))),\"\",IF(E6=0,0,MAX(1,(YEAR(C6)-YEAR('الإعدادات'!$B$4))*12+MONTH(C6)-MONTH('الإعدادات'!$B$4))))"
+      },
+      {
+       "column": "H",
+       "header": "المطلوب شهريًا",
+       "kind": "formula",
+       "formula_row_1": "=IF(G6=\"\",\"\",IF(E6=0,0,ROUND(E6/G6,2)))"
+      },
+      {
+       "column": "I",
+       "header": "الحالة",
+       "kind": "formula",
+       "formula_row_1": "=IF(G6=\"\",\"\",IF(E6=0,\"تحقق\",IF(C6<'الإعدادات'!$B$4,\"فات الموعد\",\"جارٍ\")))"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "الملخص",
+   "formula_cells": 30,
+   "record_tables": [
+    {
+     "header_row": 16,
+     "first_record_row": 17,
+     "sample_rows_filled": 16,
+     "capacity_last_row": 34,
+     "columns": [
+      {
+       "column": "A",
+       "header": "النوع",
+       "kind": "input",
+       "examples": [
+        "ثابت",
+        "متغير",
+        "أكبر ثلاثة تصنيفات صرفًا"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "الفعلي",
+       "kind": "formula",
+       "formula_row_1": "=SUMIFS('الميزانية'!$D$6:$D$45,'الميزانية'!$B$6:$B$45,A17)"
+      },
+      {
+       "column": "C",
+       "header": "الميزانية",
+       "kind": "formula",
+       "formula_row_1": "=SUMIFS('الميزانية'!$C$6:$C$45,'الميزانية'!$B$6:$B$45,A17)"
+      }
+     ]
+    }
+   ],
+   "results": [
+    {
+     "label": "الشهر الذي تراجعه",
+     "cell": "B5",
+     "formula": "='الإعدادات'!$B$6"
+    },
+    {
+     "label": "دخل الشهر",
+     "cell": "B6",
+     "formula": "=SUMIFS('الدخل'!$C$6:$C$505,'الدخل'!$A$6:$A$505,\">=\"&'الإعدادات'!$B$6,'الدخل'!$A$6:$A$505,\"<\"&'الإعدادات'!$B$7)"
+    },
+    {
+     "label": "مصروفات الشهر",
+     "cell": "B7",
+     "formula": "=SUMIFS('المصروفات'!$D$6:$D$2005,'المصروفات'!$A$6:$A$2005,\">=\"&'الإعدادات'!$B$6,'المصروفات'!$A$6:$A$2005,\"<\"&'الإعدادات'!$B$7)"
+    },
+    {
+     "label": "المتبقي من الدخل",
+     "cell": "B8",
+     "formula": "=ROUND(B6-B7,2)"
+    },
+    {
+     "label": "نسبة الادخار (المتبقي ÷ الدخل)",
+     "cell": "B9",
+     "formula": "=IF(B6=0,\"\",B8/B6)"
+    },
+    {
+     "label": "ميزانية الشهر لكل التصنيفات",
+     "cell": "B10",
+     "formula": "=SUM('الميزانية'!$C$6:$C$45)"
+    },
+    {
+     "label": "الفرق عن الميزانية (الموجب = وفر)",
+     "cell": "B11",
+     "formula": "=ROUND(B10-B7,2)"
+    },
+    {
+     "label": "تصنيفات تجاوزت ميزانيتها",
+     "cell": "B12",
+     "formula": "=COUNTIF('الميزانية'!$G$6:$G$45,\"تجاوز\")"
+    },
+    {
+     "label": "مصروفات بلا تصنيف مسجّل",
+     "cell": "B13",
+     "formula": "=ROUND(B7-SUM('الميزانية'!$D$6:$D$45),2)"
+    }
+   ]
+  },
+  {
+   "name": "لماذا ما زلت على إكسل؟",
+   "formula_cells": 0
+  }
+ ]
+}

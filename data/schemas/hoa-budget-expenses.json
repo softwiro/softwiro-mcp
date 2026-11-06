@@ -1,0 +1,394 @@
+{
+ "id": "hoa-budget-expenses",
+ "file": "softwiro-hoa-budget-expenses.xlsx",
+ "title": "شيت ميزانية ومصروفات اتحاد الملاك",
+ "language": "ar",
+ "direction": "rtl",
+ "how_it_works": "White cells are typed input; cells whose kind is \"formula\" are calculated and must not be overwritten. Add one record per row under the header row of a record table, keeping the columns in order.",
+ "sheets": [
+  {
+   "name": "ابدأ هنا",
+   "formula_cells": 0
+  },
+  {
+   "name": "الإعدادات",
+   "formula_cells": 1,
+   "settings": [
+    {
+     "label": "تاريخ اليوم",
+     "cell": "B4",
+     "value": "2026-11-01"
+    },
+    {
+     "label": "سنة الميزانية",
+     "cell": "B5",
+     "value": 2026
+    },
+    {
+     "label": "رصيد الاتحاد في أول السنة (بعملتك)",
+     "cell": "B6",
+     "value": 15000
+    },
+    {
+     "label": "نسبة التنبيه من الميزانية السنوية",
+     "cell": "B7",
+     "value": 0.9
+    }
+   ],
+   "results": [
+    {
+     "label": "الأشهر المنقضية من السنة (تُحسب)",
+     "cell": "B8",
+     "formula": "=IF(YEAR(B4)>B5,12,IF(YEAR(B4)<B5,0,MONTH(B4)))"
+    }
+   ]
+  },
+  {
+   "name": "البنود",
+   "formula_cells": 140,
+   "record_tables": [
+    {
+     "header_row": 5,
+     "first_record_row": 6,
+     "sample_rows_filled": 8,
+     "capacity_last_row": 25,
+     "columns": [
+      {
+       "column": "A",
+       "header": "البند",
+       "kind": "input",
+       "examples": [
+        "نظافة",
+        "حراسة",
+        "كهرباء المناطق المشتركة"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "نوع الميزانية",
+       "kind": "input",
+       "examples": [
+        "شهرية",
+        "شهرية",
+        "شهرية"
+       ],
+       "allowed_values": [
+        "شهرية",
+        "سنوية"
+       ]
+      },
+      {
+       "column": "C",
+       "header": "المبلغ المعتمد",
+       "kind": "input",
+       "examples": [
+        3000,
+        8000,
+        2500
+       ]
+      },
+      {
+       "column": "D",
+       "header": "الميزانية الشهرية",
+       "kind": "formula",
+       "formula_row_1": "=IF(OR(A6&\"\"=\"\",NOT(ISNUMBER(C6))),\"\",IF(B6=\"سنوية\",ROUND(C6/12,2),C6))"
+      },
+      {
+       "column": "E",
+       "header": "الميزانية السنوية",
+       "kind": "formula",
+       "formula_row_1": "=IF(D6=\"\",\"\",IF(B6=\"سنوية\",C6,ROUND(C6*12,2)))"
+      },
+      {
+       "column": "F",
+       "header": "المصروف منذ بداية السنة",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",SUMIFS('المصروفات'!$D$6:$D$2005,'المصروفات'!$B$6:$B$2005,A6&\"\",'المصروفات'!$A$6:$A$2005,\">=\"&DATE('الإعدادات'!$B$5,1,1),'المصروفات'!$A$6:$A$2005,\"<\"&DATE('الإعدادات'!$B$5+1,1,1)))"
+      },
+      {
+       "column": "G",
+       "header": "الميزانية حتى الآن",
+       "kind": "formula",
+       "formula_row_1": "=IF(D6=\"\",\"\",IF(B6=\"سنوية\",E6,ROUND(C6*'الإعدادات'!$B$8,2)))"
+      },
+      {
+       "column": "H",
+       "header": "المتبقي من السنوية",
+       "kind": "formula",
+       "formula_row_1": "=IF(E6=\"\",\"\",ROUND(E6-F6,2))"
+      },
+      {
+       "column": "I",
+       "header": "نسبة الصرف",
+       "kind": "formula",
+       "formula_row_1": "=IF(OR(E6=\"\",E6=0),\"\",F6/E6)"
+      },
+      {
+       "column": "J",
+       "header": "التنبيه",
+       "kind": "formula",
+       "formula_row_1": "=IF(E6=\"\",\"\",IF(F6>E6,\"تجاوز الميزانية السنوية\",IF(F6>G6,\"تجاوز حتى الآن\",IF(F6>=E6*'الإعدادات'!$B$7,\"اقتربت من الحد\",\"\"))))"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "المصروفات",
+   "formula_cells": 2000,
+   "record_tables": [
+    {
+     "header_row": 5,
+     "first_record_row": 6,
+     "sample_rows_filled": 68,
+     "capacity_last_row": 2005,
+     "columns": [
+      {
+       "column": "A",
+       "header": "التاريخ",
+       "kind": "input",
+       "examples": [
+        "2026-01-05",
+        "2026-01-05",
+        "2026-01-05"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "البند",
+       "kind": "input",
+       "examples": [
+        "حدائق",
+        "حراسة",
+        "مصعد وصيانة"
+       ],
+       "allowed_values": {
+        "from_range": "'البنود'!$A$6:$A$25"
+       }
+      },
+      {
+       "column": "C",
+       "header": "المورد / المقاول",
+       "kind": "input",
+       "examples": [
+        "مقاول الحدائق",
+        "شركة حراسة (مثال)",
+        "شركة مصاعد (مثال)"
+       ]
+      },
+      {
+       "column": "D",
+       "header": "المبلغ",
+       "kind": "input",
+       "examples": [
+        900,
+        8000,
+        1500
+       ]
+      },
+      {
+       "column": "E",
+       "header": "رقم الفاتورة",
+       "kind": "input",
+       "examples": [
+        "INV-2001",
+        "INV-2002",
+        "INV-2003"
+       ]
+      },
+      {
+       "column": "F",
+       "header": "طريقة الدفع",
+       "kind": "input",
+       "examples": [
+        "نقدًا",
+        "تحويل بنكي",
+        "نقدًا"
+       ],
+       "allowed_values": [
+        "نقدًا",
+        "تحويل بنكي"
+       ]
+      },
+      {
+       "column": "G",
+       "header": "فحص البند",
+       "kind": "formula",
+       "formula_row_1": "=IF(B6&\"\"=\"\",\"\",IF(COUNTIF('البنود'!$A$6:$A$25,B6&\"\")=0,\"بند غير موجود\",\"\"))"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "الإيرادات",
+   "formula_cells": 0,
+   "record_tables": [
+    {
+     "header_row": 5,
+     "first_record_row": 6,
+     "sample_rows_filled": 11,
+     "capacity_last_row": 16,
+     "columns": [
+      {
+       "column": "A",
+       "header": "الشهر",
+       "kind": "input",
+       "examples": [
+        "2026-01-01",
+        "2026-02-01",
+        "2026-03-01"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "إجمالي الاشتراكات المحصّلة",
+       "kind": "input",
+       "examples": [
+        24000,
+        24500,
+        23800
+       ]
+      },
+      {
+       "column": "C",
+       "header": "ملاحظة",
+       "kind": "input",
+       "examples": [
+        "الشهر الحالي لم ينتهِ"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "الفعلي مقابل الميزانية",
+   "formula_cells": 618,
+   "settings": [
+    {
+     "label": "البند",
+     "cell": "B5",
+     "value": "الميزانية الشهرية"
+    },
+    {
+     "label": "البند",
+     "cell": "B29",
+     "value": "النوع"
+    }
+   ],
+   "results": [
+    {
+     "label": "الإجمالي",
+     "cell": "B26",
+     "formula": "=SUM(B6:B25)"
+    }
+   ]
+  },
+  {
+   "name": "الملخص السنوي",
+   "formula_cells": 74,
+   "record_tables": [
+    {
+     "header_row": 20,
+     "first_record_row": 21,
+     "sample_rows_filled": 0,
+     "capacity_last_row": 33,
+     "columns": [
+      {
+       "column": "A",
+       "header": "الشهر",
+       "kind": "formula",
+       "formula_row_1": "=DATE('الإعدادات'!$B$5,1,1)"
+      },
+      {
+       "column": "B",
+       "header": "الإيرادات",
+       "kind": "formula",
+       "formula_row_1": "=IF($A21>'الإعدادات'!$B$4,\"\",SUMIFS('الإيرادات'!$B$6:$B$41,'الإيرادات'!$A$6:$A$41,\">=\"&$A21,'الإيرادات'!$A$6:$A$41,\"<\"&EDATE($A21,1)))"
+      },
+      {
+       "column": "C",
+       "header": "المصروفات",
+       "kind": "formula",
+       "formula_row_1": "=IF($A21>'الإعدادات'!$B$4,\"\",SUMIFS('المصروفات'!$D$6:$D$2005,'المصروفات'!$A$6:$A$2005,\">=\"&$A21,'المصروفات'!$A$6:$A$2005,\"<\"&EDATE($A21,1)))"
+      },
+      {
+       "column": "D",
+       "header": "الصافي",
+       "kind": "formula",
+       "formula_row_1": "=IF($A21>'الإعدادات'!$B$4,\"\",B21-C21)"
+      },
+      {
+       "column": "E",
+       "header": "الرصيد التراكمي",
+       "kind": "formula",
+       "formula_row_1": "=IF($A21>'الإعدادات'!$B$4,\"\",'الإعدادات'!$B$6+SUM(D$21:D21))"
+      }
+     ]
+    }
+   ],
+   "results": [
+    {
+     "label": "إجمالي الميزانية السنوية",
+     "cell": "B5",
+     "formula": "=SUM('البنود'!$E$6:$E$25)"
+    },
+    {
+     "label": "المصروف على البنود منذ بداية السنة",
+     "cell": "B6",
+     "formula": "=SUM('البنود'!$F$6:$F$25)"
+    },
+    {
+     "label": "نسبة الصرف من الميزانية",
+     "cell": "B7",
+     "formula": "=IF(B5=0,\"\",B6/B5)"
+    },
+    {
+     "label": "المتبقي من الميزانية",
+     "cell": "B8",
+     "formula": "=B5-B6"
+    },
+    {
+     "label": "بنود عليها تنبيه",
+     "cell": "B9",
+     "formula": "=COUNTIF('البنود'!$J$6:$J$25,\"?*\")"
+    },
+    {
+     "label": "بنود تجاوزت الميزانية السنوية",
+     "cell": "B10",
+     "formula": "=COUNTIF('البنود'!$J$6:$J$25,\"تجاوز الميزانية السنوية\")"
+    },
+    {
+     "label": "مصروفات بلا بند معروف",
+     "cell": "B11",
+     "formula": "=SUMIFS('المصروفات'!$D$6:$D$2005,'المصروفات'!$A$6:$A$2005,\">=\"&DATE('الإعدادات'!$B$5,1,1),'المصروفات'!$A$6:$A$2005,\"<\"&DATE('الإعدادات'!$B$5+1,1,1))-B6"
+    },
+    {
+     "label": "رصيد أول السنة",
+     "cell": "B14",
+     "formula": "='الإعدادات'!$B$6"
+    },
+    {
+     "label": "إيرادات الاشتراكات حتى اليوم",
+     "cell": "B15",
+     "formula": "=SUM(B21:B32)"
+    },
+    {
+     "label": "المصروفات حتى اليوم",
+     "cell": "B16",
+     "formula": "=SUM(C21:C32)"
+    },
+    {
+     "label": "الرصيد المتبقي الحالي",
+     "cell": "B17",
+     "formula": "=B14+B15-B16"
+    }
+   ]
+  },
+  {
+   "name": "لماذا ما زلت على إكسل؟",
+   "formula_cells": 0
+  }
+ ]
+}

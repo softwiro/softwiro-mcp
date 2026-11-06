@@ -1,0 +1,515 @@
+{
+ "id": "travel-agency-bookings",
+ "file": "softwiro-travel-agency-bookings.xlsx",
+ "title": "شيت حجوزات وكالة السفر",
+ "language": "ar",
+ "direction": "rtl",
+ "how_it_works": "White cells are typed input; cells whose kind is \"formula\" are calculated and must not be overwritten. Add one record per row under the header row of a record table, keeping the columns in order.",
+ "sheets": [
+  {
+   "name": "ابدأ هنا",
+   "formula_cells": 0
+  },
+  {
+   "name": "الإعدادات",
+   "formula_cells": 0,
+   "settings": [
+    {
+     "label": "تاريخ اليوم",
+     "cell": "B4",
+     "value": "2026-11-01"
+    },
+    {
+     "label": "تنبيه السفر القريب قبل (يوم)",
+     "cell": "B5",
+     "value": 14
+    }
+   ]
+  },
+  {
+   "name": "الحجوزات",
+   "formula_cells": 9000,
+   "record_tables": [
+    {
+     "header_row": 5,
+     "first_record_row": 6,
+     "sample_rows_filled": 9,
+     "capacity_last_row": 1005,
+     "columns": [
+      {
+       "column": "A",
+       "header": "رقم الحجز",
+       "kind": "input",
+       "examples": [
+        "BK001",
+        "BK002",
+        "BK003"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "تاريخ الحجز",
+       "kind": "input",
+       "examples": [
+        "2026-08-10",
+        "2026-09-05",
+        "2026-09-20"
+       ]
+      },
+      {
+       "column": "C",
+       "header": "العميل",
+       "kind": "input",
+       "examples": [
+        "محمود إبراهيم",
+        "هالة صلاح",
+        "ياسر كمال"
+       ]
+      },
+      {
+       "column": "D",
+       "header": "الجوال",
+       "kind": "input",
+       "examples": [
+        "01010000001",
+        "01010000002",
+        "01010000003"
+       ]
+      },
+      {
+       "column": "E",
+       "header": "نوع الحجز",
+       "kind": "input",
+       "examples": [
+        "عمرة",
+        "رحلة داخلية",
+        "رحلة خارجية"
+       ],
+       "allowed_values": {
+        "from_range": "'الإعدادات'!$A$8:$A$12"
+       }
+      },
+      {
+       "column": "F",
+       "header": "الوجهة / البرنامج",
+       "kind": "input",
+       "examples": [
+        "عمرة 10 أيام",
+        "شرم الشيخ 4 ليالي",
+        "إسطنبول 7 أيام"
+       ]
+      },
+      {
+       "column": "G",
+       "header": "تاريخ السفر",
+       "kind": "input",
+       "examples": [
+        "2026-11-20",
+        "2026-11-10",
+        "2026-12-15"
+       ]
+      },
+      {
+       "column": "H",
+       "header": "عدد الأفراد",
+       "kind": "input",
+       "examples": [
+        2,
+        3,
+        2
+       ]
+      },
+      {
+       "column": "I",
+       "header": "سعر الفرد للعميل",
+       "kind": "input",
+       "examples": [
+        28000,
+        6000,
+        25000
+       ]
+      },
+      {
+       "column": "J",
+       "header": "تكلفة الفرد من المورّد",
+       "kind": "input",
+       "examples": [
+        24000,
+        5000,
+        21500
+       ]
+      },
+      {
+       "column": "K",
+       "header": "حالة الحجز",
+       "kind": "input",
+       "examples": [
+        "مؤكد",
+        "مؤكد",
+        "مؤكد"
+       ],
+       "allowed_values": [
+        "مؤكد",
+        "معلق",
+        "ملغي"
+       ]
+      },
+      {
+       "column": "L",
+       "header": "إجمالي السعر",
+       "kind": "formula",
+       "formula_row_1": "=IF(OR(A6&\"\"=\"\",NOT(ISNUMBER(H6)),NOT(ISNUMBER(I6))),\"\",IF(K6=\"ملغي\",0,ROUND(H6*I6,2)))"
+      },
+      {
+       "column": "M",
+       "header": "إجمالي التكلفة",
+       "kind": "formula",
+       "formula_row_1": "=IF(L6=\"\",\"\",IF(K6=\"ملغي\",0,ROUND(H6*N(J6),2)))"
+      },
+      {
+       "column": "N",
+       "header": "العمولة",
+       "kind": "formula",
+       "formula_row_1": "=IF(L6=\"\",\"\",ROUND(L6-M6,2))"
+      },
+      {
+       "column": "O",
+       "header": "المدفوع",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",SUMIFS('الدفعات'!$C$6:$C$2005,'الدفعات'!$B$6:$B$2005,A6&\"\"))"
+      },
+      {
+       "column": "P",
+       "header": "المتبقي",
+       "kind": "formula",
+       "formula_row_1": "=IF(L6=\"\",\"\",IF(K6=\"ملغي\",\"\",ROUND(L6-O6,2)))"
+      },
+      {
+       "column": "Q",
+       "header": "حالة السداد",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",IF(L6=\"\",\"بيانات ناقصة\",IF(K6=\"ملغي\",IF(O6>0,\"ملغي - يُراجع المدفوع\",\"ملغي\"),IF(P6>0,IF(O6=0,\"لم يدفع\",\"دفع جزءًا\"),IF(P6<0,\"مدفوع زيادة\",\"مسدد\")))))"
+      },
+      {
+       "column": "R",
+       "header": "أيام حتى السفر",
+       "kind": "formula",
+       "formula_row_1": "=IF(OR(A6&\"\"=\"\",NOT(ISNUMBER(G6))),\"\",G6-'الإعدادات'!$B$4)"
+      },
+      {
+       "column": "S",
+       "header": "تنبيه",
+       "kind": "formula",
+       "formula_row_1": "=IF(OR(R6=\"\",K6=\"ملغي\"),\"\",IF(N(P6)<=0,\"\",IF(R6<0,\"سافر وعليه متبقي\",IF(R6<='الإعدادات'!$B$5,\"سفر قريب ومتبقي\",\"\"))))"
+      },
+      {
+       "column": "T",
+       "header": "ترتيب المتابعة",
+       "kind": "formula",
+       "formula_row_1": "=IF(ISNUMBER(P6),IF(P6>0,COUNTIFS($P$6:$P$1005,\">\"&P6)+COUNTIFS($P$6:P6,P6),\"\"),\"\")"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "الدفعات",
+   "formula_cells": 4000,
+   "record_tables": [
+    {
+     "header_row": 5,
+     "first_record_row": 6,
+     "sample_rows_filled": 14,
+     "capacity_last_row": 2005,
+     "columns": [
+      {
+       "column": "A",
+       "header": "التاريخ",
+       "kind": "input",
+       "examples": [
+        "2026-07-15",
+        "2026-08-10",
+        "2026-08-30"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "رقم الحجز",
+       "kind": "input",
+       "examples": [
+        "BK005",
+        "BK001",
+        "BK005"
+       ],
+       "allowed_values": {
+        "from_range": "'الحجوزات'!$A$6:$A$1005"
+       }
+      },
+      {
+       "column": "C",
+       "header": "المبلغ",
+       "kind": "input",
+       "examples": [
+        7000,
+        20000,
+        5000
+       ]
+      },
+      {
+       "column": "D",
+       "header": "طريقة الدفع",
+       "kind": "input",
+       "examples": [
+        "نقدًا",
+        "تحويل بنكي",
+        "نقدًا"
+       ],
+       "allowed_values": [
+        "نقدًا",
+        "تحويل بنكي",
+        "محفظة إلكترونية"
+       ]
+      },
+      {
+       "column": "E",
+       "header": "ملاحظة",
+       "kind": "input"
+      },
+      {
+       "column": "F",
+       "header": "العميل",
+       "kind": "formula",
+       "formula_row_1": "=IF(B6&\"\"=\"\",\"\",IFERROR(INDEX('الحجوزات'!$C$6:$C$1005,MATCH(B6&\"\",'الحجوزات'!$A$6:$A$1005,0))&\"\",\"\"))"
+      },
+      {
+       "column": "G",
+       "header": "تنبيه",
+       "kind": "formula",
+       "formula_row_1": "=IF(B6&\"\"=\"\",\"\",IF(ISNA(MATCH(B6&\"\",'الحجوزات'!$A$6:$A$1005,0)),\"رقم غير موجود\",IF(NOT(ISNUMBER(A6)),\"بدون تاريخ\",\"\")))"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "للمتابعة",
+   "formula_cells": 451,
+   "record_tables": [
+    {
+     "header_row": 6,
+     "first_record_row": 7,
+     "sample_rows_filled": 0,
+     "capacity_last_row": 56,
+     "columns": [
+      {
+       "column": "A",
+       "header": "م",
+       "kind": "formula",
+       "formula_row_1": "=IF(1<=$B$4,1,\"\")"
+      },
+      {
+       "column": "B",
+       "header": "رقم الحجز",
+       "kind": "formula",
+       "formula_row_1": "=IF($A7=\"\",\"\",INDEX('الحجوزات'!$A$6:$A$1005,MATCH($A7,'الحجوزات'!$T$6:$T$1005,0))&\"\")"
+      },
+      {
+       "column": "C",
+       "header": "العميل",
+       "kind": "formula",
+       "formula_row_1": "=IF($A7=\"\",\"\",INDEX('الحجوزات'!$C$6:$C$1005,MATCH($A7,'الحجوزات'!$T$6:$T$1005,0))&\"\")"
+      },
+      {
+       "column": "D",
+       "header": "الجوال",
+       "kind": "formula",
+       "formula_row_1": "=IF($A7=\"\",\"\",INDEX('الحجوزات'!$D$6:$D$1005,MATCH($A7,'الحجوزات'!$T$6:$T$1005,0))&\"\")"
+      },
+      {
+       "column": "E",
+       "header": "الوجهة",
+       "kind": "formula",
+       "formula_row_1": "=IF($A7=\"\",\"\",INDEX('الحجوزات'!$F$6:$F$1005,MATCH($A7,'الحجوزات'!$T$6:$T$1005,0))&\"\")"
+      },
+      {
+       "column": "F",
+       "header": "تاريخ السفر",
+       "kind": "formula",
+       "formula_row_1": "=IF($A7=\"\",\"\",INDEX('الحجوزات'!$G$6:$G$1005,MATCH($A7,'الحجوزات'!$T$6:$T$1005,0)))"
+      },
+      {
+       "column": "G",
+       "header": "المتبقي",
+       "kind": "formula",
+       "formula_row_1": "=IF($A7=\"\",\"\",INDEX('الحجوزات'!$P$6:$P$1005,MATCH($A7,'الحجوزات'!$T$6:$T$1005,0)))"
+      },
+      {
+       "column": "H",
+       "header": "أيام حتى السفر",
+       "kind": "formula",
+       "formula_row_1": "=IF($A7=\"\",\"\",INDEX('الحجوزات'!$R$6:$R$1005,MATCH($A7,'الحجوزات'!$T$6:$T$1005,0)))"
+      },
+      {
+       "column": "I",
+       "header": "تنبيه",
+       "kind": "formula",
+       "formula_row_1": "=IF($A7=\"\",\"\",INDEX('الحجوزات'!$S$6:$S$1005,MATCH($A7,'الحجوزات'!$T$6:$T$1005,0))&\"\")"
+      }
+     ]
+    }
+   ],
+   "results": [
+    {
+     "label": "حجوزات عليها متبقي",
+     "cell": "B4",
+     "formula": "=COUNTIF('الحجوزات'!$P$6:$P$1005,\">0\")"
+    }
+   ]
+  },
+  {
+   "name": "الملخص",
+   "formula_cells": 44,
+   "record_tables": [
+    {
+     "header_row": 32,
+     "first_record_row": 33,
+     "sample_rows_filled": 0,
+     "capacity_last_row": 37,
+     "columns": [
+      {
+       "column": "A",
+       "header": "نوع الحجز",
+       "kind": "formula",
+       "formula_row_1": "=IF('الإعدادات'!A8=\"\",\"\",'الإعدادات'!A8)"
+      },
+      {
+       "column": "B",
+       "header": "عدد الحجوزات",
+       "kind": "formula",
+       "formula_row_1": "=IF(A33=\"\",\"\",COUNTIFS('الحجوزات'!$E$6:$E$1005,A33,'الحجوزات'!$K$6:$K$1005,\"<>ملغي\"))"
+      },
+      {
+       "column": "C",
+       "header": "المبيعات",
+       "kind": "formula",
+       "formula_row_1": "=IF(A33=\"\",\"\",SUMIFS('الحجوزات'!$L$6:$L$1005,'الحجوزات'!$E$6:$E$1005,A33,'الحجوزات'!$K$6:$K$1005,\"<>ملغي\"))"
+      },
+      {
+       "column": "D",
+       "header": "العمولة",
+       "kind": "formula",
+       "formula_row_1": "=IF(A33=\"\",\"\",SUMIFS('الحجوزات'!$N$6:$N$1005,'الحجوزات'!$E$6:$E$1005,A33,'الحجوزات'!$K$6:$K$1005,\"<>ملغي\"))"
+      },
+      {
+       "column": "E",
+       "header": "المتبقي",
+       "kind": "formula",
+       "formula_row_1": "=IF(A33=\"\",\"\",SUMIFS('الحجوزات'!$P$6:$P$1005,'الحجوزات'!$E$6:$E$1005,A33,'الحجوزات'!$K$6:$K$1005,\"<>ملغي\"))"
+      }
+     ]
+    }
+   ],
+   "results": [
+    {
+     "label": "كل الحجوزات المسجلة",
+     "cell": "B5",
+     "formula": "=COUNTIF('الحجوزات'!$A$6:$A$1005,\"?*\")"
+    },
+    {
+     "label": "حجوزات ملغية",
+     "cell": "B6",
+     "formula": "=COUNTIF('الحجوزات'!$K$6:$K$1005,\"ملغي\")"
+    },
+    {
+     "label": "حجوزات سارية",
+     "cell": "B7",
+     "formula": "=B5-B6"
+    },
+    {
+     "label": "منها مؤكدة",
+     "cell": "B8",
+     "formula": "=COUNTIF('الحجوزات'!$K$6:$K$1005,\"مؤكد\")"
+    },
+    {
+     "label": "منها معلقة",
+     "cell": "B9",
+     "formula": "=COUNTIF('الحجوزات'!$K$6:$K$1005,\"معلق\")"
+    },
+    {
+     "label": "عدد المسافرين في الحجوزات السارية",
+     "cell": "B10",
+     "formula": "=SUMIFS('الحجوزات'!$H$6:$H$1005,'الحجوزات'!$K$6:$K$1005,\"<>ملغي\")"
+    },
+    {
+     "label": "إجمالي المبيعات",
+     "cell": "B13",
+     "formula": "=SUM('الحجوزات'!$L$6:$L$1005)"
+    },
+    {
+     "label": "إجمالي التكلفة",
+     "cell": "B14",
+     "formula": "=SUM('الحجوزات'!$M$6:$M$1005)"
+    },
+    {
+     "label": "إجمالي العمولة",
+     "cell": "B15",
+     "formula": "=SUM('الحجوزات'!$N$6:$N$1005)"
+    },
+    {
+     "label": "نسبة العمولة من المبيعات",
+     "cell": "B16",
+     "formula": "=IF(B13=0,\"\",B15/B13)"
+    },
+    {
+     "label": "المحصّل على الحجوزات السارية",
+     "cell": "B19",
+     "formula": "=SUMIFS('الحجوزات'!$O$6:$O$1005,'الحجوزات'!$K$6:$K$1005,\"<>ملغي\",'الحجوزات'!$A$6:$A$1005,\"?*\")"
+    },
+    {
+     "label": "المتبقي على العملاء",
+     "cell": "B20",
+     "formula": "=SUMIF('الحجوزات'!$P$6:$P$1005,\">0\")"
+    },
+    {
+     "label": "مدفوع زيادة (للرد أو الخصم)",
+     "cell": "B21",
+     "formula": "=-SUMIF('الحجوزات'!$P$6:$P$1005,\"<0\")"
+    },
+    {
+     "label": "مدفوع على حجوزات ملغية",
+     "cell": "B22",
+     "formula": "=SUMIFS('الحجوزات'!$O$6:$O$1005,'الحجوزات'!$K$6:$K$1005,\"ملغي\")"
+    },
+    {
+     "label": "المحصّل خلال آخر 30 يومًا",
+     "cell": "B23",
+     "formula": "=SUMIFS('الدفعات'!$C$6:$C$2005,'الدفعات'!$A$6:$A$2005,\">\"&('الإعدادات'!$B$4-30),'الدفعات'!$A$6:$A$2005,\"<=\"&'الإعدادات'!$B$4)"
+    },
+    {
+     "label": "حجوزات عليها متبقي",
+     "cell": "B26",
+     "formula": "=COUNTIF('الحجوزات'!$P$6:$P$1005,\">0\")"
+    },
+    {
+     "label": "سفر قريب ومتبقي",
+     "cell": "B27",
+     "formula": "=COUNTIF('الحجوزات'!$S$6:$S$1005,\"سفر قريب ومتبقي\")"
+    },
+    {
+     "label": "سافر وعليه متبقي",
+     "cell": "B28",
+     "formula": "=COUNTIF('الحجوزات'!$S$6:$S$1005,\"سافر وعليه متبقي\")"
+    },
+    {
+     "label": "دفعات برقم حجز غير موجود",
+     "cell": "B29",
+     "formula": "=COUNTIF('الدفعات'!$G$6:$G$2005,\"رقم غير موجود\")"
+    }
+   ]
+  },
+  {
+   "name": "لماذا ما زلت على إكسل؟",
+   "formula_cells": 0
+  }
+ ]
+}

@@ -1,0 +1,579 @@
+{
+ "id": "fleet-fuel-maintenance",
+ "file": "softwiro-fleet-fuel-maintenance.xlsx",
+ "title": "شيت وقود وصيانة الأسطول",
+ "language": "ar",
+ "direction": "rtl",
+ "how_it_works": "White cells are typed input; cells whose kind is \"formula\" are calculated and must not be overwritten. Add one record per row under the header row of a record table, keeping the columns in order.",
+ "sheets": [
+  {
+   "name": "ابدأ هنا",
+   "formula_cells": 0
+  },
+  {
+   "name": "الإعدادات",
+   "formula_cells": 0,
+   "settings": [
+    {
+     "label": "تاريخ اليوم",
+     "cell": "B4",
+     "value": "2026-11-01"
+    },
+    {
+     "label": "تنبيه الترخيص والتأمين قبل (يوم)",
+     "cell": "B5",
+     "value": 30
+    }
+   ]
+  },
+  {
+   "name": "المركبات",
+   "formula_cells": 2600,
+   "record_tables": [
+    {
+     "header_row": 5,
+     "first_record_row": 6,
+     "sample_rows_filled": 6,
+     "capacity_last_row": 205,
+     "columns": [
+      {
+       "column": "A",
+       "header": "كود المركبة",
+       "kind": "input",
+       "examples": [
+        "V01",
+        "V02",
+        "V03"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "رقم اللوحة",
+       "kind": "input",
+       "examples": [
+        "ن ق ل 2201",
+        "ن ق ل 2202",
+        "ن ق ل 2203"
+       ]
+      },
+      {
+       "column": "C",
+       "header": "النوع",
+       "kind": "input",
+       "examples": [
+        "ميكروباص",
+        "ميكروباص",
+        "نصف نقل"
+       ],
+       "allowed_values": [
+        "ميكروباص",
+        "نصف نقل",
+        "سيارة ملاكي",
+        "فان"
+       ]
+      },
+      {
+       "column": "D",
+       "header": "الوصف",
+       "kind": "input",
+       "examples": [
+        "تويوتا هايس",
+        "هيونداي H1",
+        "ميتسوبيشي L200"
+       ]
+      },
+      {
+       "column": "E",
+       "header": "السائق",
+       "kind": "input",
+       "examples": [
+        "عادل فتحي",
+        "سمير عوض",
+        "ماهر زكي"
+       ]
+      },
+      {
+       "column": "F",
+       "header": "عداد البداية",
+       "kind": "input",
+       "examples": [
+        120000,
+        85000,
+        200000
+       ]
+      },
+      {
+       "column": "G",
+       "header": "انتهاء الترخيص",
+       "kind": "input",
+       "examples": [
+        "2027-02-10",
+        "2026-11-15",
+        "2026-10-20"
+       ]
+      },
+      {
+       "column": "H",
+       "header": "انتهاء التأمين",
+       "kind": "input",
+       "examples": [
+        "2027-02-10",
+        "2027-01-20",
+        "2026-12-30"
+       ]
+      },
+      {
+       "column": "I",
+       "header": "العداد الحالي",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",IFERROR(SUMIFS('الوقود'!$C$6:$C$2005,'الوقود'!$B$6:$B$2005,A6&\"\",'الوقود'!$I$6:$I$2005,1)/COUNTIFS('الوقود'!$B$6:$B$2005,A6&\"\",'الوقود'!$I$6:$I$2005,1),\"\"))"
+      },
+      {
+       "column": "J",
+       "header": "الكيلومترات",
+       "kind": "formula",
+       "formula_row_1": "=IF(OR(I6=\"\",NOT(ISNUMBER(F6))),\"\",MAX(0,I6-F6))"
+      },
+      {
+       "column": "K",
+       "header": "اللترات",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",SUMIFS('الوقود'!$D$6:$D$2005,'الوقود'!$B$6:$B$2005,A6&\"\"))"
+      },
+      {
+       "column": "L",
+       "header": "تكلفة الوقود",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",SUMIFS('الوقود'!$G$6:$G$2005,'الوقود'!$B$6:$B$2005,A6&\"\"))"
+      },
+      {
+       "column": "M",
+       "header": "تكلفة الصيانة",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",SUMIFS('الصيانة'!$D$6:$D$1005,'الصيانة'!$B$6:$B$1005,A6&\"\"))"
+      },
+      {
+       "column": "N",
+       "header": "إجمالي التكلفة",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",ROUND(L6+M6,2))"
+      },
+      {
+       "column": "O",
+       "header": "تكلفة الكيلومتر",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",IF(N(J6)=0,\"\",ROUND(N6/J6,2)))"
+      },
+      {
+       "column": "P",
+       "header": "لتر لكل 100 كم",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",IF(OR(N(J6)=0,N(K6)=0),\"\",ROUND(K6/J6*100,2)))"
+      },
+      {
+       "column": "Q",
+       "header": "آخر صيانة",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",IFERROR(SUMIFS('الصيانة'!$A$6:$A$1005,'الصيانة'!$B$6:$B$1005,A6&\"\",'الصيانة'!$G$6:$G$1005,1)/COUNTIFS('الصيانة'!$B$6:$B$1005,A6&\"\",'الصيانة'!$G$6:$G$1005,1),\"\"))"
+      },
+      {
+       "column": "R",
+       "header": "أقرب انتهاء",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",IF(AND(ISNUMBER(G6),ISNUMBER(H6)),MIN(G6,H6),IF(ISNUMBER(G6),G6,IF(ISNUMBER(H6),H6,\"\"))))"
+      },
+      {
+       "column": "S",
+       "header": "أيام لأقرب انتهاء",
+       "kind": "formula",
+       "formula_row_1": "=IF(R6=\"\",\"\",R6-'الإعدادات'!$B$4)"
+      },
+      {
+       "column": "T",
+       "header": "التنبيه",
+       "kind": "formula",
+       "formula_row_1": "=IF(S6=\"\",\"\",IF(S6<0,\"منتهي\",IF(S6<='الإعدادات'!$B$5,\"ينتهي قريبًا\",\"\")))"
+      },
+      {
+       "column": "U",
+       "header": "ترتيب المتابعة",
+       "kind": "formula",
+       "formula_row_1": "=IF(ISNUMBER(S6),IF(S6<='الإعدادات'!$B$5,COUNTIFS($S$6:$S$205,\"<\"&S6)+COUNTIFS($S$6:S6,S6),\"\"),\"\")"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "الوقود",
+   "formula_cells": 6000,
+   "record_tables": [
+    {
+     "header_row": 5,
+     "first_record_row": 6,
+     "sample_rows_filled": 14,
+     "capacity_last_row": 2005,
+     "columns": [
+      {
+       "column": "A",
+       "header": "التاريخ",
+       "kind": "input",
+       "examples": [
+        "2026-10-02",
+        "2026-10-03",
+        "2026-10-04"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "كود المركبة",
+       "kind": "input",
+       "examples": [
+        "V01",
+        "V02",
+        "V06"
+       ],
+       "allowed_values": {
+        "from_range": "'المركبات'!$A$6:$A$205"
+       }
+      },
+      {
+       "column": "C",
+       "header": "العداد (كم)",
+       "kind": "input",
+       "examples": [
+        121000,
+        85900,
+        96500
+       ]
+      },
+      {
+       "column": "D",
+       "header": "اللترات",
+       "kind": "input",
+       "examples": [
+        50,
+        45,
+        60
+       ]
+      },
+      {
+       "column": "E",
+       "header": "سعر اللتر",
+       "kind": "input",
+       "examples": [
+        20,
+        20,
+        20
+       ]
+      },
+      {
+       "column": "F",
+       "header": "ملاحظة",
+       "kind": "input",
+       "examples": [
+        "محطة الطريق الدائري",
+        "سعر اللتر زاد"
+       ]
+      },
+      {
+       "column": "G",
+       "header": "تكلفة التعبئة",
+       "kind": "formula",
+       "formula_row_1": "=IF(OR(B6&\"\"=\"\",NOT(ISNUMBER(D6))),\"\",ROUND(D6*N(E6),2))"
+      },
+      {
+       "column": "H",
+       "header": "المركبة",
+       "kind": "formula",
+       "formula_row_1": "=IF(B6&\"\"=\"\",\"\",IFERROR(INDEX('المركبات'!$B$6:$B$205,MATCH(B6&\"\",'المركبات'!$A$6:$A$205,0))&\"\",\"كود غير موجود\"))"
+      },
+      {
+       "column": "I",
+       "header": "آخر قراءة للمركبة",
+       "kind": "formula",
+       "formula_row_1": "=IF(OR(B6&\"\"=\"\",NOT(ISNUMBER(C6))),\"\",IF(COUNTIFS($B$6:$B$2005,B6&\"\",$C$6:$C$2005,\">\"&C6)=0,1,0))"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "الصيانة",
+   "formula_cells": 2000,
+   "record_tables": [
+    {
+     "header_row": 5,
+     "first_record_row": 6,
+     "sample_rows_filled": 9,
+     "capacity_last_row": 1005,
+     "columns": [
+      {
+       "column": "A",
+       "header": "التاريخ",
+       "kind": "input",
+       "examples": [
+        "2026-09-15",
+        "2026-10-03",
+        "2026-10-07"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "كود المركبة",
+       "kind": "input",
+       "examples": [
+        "V01",
+        "V06",
+        "V04"
+       ],
+       "allowed_values": {
+        "from_range": "'المركبات'!$A$6:$A$205"
+       }
+      },
+      {
+       "column": "C",
+       "header": "النوع",
+       "kind": "input",
+       "examples": [
+        "فرامل",
+        "إصلاح عطل",
+        "زيت وفلاتر"
+       ],
+       "allowed_values": [
+        "زيت وفلاتر",
+        "إطارات",
+        "فرامل",
+        "كهرباء",
+        "إصلاح عطل",
+        "أخرى"
+       ]
+      },
+      {
+       "column": "D",
+       "header": "التكلفة",
+       "kind": "input",
+       "examples": [
+        1800,
+        9000,
+        900
+       ]
+      },
+      {
+       "column": "E",
+       "header": "الورشة / ملاحظة",
+       "kind": "input",
+       "examples": [
+        "تغيير طلمبة"
+       ]
+      },
+      {
+       "column": "F",
+       "header": "المركبة",
+       "kind": "formula",
+       "formula_row_1": "=IF(B6&\"\"=\"\",\"\",IFERROR(INDEX('المركبات'!$B$6:$B$205,MATCH(B6&\"\",'المركبات'!$A$6:$A$205,0))&\"\",\"كود غير موجود\"))"
+      },
+      {
+       "column": "G",
+       "header": "آخر صيانة للمركبة",
+       "kind": "formula",
+       "formula_row_1": "=IF(OR(B6&\"\"=\"\",NOT(ISNUMBER(A6))),\"\",IF(COUNTIFS($B$6:$B$1005,B6&\"\",$A$6:$A$1005,\">\"&A6)=0,1,0))"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "للمتابعة",
+   "formula_cells": 401,
+   "record_tables": [
+    {
+     "header_row": 6,
+     "first_record_row": 7,
+     "sample_rows_filled": 0,
+     "capacity_last_row": 56,
+     "columns": [
+      {
+       "column": "A",
+       "header": "م",
+       "kind": "formula",
+       "formula_row_1": "=IF(1<=$B$4,1,\"\")"
+      },
+      {
+       "column": "B",
+       "header": "المركبة",
+       "kind": "formula",
+       "formula_row_1": "=IF($A7=\"\",\"\",INDEX('المركبات'!$A$6:$A$205,MATCH($A7,'المركبات'!$U$6:$U$205,0))&\"\")"
+      },
+      {
+       "column": "C",
+       "header": "اللوحة",
+       "kind": "formula",
+       "formula_row_1": "=IF($A7=\"\",\"\",INDEX('المركبات'!$B$6:$B$205,MATCH($A7,'المركبات'!$U$6:$U$205,0))&\"\")"
+      },
+      {
+       "column": "D",
+       "header": "السائق",
+       "kind": "formula",
+       "formula_row_1": "=IF($A7=\"\",\"\",INDEX('المركبات'!$E$6:$E$205,MATCH($A7,'المركبات'!$U$6:$U$205,0))&\"\")"
+      },
+      {
+       "column": "E",
+       "header": "انتهاء الترخيص",
+       "kind": "formula",
+       "formula_row_1": "=IF($A7=\"\",\"\",INDEX('المركبات'!$G$6:$G$205,MATCH($A7,'المركبات'!$U$6:$U$205,0)))"
+      },
+      {
+       "column": "F",
+       "header": "انتهاء التأمين",
+       "kind": "formula",
+       "formula_row_1": "=IF($A7=\"\",\"\",INDEX('المركبات'!$H$6:$H$205,MATCH($A7,'المركبات'!$U$6:$U$205,0)))"
+      },
+      {
+       "column": "G",
+       "header": "أيام لأقرب انتهاء",
+       "kind": "formula",
+       "formula_row_1": "=IF($A7=\"\",\"\",INDEX('المركبات'!$S$6:$S$205,MATCH($A7,'المركبات'!$U$6:$U$205,0)))"
+      },
+      {
+       "column": "H",
+       "header": "التنبيه",
+       "kind": "formula",
+       "formula_row_1": "=IF($A7=\"\",\"\",INDEX('المركبات'!$T$6:$T$205,MATCH($A7,'المركبات'!$U$6:$U$205,0))&\"\")"
+      }
+     ]
+    }
+   ],
+   "results": [
+    {
+     "label": "مركبات تحتاج متابعة",
+     "cell": "B4",
+     "formula": "=COUNTIF('المركبات'!$T$6:$T$205,\"منتهي\")+COUNTIF('المركبات'!$T$6:$T$205,\"ينتهي قريبًا\")"
+    }
+   ]
+  },
+  {
+   "name": "الملخص",
+   "formula_cells": 39,
+   "record_tables": [
+    {
+     "header_row": 24,
+     "first_record_row": 25,
+     "sample_rows_filled": 12,
+     "capacity_last_row": 37,
+     "columns": [
+      {
+       "column": "A",
+       "header": "النوع",
+       "kind": "input",
+       "examples": [
+        "ميكروباص",
+        "نصف نقل",
+        "سيارة ملاكي"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "عدد المركبات",
+       "kind": "formula",
+       "formula_row_1": "=COUNTIF('المركبات'!$C$6:$C$205,A25)"
+      },
+      {
+       "column": "C",
+       "header": "الكيلومترات",
+       "kind": "formula",
+       "formula_row_1": "=SUMIFS('المركبات'!$J$6:$J$205,'المركبات'!$C$6:$C$205,A25)"
+      },
+      {
+       "column": "D",
+       "header": "إجمالي التكلفة",
+       "kind": "formula",
+       "formula_row_1": "=SUMIFS('المركبات'!$N$6:$N$205,'المركبات'!$C$6:$C$205,A25)"
+      }
+     ]
+    }
+   ],
+   "results": [
+    {
+     "label": "عدد المركبات",
+     "cell": "B5",
+     "formula": "=COUNTIF('المركبات'!$A$6:$A$205,\"?*\")"
+    },
+    {
+     "label": "إجمالي الكيلومترات",
+     "cell": "B6",
+     "formula": "=SUM('المركبات'!$J$6:$J$205)"
+    },
+    {
+     "label": "إجمالي اللترات",
+     "cell": "B7",
+     "formula": "=SUM('المركبات'!$K$6:$K$205)"
+    },
+    {
+     "label": "تكلفة الوقود",
+     "cell": "B8",
+     "formula": "=SUM('المركبات'!$L$6:$L$205)"
+    },
+    {
+     "label": "تكلفة الصيانة",
+     "cell": "B9",
+     "formula": "=SUM('المركبات'!$M$6:$M$205)"
+    },
+    {
+     "label": "إجمالي التكلفة",
+     "cell": "B10",
+     "formula": "=B8+B9"
+    },
+    {
+     "label": "تكلفة الكيلومتر للأسطول",
+     "cell": "B11",
+     "formula": "=IF(B6=0,\"\",ROUND(SUMIFS('المركبات'!$N$6:$N$205,'المركبات'!$J$6:$J$205,\">0\")/B6,2))"
+    },
+    {
+     "label": "أعلى تكلفة كيلومتر (مركبة)",
+     "cell": "B12",
+     "formula": "=IFERROR(INDEX('المركبات'!$A$6:$A$205,MATCH(MAX('المركبات'!$O$6:$O$205),'المركبات'!$O$6:$O$205,0))&\"\",\"\")"
+    },
+    {
+     "label": "أقل تكلفة كيلومتر (مركبة)",
+     "cell": "B13",
+     "formula": "=IFERROR(INDEX('المركبات'!$A$6:$A$205,MATCH(MIN('المركبات'!$O$6:$O$205),'المركبات'!$O$6:$O$205,0))&\"\",\"\")"
+    },
+    {
+     "label": "وقود الشهر الحالي",
+     "cell": "B14",
+     "formula": "=SUMIFS('الوقود'!$G$6:$G$2005,'الوقود'!$A$6:$A$2005,\">=\"&DATE(YEAR('الإعدادات'!$B$4),MONTH('الإعدادات'!$B$4),1),'الوقود'!$A$6:$A$2005,\"<=\"&'الإعدادات'!$B$4)"
+    },
+    {
+     "label": "صيانة الشهر الحالي",
+     "cell": "B15",
+     "formula": "=SUMIFS('الصيانة'!$D$6:$D$1005,'الصيانة'!$A$6:$A$1005,\">=\"&DATE(YEAR('الإعدادات'!$B$4),MONTH('الإعدادات'!$B$4),1),'الصيانة'!$A$6:$A$1005,\"<=\"&'الإعدادات'!$B$4)"
+    },
+    {
+     "label": "تراخيص منتهية",
+     "cell": "B18",
+     "formula": "=COUNTIFS('المركبات'!$G$6:$G$205,\"<\"&'الإعدادات'!$B$4)"
+    },
+    {
+     "label": "تراخيص تنتهي قريبًا",
+     "cell": "B19",
+     "formula": "=COUNTIFS('المركبات'!$G$6:$G$205,\">=\"&'الإعدادات'!$B$4,'المركبات'!$G$6:$G$205,\"<=\"&'الإعدادات'!$B$4+'الإعدادات'!$B$5)"
+    },
+    {
+     "label": "تأمينات منتهية",
+     "cell": "B20",
+     "formula": "=COUNTIFS('المركبات'!$H$6:$H$205,\"<\"&'الإعدادات'!$B$4)"
+    },
+    {
+     "label": "تأمينات تنتهي قريبًا",
+     "cell": "B21",
+     "formula": "=COUNTIFS('المركبات'!$H$6:$H$205,\">=\"&'الإعدادات'!$B$4,'المركبات'!$H$6:$H$205,\"<=\"&'الإعدادات'!$B$4+'الإعدادات'!$B$5)"
+    }
+   ]
+  },
+  {
+   "name": "لماذا ما زلت على إكسل؟",
+   "formula_cells": 0
+  }
+ ]
+}

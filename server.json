@@ -1,0 +1,23 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "com.softwiro/templates",
+  "title": "Softwiro Excel templates and calculators",
+  "description": "Arabic Excel templates and 23 calculators (VAT, BMI, gold zakat...). No key, nothing stored.",
+  "version": "1.2.0",
+  "websiteUrl": "https://softwiro.com/mcp",
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://softwiro.com/api/mcp"
+    }
+  ],
+  "icons": [
+    {
+      "src": "https://softwiro.com/brand/softwiro-logo-512.png",
+      "mimeType": "image/png",
+      "sizes": [
+        "512x512"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,349 @@
+{
+ "id": "igcse-subject-tracker",
+ "file": "softwiro-igcse-subject-tracker.xlsx",
+ "title": "شيت متابعة مواد IGCSE",
+ "language": "ar",
+ "direction": "rtl",
+ "how_it_works": "White cells are typed input; cells whose kind is \"formula\" are calculated and must not be overwritten. Add one record per row under the header row of a record table, keeping the columns in order.",
+ "sheets": [
+  {
+   "name": "ابدأ هنا",
+   "formula_cells": 0
+  },
+  {
+   "name": "الإعدادات",
+   "formula_cells": 1,
+   "settings": [
+    {
+     "label": "اسم الطالب",
+     "cell": "B4",
+     "value": "ياسين علي"
+    },
+    {
+     "label": "الدورة (Session)",
+     "cell": "B5",
+     "value": "مثال: Nov 2026"
+    },
+    {
+     "label": "الدرجة",
+     "cell": "B9",
+     "value": "أدنى نسبة مئوية (مثال)"
+    },
+    {
+     "label": "A*",
+     "cell": "B10",
+     "value": 0.9
+    },
+    {
+     "label": "A",
+     "cell": "B11",
+     "value": 0.8
+    },
+    {
+     "label": "B",
+     "cell": "B12",
+     "value": 0.7
+    },
+    {
+     "label": "C",
+     "cell": "B13",
+     "value": 0.6
+    },
+    {
+     "label": "D",
+     "cell": "B14",
+     "value": 0.5
+    },
+    {
+     "label": "E",
+     "cell": "B15",
+     "value": 0.4
+    },
+    {
+     "label": "F",
+     "cell": "B16",
+     "value": 0.3
+    },
+    {
+     "label": "G",
+     "cell": "B17",
+     "value": 0.2
+    },
+    {
+     "label": "U",
+     "cell": "B18",
+     "value": 0
+    }
+   ],
+   "results": [
+    {
+     "label": "هل الحدود مرتبة من الأعلى إلى الأقل؟",
+     "cell": "B20",
+     "formula": "=IF(AND(B10>=B11,B11>=B12,B12>=B13,B13>=B14,B14>=B15,B15>=B16,B16>=B17,B17>=B18),\"مرتبة\",\"تحتاج ترتيبًا\")"
+    }
+   ]
+  },
+  {
+   "name": "المواد",
+   "formula_cells": 2400,
+   "record_tables": [
+    {
+     "header_row": 5,
+     "first_record_row": 6,
+     "sample_rows_filled": 8,
+     "capacity_last_row": 205,
+     "columns": [
+      {
+       "column": "A",
+       "header": "المادة",
+       "kind": "input",
+       "examples": [
+        "Mathematics",
+        "English Language",
+        "Physics"
+       ]
+      },
+      {
+       "column": "B",
+       "header": "الدرجة المستهدفة",
+       "kind": "input",
+       "examples": [
+        "A",
+        "B",
+        "A*"
+       ],
+       "allowed_values": {
+        "from_range": "'الإعدادات'!$A$10:$A$18"
+       }
+      },
+      {
+       "column": "C",
+       "header": "إزاحة الحدود",
+       "kind": "input",
+       "examples": [
+        0.03
+       ]
+      },
+      {
+       "column": "D",
+       "header": "مجموع الأوزان",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",SUMIFS('الأوراق'!$C$6:$C$505,'الأوراق'!$A$6:$A$505,A6&\"\",'الأوراق'!$H$6:$H$505,\"محسوب\")+SUMIFS('الأوراق'!$C$6:$C$505,'الأوراق'!$A$6:$A$505,A6&\"\",'الأوراق'!$H$6:$H$505,\"لم تُجرَّب بعد\"))"
+      },
+      {
+       "column": "E",
+       "header": "وزن الأوراق المُجرَّبة",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",SUMIFS('الأوراق'!$C$6:$C$505,'الأوراق'!$A$6:$A$505,A6&\"\",'الأوراق'!$H$6:$H$505,\"محسوب\"))"
+      },
+      {
+       "column": "F",
+       "header": "نقاط حصلت عليها",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",ROUND(SUMIFS('الأوراق'!$G$6:$G$505,'الأوراق'!$A$6:$A$505,A6&\"\",'الأوراق'!$H$6:$H$505,\"محسوب\"),4))"
+      },
+      {
+       "column": "G",
+       "header": "النسبة المتوقعة",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",IF(E6=0,\"\",ROUND(F6/E6,4)))"
+      },
+      {
+       "column": "H",
+       "header": "الدرجة المتوقعة",
+       "kind": "formula",
+       "formula_row_1": "=IF(G6=\"\",\"\",INDEX('الإعدادات'!$A$10:$A$18,MIN(9,COUNTIF('الإعدادات'!$B$10:$B$18,\">\"&ROUND(G6-N(C6),4))+1)))"
+      },
+      {
+       "column": "I",
+       "header": "النسبة المطلوبة للهدف",
+       "kind": "formula",
+       "formula_row_1": "=IF(OR(A6&\"\"=\"\",B6&\"\"=\"\"),\"\",IFERROR(VLOOKUP(B6,'الإعدادات'!$A$10:$B$18,2,FALSE)+N(C6),\"\"))"
+      },
+      {
+       "column": "J",
+       "header": "الفجوة عن الهدف",
+       "kind": "formula",
+       "formula_row_1": "=IF(OR(G6=\"\",I6=\"\"),\"\",ROUND(I6-G6,4))"
+      },
+      {
+       "column": "K",
+       "header": "نقاط ناقصة للهدف",
+       "kind": "formula",
+       "formula_row_1": "=IF(I6=\"\",\"\",IF(D6=0,\"\",MAX(0,ROUND(I6*D6-F6,2))))"
+      },
+      {
+       "column": "L",
+       "header": "وزن الأوراق المتبقية",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",IF(D6=0,\"\",ROUND(D6-E6,2)))"
+      },
+      {
+       "column": "M",
+       "header": "متوسط مطلوب في المتبقي",
+       "kind": "formula",
+       "formula_row_1": "=IF(K6=\"\",\"\",IF(L6=\"\",\"\",IF(K6=0,0,IF(L6<=0,\"\",ROUND(K6/L6,4)))))"
+      },
+      {
+       "column": "N",
+       "header": "الموقف",
+       "kind": "formula",
+       "formula_row_1": "=IF(A6&\"\"=\"\",\"\",IF(D6=0,\"لا أوراق مسجلة\",IF(ROUND(D6,2)<>100,\"مجموع الأوزان ليس 100\",IF(B6&\"\"=\"\",\"بلا درجة مستهدفة\",IF(I6=\"\",\"درجة مستهدفة غير موجودة\",IF(E6=0,\"لا mock بعد\",IF(J6>0,\"دون الهدف\",\"على الهدف\")))))))"
+      },
+      {
+       "column": "O",
+       "header": "ترتيب المتابعة",
+       "kind": "formula",
+       "formula_row_1": "=IF(N6=\"دون الهدف\",COUNTIFS($N$6:$N$205,\"دون الهدف\",$J$6:$J$205,\">\"&J6)+COUNTIFS($N$6:N6,\"دون الهدف\",$J$6:J6,J6),\"\")"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "الأوراق",
+   "formula_cells": 1500,
+   "record_tables": [
+    {
+     "header_row": 5,
+     "first_record_row": 6,
+     "sample_rows_filled": 20,
+     "capacity_last_row": 505,
+     "columns": [
+      {
+       "column": "A",
+       "header": "المادة",
+       "kind": "input",
+       "examples": [
+        "Mathematics",
+        "Mathematics",
+        "English Language"
+       ],
+       "allowed_values": {
+        "from_range": "'المواد'!$A$6:$A$205"
+       }
+      },
+      {
+       "column": "B",
+       "header": "الورقة (Paper / Component)",
+       "kind": "input",
+       "examples": [
+        "Paper 1",
+        "Paper 2",
+        "Paper 1"
+       ]
+      },
+      {
+       "column": "C",
+       "header": "الوزن",
+       "kind": "input",
+       "examples": [
+        50,
+        50,
+        60
+       ]
+      },
+      {
+       "column": "D",
+       "header": "الدرجة العظمى",
+       "kind": "input",
+       "examples": [
+        100,
+        100,
+        80
+       ]
+      },
+      {
+       "column": "E",
+       "header": "درجة الـ mock",
+       "kind": "input",
+       "examples": [
+        78,
+        86,
+        52
+       ]
+      },
+      {
+       "column": "F",
+       "header": "النسبة",
+       "kind": "formula",
+       "formula_row_1": "=IF(H6=\"محسوب\",ROUND(E6/D6,4),\"\")"
+      },
+      {
+       "column": "G",
+       "header": "النقاط",
+       "kind": "formula",
+       "formula_row_1": "=IF(H6=\"محسوب\",ROUND(C6*F6,4),\"\")"
+      },
+      {
+       "column": "H",
+       "header": "الحالة",
+       "kind": "formula",
+       "formula_row_1": "=IF(AND(A6&\"\"=\"\",B6&\"\"=\"\",C6&\"\"=\"\",D6&\"\"=\"\",E6&\"\"=\"\"),\"\",IF(A6&\"\"=\"\",\"المادة ناقصة\",IF(COUNTIF('المواد'!$A$6:$A$205,A6&\"\")=0,\"مادة غير موجودة\",IF(NOT(ISNUMBER(C6)),\"الوزن ناقص\",IF(NOT(ISNUMBER(D6)),\"الدرجة العظمى ناقصة\",IF(D6<=0,\"الدرجة العظمى ناقصة\",IF(E6&\"\"=\"\",\"لم تُجرَّب بعد\",IF(NOT(ISNUMBER(E6)),\"درجة غير رقمية\",IF(OR(E6<0,E6>D6),\"درجة خارج المدى\",\"محسوب\")))))))))"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "الملخص",
+   "formula_cells": 112,
+   "record_tables": [
+    {
+     "header_row": 14,
+     "first_record_row": 15,
+     "sample_rows_filled": 0,
+     "capacity_last_row": 29,
+     "columns": [
+      {
+       "column": "A",
+       "header": "م",
+       "kind": "formula",
+       "formula_row_1": "=IF(1<=$C$9,1,\"\")"
+      },
+      {
+       "column": "B",
+       "header": "المادة",
+       "kind": "formula",
+       "formula_row_1": "=IF($A15=\"\",\"\",INDEX('المواد'!$A$6:$A$205,MATCH($A15,'المواد'!$O$6:$O$205,0))&\"\")"
+      },
+      {
+       "column": "C",
+       "header": "الهدف",
+       "kind": "formula",
+       "formula_row_1": "=IF($A15=\"\",\"\",INDEX('المواد'!$B$6:$B$205,MATCH($A15,'المواد'!$O$6:$O$205,0))&\"\")"
+      },
+      {
+       "column": "D",
+       "header": "المتوقعة",
+       "kind": "formula",
+       "formula_row_1": "=IF($A15=\"\",\"\",INDEX('المواد'!$H$6:$H$205,MATCH($A15,'المواد'!$O$6:$O$205,0))&\"\")"
+      },
+      {
+       "column": "E",
+       "header": "الفجوة",
+       "kind": "formula",
+       "formula_row_1": "=IF($A15=\"\",\"\",INDEX('المواد'!$J$6:$J$205,MATCH($A15,'المواد'!$O$6:$O$205,0)))"
+      },
+      {
+       "column": "F",
+       "header": "نقاط ناقصة",
+       "kind": "formula",
+       "formula_row_1": "=IF($A15=\"\",\"\",INDEX('المواد'!$K$6:$K$205,MATCH($A15,'المواد'!$O$6:$O$205,0)))"
+      },
+      {
+       "column": "G",
+       "header": "متوسط مطلوب في المتبقي",
+       "kind": "formula",
+       "formula_row_1": "=IF($A15=\"\",\"\",INDEX('المواد'!$M$6:$M$205,MATCH($A15,'المواد'!$O$6:$O$205,0)))"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "لماذا ما زلت على إكسل؟",
+   "formula_cells": 0
+  }
+ ]
+}
