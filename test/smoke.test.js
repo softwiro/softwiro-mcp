@@ -41,6 +41,33 @@ const srv = http.createServer(app).listen(0, '127.0.0.1', async () => {
     assert.ok(Array.isArray(sc.structuredContent.items) && sc.structuredContent.items[0].page, 'structuredContent wraps arrays');
     assert.ok(JSON.parse(sc.content[0].text).length, 'text content unchanged');
 
+    // A2UI 1.0: surfaces, events, validation and the confirm step for sensitive actions
+    const a2ui = require('../src/a2ui');
+    const events = async body => { const r = await fetch(base + '/api/a2ui/events', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) }); return (await r.text()).split('\n\n').filter(Boolean).map(l => JSON.parse(l.replace(/^data: /, ''))); };
+    const surf = (await (await fetch(base + '/api/a2ui/surface/calculator/vat-calculator')).text()).split('\n\n').filter(Boolean).map(l => JSON.parse(l.slice(6)));
+    assert.strictEqual(surf[0].version, '1.0');
+    assert.strictEqual(Object.keys(surf[0]).filter(k => k !== 'version').length, 1, 'one operation per message');
+    assert.ok(surf[0].createSurface.components.some(c => c.id === 'root'), 'surface has a root');
+    const act = (name, context, surfaceId) => ({ message: { version: '1.0', action: { name, surfaceId: surfaceId || 'calc-vat-calculator', context } } });
+    const ran = await events(act('run_calculator', { id: 'vat-calculator', inputs: { country: ['eg'], mode: ['add'], lines: '[{"price":1000,"quantity":2}]' } }));
+    assert.ok(ran.some(m => m.updateDataModel && m.updateDataModel.path === '/result' && /2280/.test(m.updateDataModel.value)), 'action ran the calculator');
+    assert.ok((await events({ message: { version: '2.0', action: {} } }))[0].error, 'wrong version is rejected');
+    assert.ok((await events(act('nope', {})))[0].error, 'unknown action is rejected');
+    assert.ok((await events(act('run_calculator', { id: '../x' })))[0].error, 'bad id is rejected');
+    // a sensitive action asks first, runs only with the server's token, and the token is bound to the context
+    let did = 0;
+    a2ui.registerAction('test_sensitive', { sensitive: true, question: 'Sure?', async handler() { did++; return []; } });
+    const first = await events(act('test_sensitive', { item: 1 }, 'cart'));
+    assert.strictEqual(did, 0, 'not run before confirmation');
+    const tok = first[0].createSurface.components.find(c => c.id === 'yes').action.event.context.confirmToken;
+    assert.ok(tok, 'confirm card carries a token');
+    assert.ok((await events(act('test_sensitive', { item: 2, confirmToken: tok }, 'cart')))[0].error, 'token for another context is refused');
+    assert.ok((await events(act('test_sensitive', { item: 1, confirmToken: 'x.y' }, 'cart')))[0].error, 'forged token is refused');
+    await events(act('test_sensitive', { item: 1, confirmToken: tok }, 'cart'));
+    assert.strictEqual(did, 1, 'ran once after confirmation');
+    const toolRes = (await rpc('tools/call', { name: 'run_calculator', arguments: { id: 'vat-calculator', inputs: { lines: [{ price: 100 }] } } })).result;
+    assert.ok(toolRes.structuredContent.a2ui[0].createSurface, 'tool result carries A2UI next to the data');
+
     const list = await call('list_templates', {});
     assert.ok(list.data.length >= 60, 'catalog size ' + list.data.length);
     assert.ok((await call('list_templates', { query: 'gym' })).data.some(t => t.id === 'gym-memberships'));

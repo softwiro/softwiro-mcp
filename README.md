@@ -136,3 +136,20 @@ The result tools (`list_templates`, `calculate`, `list_calculators`, `run_calcul
 - The view is one self-contained HTML file (`src/app-ui.js`) that speaks the MCP Apps postMessage protocol directly: no script is loaded from anywhere, and the default CSP (`connect-src 'none'`) is enough. It calls tools only through the host.
 - Opening a download or page link asks the user to confirm inside the view, then asks the host to open it (`ui/open-link`).
 - Nothing is stored. The view gets only what the tool already returned to the model.
+
+## A2UI 1.0 (agent-generated interfaces)
+
+Alongside MCP, the server speaks [A2UI 1.0](https://a2ui.org/specification/v1.0-a2ui/): the agent sends declarative JSON (`createSurface`, `updateDataModel`, `deleteSurface`), the client draws it from a fixed catalog and sends the user's clicks back.
+
+| Endpoint | What |
+|---|---|
+| `GET /api/a2ui/surface/calculator/:id` | SSE stream: a form for one calculator, built from its input schema, bound to a data model |
+| `GET /api/a2ui/surface/templates?q=` | SSE stream: a list of Excel templates; each download asks for confirmation first |
+| `POST /api/a2ui/events` | body `{ "message": { "version": "1.0", "action": { name, surfaceId, context } } }`; answers with an SSE stream of A2UI messages (`updateDataModel` with the result, or `error`) |
+| `GET /api/a2ui/app` | the React renderer (demo page, from `web/dist`) |
+
+The MCP tools `list_calculators`, `list_templates` and `run_calculator` also return the same messages in `structuredContent.a2ui` (additive; the data keys do not change).
+
+Security: only basic-catalog components, no code, no inline catalogs; ids and inputs are checked against the server's own catalog and schemas; download URLs come from the server, never from the client; every message is validated (`version` must be `"1.0"`, exactly one operation, known action names). An action registered with `sensitive: true` (`registerAction` in `src/a2ui.js`) does not run on the first request: the server returns a confirm card holding a signed token bound to that action and context (5 minutes); the action runs only when the user presses Confirm and the token comes back. Nothing is stored.
+
+The React renderer is in `web/` (`npm install && npm run build`; `src/processor.js` applies messages, `src/A2uiRenderer.jsx` draws the catalog subset: Text, Column, Row, List, Card, Divider, Image, Button, TextField, CheckBox, ChoicePicker, Modal). The official `@a2ui/react` package (0.15) does not yet ship a v1.0 basic catalog, so this one is small and self-contained.

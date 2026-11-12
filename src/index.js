@@ -14,6 +14,7 @@ const path = require('path');
 const { Worker } = require('worker_threads');
 const calculators = require('./calculators');
 const appUi = require('./app-ui');
+const a2ui = require('./a2ui');
 const { AsyncLocalStorage } = require('async_hooks');
 const ctx = new AsyncLocalStorage(); // requests marked X-Softwiro-Test are not counted
 
@@ -214,6 +215,16 @@ function structured(r) {
   return r && typeof r === 'object' ? r : { result: r };
 }
 
+// A2UI messages next to the data, so a client that renders A2UI can draw the result. Additive: the data keys are unchanged.
+function withA2ui(name, args, sc) {
+  try {
+    if (name === 'list_calculators' && Array.isArray(sc.calculators) && sc.calculators.length && sc.calculators.length <= 6) return { ...sc, a2ui: sc.calculators.flatMap(a2ui.calculatorSurface) };
+    if (name === 'list_templates' && Array.isArray(sc.items) && sc.items.length) return { ...sc, a2ui: a2ui.templatesSurface(sc.items) };
+    if (name === 'run_calculator') return { ...sc, a2ui: a2ui.resultSurface(String((args && args.id) || 'calc').replace(/[^a-z0-9_-]/gi, ''), String((args && args.id) || 'Result'), sc) };
+  } catch (e) { /* the plain result is still returned */ }
+  return sc;
+}
+
 async function mcpCall(name, a) {
   a = a || {};
   if (name === 'list_templates') return catalogList(a.query);
@@ -232,8 +243,8 @@ function mount(app, express) {
   const lim = (kind, max) => (req, res, next) => limited(ip(req), kind, max) ? res.status(429).json({ error: 'rate limit: slow down and retry in a minute' }) : next();
   const fail = (res, e) => res.status(e.code && e.code < 600 ? e.code : 500).json({ error: e.message });
 
-  app.use(['/api/v1', '/api/mcp'], (req, res, next) => ctx.run({ test: req.headers['x-softwiro-test'] === '1' }, next));
-  app.use(['/api/v1', '/api/mcp'], cors, (req, res, next) => (+req.headers['content-length'] || 0) > LIMITS.bodyBytes ? res.status(413).json({ error: 'body too large (max 200 KB)' }) : next());
+  app.use(['/api/v1', '/api/mcp', '/api/a2ui'], (req, res, next) => ctx.run({ test: req.headers['x-softwiro-test'] === '1' }, next));
+  app.use(['/api/v1', '/api/mcp', '/api/a2ui'], cors, (req, res, next) => (+req.headers['content-length'] || 0) > LIMITS.bodyBytes ? res.status(413).json({ error: 'body too large (max 200 KB)' }) : next());
   app.get('/api/v1/templates', (req, res, next) => { count('catalog'); next(); }, lim('read', LIMITS.readPerMinute), (req, res) => res.json({ count: catalogList().length, templates: catalogList(req.query.q), docs: SITE + '/api/v1' }));
   app.get('/api/v1/templates/:id/schema', (req, res, next) => { count('schema:' + req.params.id); next(); }, lim('read', LIMITS.readPerMinute), (req, res) => { const s = getSchema(req.params.id); s ? res.json(s) : res.status(404).json({ error: 'unknown template id' }); });
   app.post('/api/v1/calc/:id', lim('calc', LIMITS.perMinute), json, async (req, res) => {
@@ -272,12 +283,39 @@ function mount(app, express) {
         count('mcp_tool:' + (b.params && b.params.name));
         try {
           const r = await mcpCall(b.params && b.params.name, b.params && b.params.arguments);
-          return ok({ content: [{ type: 'text', text: JSON.stringify(r) }], structuredContent: structured(r) });
+          return ok({ content: [{ type: 'text', text: JSON.stringify(r) }], structuredContent: withA2ui(b.params.name, b.params.arguments, structured(r)) });
         } catch (e) { return ok({ isError: true, content: [{ type: 'text', text: String(e.message) }] }); }
       }
       return res.json({ jsonrpc: '2.0', id: b.id, error: { code: -32601, message: 'method not found' } });
     } catch (e) { return res.json({ jsonrpc: '2.0', id: b.id, error: { code: -32603, message: 'internal error' } }); }
   });
+
+  // ---- A2UI 1.0: surfaces and events as Server-Sent Events (one JSON message per event) ----
+  const stream = (res, messages) => {
+    res.status(200).set({ 'Content-Type': 'text/event-stream; charset=utf-8', 'Cache-Control': 'no-store', 'X-Accel-Buffering': 'no' });
+    messages.forEach(m => res.write(a2ui.sse(m)));
+    res.end();
+  };
+  app.get('/api/a2ui/surface/calculator/:id', lim('read', LIMITS.readPerMinute), (req, res) => {
+    const c = calculators.catalog().find(x => x.id === req.params.id);
+    if (!c) return res.status(404).json({ error: 'unknown calculator' });
+    count('a2ui_surface:calculator'); stream(res, a2ui.calculatorSurface(c));
+  });
+  app.get('/api/a2ui/surface/templates', lim('read', LIMITS.readPerMinute), (req, res) => {
+    count('a2ui_surface:templates'); stream(res, a2ui.templatesSurface(catalogList(String(req.query.q || '').slice(0, 80))));
+  });
+  app.post('/api/a2ui/events', lim('calc', LIMITS.perMinute), json, async (req, res) => {
+    const parsed = a2ui.parseAction(req.body);
+    count('a2ui_action:' + (parsed.action ? parsed.action.name : 'invalid'));
+    const out = await a2ui.handleAction(parsed, { calculators, mcpCall });
+    if (out.error) return stream(res, [a2ui.errorMessage(out.error, parsed.action && parsed.action.surfaceId)]);
+    stream(res, out.messages);
+  });
+  // The React renderer (web/, built with `npm run build` there) is served as a demo page when it exists
+  const dist = path.join(__dirname, '..', 'web', 'dist');
+  if (fs.existsSync(path.join(dist, 'index.html'))) {
+    app.get('/api/a2ui/app', lim('read', LIMITS.readPerMinute), (req, res) => res.type('html').sendFile(path.join(dist, 'index.html')));
+  }
   app.get('/api/mcp', (req, res) => res.status(405).set('Allow', 'POST').json({ error: 'POST JSON-RPC to this URL (MCP streamable HTTP, stateless)' }));
 }
 
