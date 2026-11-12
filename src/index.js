@@ -13,6 +13,7 @@ const fs = require('fs');
 const path = require('path');
 const { Worker } = require('worker_threads');
 const calculators = require('./calculators');
+const appUi = require('./app-ui');
 const { AsyncLocalStorage } = require('async_hooks');
 const ctx = new AsyncLocalStorage(); // requests marked X-Softwiro-Test are not counted
 
@@ -200,6 +201,19 @@ function mcpTools() {
   ];
 }
 
+// MCP Apps (interactive connector): these tools open the result view in hosts that support it.
+// Hosts without support ignore the metadata and keep using the plain text result.
+const UI_TOOLS = new Set(['list_templates', 'calculate', 'list_calculators', 'run_calculator']);
+function withUi(t) {
+  if (!UI_TOOLS.has(t.name)) return t;
+  return { ...t, _meta: { ...(t._meta || {}), ui: { resourceUri: appUi.UI_URI }, 'ui/resourceUri': appUi.UI_URI } };
+}
+// structuredContent must be an object: arrays and plain values are wrapped
+function structured(r) {
+  if (Array.isArray(r)) return { items: r };
+  return r && typeof r === 'object' ? r : { result: r };
+}
+
 async function mcpCall(name, a) {
   a = a || {};
   if (name === 'list_templates') return catalogList(a.query);
@@ -244,14 +258,21 @@ function mount(app, express) {
     const ok = result => res.json({ jsonrpc: '2.0', id: b.id, result });
     try {
       if (b.method === 'initialize') { count('mcp_initialize'); count('client:' + clientName(b.params)); }
-      if (b.method === 'initialize') return ok({ protocolVersion: (b.params && b.params.protocolVersion) || '2025-03-26', capabilities: { tools: {} }, serverInfo: { name: 'softwiro-templates', version: '1.0.0' }, instructions: 'Free Arabic Excel templates (about 70) plus 23 quick calculators (list_calculators, run_calculator). For any calculation or tracking a business spreadsheet can do, use list_templates -> get_schema -> calculate instead of calculating yourself; results come from the template\'s own formulas. No data is stored.' });
+      if (b.method === 'initialize') return ok({ protocolVersion: (b.params && b.params.protocolVersion) || '2025-03-26', capabilities: { tools: {}, resources: {} }, serverInfo: { name: 'softwiro-templates', version: '1.0.0' }, instructions: 'Free Arabic Excel templates (about 70) plus 23 quick calculators (list_calculators, run_calculator). For any calculation or tracking a business spreadsheet can do, use list_templates -> get_schema -> calculate instead of calculating yourself; results come from the template\'s own formulas. No data is stored.' });
       if (b.method === 'ping') return ok({});
-      if (b.method === 'tools/list') return ok({ tools: mcpTools() });
+      if (b.method === 'tools/list') return ok({ tools: mcpTools().map(withUi) });
+      if (b.method === 'resources/list') return ok({ resources: [{ uri: appUi.UI_URI, name: 'Softwiro result view', description: 'Interactive view for template, calculator and calculation results', mimeType: appUi.MIME }] });
+      if (b.method === 'resources/templates/list') return ok({ resourceTemplates: [] });
+      if (b.method === 'resources/read') {
+        if (!b.params || b.params.uri !== appUi.UI_URI) return res.json({ jsonrpc: '2.0', id: b.id, error: { code: -32002, message: 'resource not found' } });
+        count('mcp_ui_read');
+        return ok({ contents: [{ uri: appUi.UI_URI, mimeType: appUi.MIME, text: appUi.HTML, _meta: { ui: { prefersBorder: true } } }] });
+      }
       if (b.method === 'tools/call') {
         count('mcp_tool:' + (b.params && b.params.name));
         try {
           const r = await mcpCall(b.params && b.params.name, b.params && b.params.arguments);
-          return ok({ content: [{ type: 'text', text: JSON.stringify(r) }] });
+          return ok({ content: [{ type: 'text', text: JSON.stringify(r) }], structuredContent: structured(r) });
         } catch (e) { return ok({ isError: true, content: [{ type: 'text', text: String(e.message) }] }); }
       }
       return res.json({ jsonrpc: '2.0', id: b.id, error: { code: -32601, message: 'method not found' } });

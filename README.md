@@ -128,3 +128,11 @@ Code: MIT, see `LICENSE`. The files in `data/templates/` are the same free Excel
 الأدوات الست: `list_templates` (بحث في القوالب)، `get_schema` (هيكل القالب)، `calculate` (الحساب في قالب)، `get_download` (روابط التحميل)، `list_calculators` و`run_calculator` (الحاسبات). النتائج استرشادية: حاسبات الزكاة والذهب ليست فتوى، والحاسبات الصحية ليست نصيحة طبية.
 
 التشغيل محليًا: `npm install` ثم `npm start`.
+
+## Interactive connector (MCP Apps)
+
+The result tools (`list_templates`, `calculate`, `list_calculators`, `run_calculator`) carry `_meta.ui.resourceUri = ui://softwiro/result`. Hosts that support [MCP Apps](https://modelcontextprotocol.io/extensions/apps/overview) (Claude, among others) fetch that resource with `resources/read` (`text/html;profile=mcp-app`) and render it beside the conversation: a form per calculator built from its input schema, a table of templates, and a readable view of results. Hosts without support ignore the metadata and use the unchanged text result. Results also carry `structuredContent` (arrays are wrapped as `{items}`).
+
+- The view is one self-contained HTML file (`src/app-ui.js`) that speaks the MCP Apps postMessage protocol directly: no script is loaded from anywhere, and the default CSP (`connect-src 'none'`) is enough. It calls tools only through the host.
+- Opening a download or page link asks the user to confirm inside the view, then asks the host to open it (`ui/open-link`).
+- Nothing is stored. The view gets only what the tool already returned to the model.

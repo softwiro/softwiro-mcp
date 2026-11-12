@@ -26,6 +26,21 @@ const srv = http.createServer(app).listen(0, '127.0.0.1', async () => {
     assert.deepStrictEqual(tools.map(t => t.name), ['list_templates', 'get_schema', 'calculate', 'get_download', 'list_calculators', 'run_calculator']);
     for (const t of tools) assert.strictEqual(t.annotations.readOnlyHint, true, t.name + ' should be read-only');
 
+    // MCP Apps: result tools point at the ui:// view, the view is served as an MCP App, results carry structuredContent
+    const ui = (await rpc('tools/list')).result.tools;
+    for (const n of ['list_templates', 'calculate', 'list_calculators', 'run_calculator']) {
+      const t = ui.find(x => x.name === n);
+      assert.strictEqual(t._meta.ui.resourceUri, 'ui://softwiro/result', n + ' should open the view');
+    }
+    assert.ok(!ui.find(x => x.name === 'get_schema')._meta, 'get_schema stays text-only');
+    const rd = (await rpc('resources/read', { uri: 'ui://softwiro/result' })).result.contents[0];
+    assert.strictEqual(rd.mimeType, 'text/html;profile=mcp-app');
+    assert.ok(rd.text.includes('ui/initialize') && !/<script[^>]+src=/.test(rd.text), 'view is self-contained');
+    assert.ok((await rpc('resources/read', { uri: 'ui://other' })).error, 'unknown resource is an error');
+    const sc = (await rpc('tools/call', { name: 'list_templates', arguments: { query: 'gym' } })).result;
+    assert.ok(Array.isArray(sc.structuredContent.items) && sc.structuredContent.items[0].page, 'structuredContent wraps arrays');
+    assert.ok(JSON.parse(sc.content[0].text).length, 'text content unchanged');
+
     const list = await call('list_templates', {});
     assert.ok(list.data.length >= 60, 'catalog size ' + list.data.length);
     assert.ok((await call('list_templates', { query: 'gym' })).data.some(t => t.id === 'gym-memberships'));
