@@ -23,12 +23,20 @@ const MAX_TEXT = 4000;
 const TOKEN_TTL_MS = 5 * 60 * 1000;
 const SECRET = crypto.randomBytes(32); // per process: tokens do not survive a restart, which is fine for a 5 minute window
 
+// Words the server puts inside surfaces. Calculator input names and descriptions come from the
+// calculator catalog (English), so only the interface words are translated here.
+const TX = {
+  en: { run: 'Run', templates: n => `${n} templates`, open: 'Open', ask: t => `Open the download of "${t}" in a new tab?`, confirm: 'Confirm', cancel: 'Cancel', sure: 'Confirm this action?', json: 'JSON' },
+  ar: { run: 'تشغيل', templates: n => `${n} قالب`, open: 'فتح', ask: t => `فتح تحميل «${t}» في تبويب جديد؟`, confirm: 'تأكيد', cancel: 'إلغاء', sure: 'تأكيد هذا الإجراء؟', json: 'JSON' },
+};
+const tx = lang => TX[lang === 'ar' ? 'ar' : 'en'];
+
 const msg = (key, body) => ({ version: VERSION, [key]: body });
 const text = (id, t, variant) => ({ id, component: 'Text', text: String(t).slice(0, MAX_TEXT), ...(variant ? { variant } : {}) });
 
 // ---------- building blocks ----------
 // A calculator input schema field -> one component + the initial value it binds to
-function fieldFor(key, spec, i) {
+function fieldFor(key, spec, i, T) {
   const id = 'f_' + i, s = spec || {}, path = '/form/' + key;
   const label = key + (s.description ? ' - ' + String(s.description).slice(0, 80) : '');
   if (Array.isArray(s.enum)) {
@@ -37,13 +45,14 @@ function fieldFor(key, spec, i) {
   }
   if (s.type === 'boolean') return { c: { id, component: 'CheckBox', label, value: { '@path': path } }, init: !!s.default };
   if (s.type === 'number' || s.type === 'integer') return { c: { id, component: 'TextField', label, variant: 'number', value: { '@path': path } }, init: s.default !== undefined ? String(s.default) : '' };
-  if (s.type === 'array' || s.type === 'object') return { c: { id, component: 'TextField', label: label + ' (JSON)', variant: 'longText', value: { '@path': path } }, init: '' };
+  if (s.type === 'array' || s.type === 'object') return { c: { id, component: 'TextField', label: label + ' (' + T.json + ')', variant: 'longText', value: { '@path': path } }, init: '' };
   return { c: { id, component: 'TextField', label, variant: 'shortText', value: { '@path': path } }, init: s.default !== undefined ? String(s.default) : '' };
 }
 
 // Messages that open a calculator form. `calc` is an entry of calculators.catalog().
-function calculatorSurface(calc) {
-  const fields = Object.keys(calc.inputs || {}).slice(0, 12).map((k, i) => ({ k, ...fieldFor(k, calc.inputs[k], i) }));
+function calculatorSurface(calc, lang) {
+  const T = tx(lang);
+  const fields = Object.keys(calc.inputs || {}).slice(0, 12).map((k, i) => ({ k, ...fieldFor(k, calc.inputs[k], i, T) }));
   const form = {};
   fields.forEach(f => { form[f.k] = f.init; });
   const components = [
@@ -54,7 +63,7 @@ function calculatorSurface(calc) {
     ...fields.map(f => f.c),
     { id: 'run', component: 'Button', variant: 'primary', child: 'run_label',
       action: { event: { name: 'run_calculator', context: { id: calc.id, inputs: { '@path': '/form' } } } } },
-    text('run_label', 'Run'),
+    text('run_label', T.run),
     text('status', { '@path': '/status' }),
     text('result', { '@path': '/result' }),
   ];
@@ -90,10 +99,11 @@ function resultSurface(id, title, result) {
 
 // Templates list. Every download goes through a Modal: the click only asks, the second click opens.
 // The URLs come from the catalog (server side) and are sent in the data model, never from the client.
-function templatesSurface(items) {
+function templatesSurface(items, lang) {
+  const T = tx(lang);
   const list = items.slice(0, 12).filter(t => t && ID_RE.test(t.id));
   const links = {};
-  const components = [{ id: 'root', component: 'Card', child: 'body' }, { id: 'body', component: 'Column', children: ['head', ...list.map((t, i) => 'row_' + i)] }, text('head', list.length + ' templates', 'body')];
+  const components = [{ id: 'root', component: 'Card', child: 'body' }, { id: 'body', component: 'Column', children: ['head', ...list.map((t, i) => 'row_' + i)] }, text('head', T.templates(list.length), 'body')];
   list.forEach((t, i) => {
     links[t.id] = t.download || '';
     components.push(
@@ -103,10 +113,10 @@ function templatesSurface(items) {
       text('dl_label_' + i, 'xlsx'),
       { id: 'modal_' + i, component: 'Modal', trigger: 'dl_' + i, content: 'ask_' + i },
       { id: 'ask_' + i, component: 'Column', children: ['ask_text_' + i, 'ask_go_' + i] },
-      text('ask_text_' + i, `Open the download of "${t.title || t.id}" in a new tab?`),
+      text('ask_text_' + i, T.ask(t.title || t.id)),
       { id: 'ask_go_' + i, component: 'Button', variant: 'primary', child: 'ask_go_label_' + i,
         action: { functionCall: { '@call': 'openUrl', args: { url: { '@path': '/links/' + t.id } } } } },
-      text('ask_go_label_' + i, 'Open'),
+      text('ask_go_label_' + i, T.open),
     );
   });
   return [msg('createSurface', { surfaceId: 'templates', catalogId: CATALOG, components, dataModel: { links } })];
@@ -127,7 +137,8 @@ function verifyToken(token, name, context) {
   let p; try { p = JSON.parse(Buffer.from(body, 'base64url').toString()); } catch (e) { return false; }
   return p.n === name && JSON.stringify(p.c) === JSON.stringify(context) && p.e > Date.now();
 }
-function confirmCard(surfaceId, name, context, question) {
+function confirmCard(surfaceId, name, context, question, lang) {
+  const T = tx(lang);
   const token = signToken(name, context, Date.now() + TOKEN_TTL_MS);
   return [msg('createSurface', { surfaceId: 'confirm-' + surfaceId, catalogId: CATALOG, components: [
     { id: 'root', component: 'Card', child: 'body' },
@@ -135,9 +146,9 @@ function confirmCard(surfaceId, name, context, question) {
     text('q', question, 'body'),
     { id: 'row', component: 'Row', justify: 'start', children: ['yes', 'no'] },
     { id: 'yes', component: 'Button', variant: 'primary', child: 'yes_l', action: { event: { name, context: { ...context, confirmToken: token } } } },
-    text('yes_l', 'Confirm'),
+    text('yes_l', T.confirm),
     { id: 'no', component: 'Button', variant: 'borderless', child: 'no_l', action: { event: { name: 'cancel', context: { surfaceId } } } },
-    text('no_l', 'Cancel'),
+    text('no_l', T.cancel),
   ] })];
 }
 
@@ -199,14 +210,14 @@ const ACTIONS = {
 function registerAction(name, def) { ACTIONS[name] = def; }
 
 // Runs one validated action and returns { messages } or { error }
-async function handleAction(parsed, tools) {
+async function handleAction(parsed, tools, lang) {
   if (parsed.error) return { error: parsed.error };
   const a = parsed.action, def = ACTIONS[a.name];
   if (!def) return { error: { code: 'EXECUTION_ERROR', message: 'unknown action' } };
   try {
     if (def.sensitive) {
       const { confirmToken, ...ctx } = a.context;
-      if (!confirmToken) return { messages: confirmCard(a.surfaceId, a.name, ctx, def.question || 'Confirm this action?') };
+      if (!confirmToken) return { messages: confirmCard(a.surfaceId, a.name, ctx, def.question || tx(lang).sure, lang) };
       if (!verifyToken(confirmToken, a.name, ctx)) return { error: { code: 'EXECUTION_ERROR', message: 'confirmation expired or invalid; confirm again' } };
       return { messages: await def.handler({ ...a, context: ctx }, tools) };
     }

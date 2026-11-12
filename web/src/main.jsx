@@ -8,6 +8,18 @@ import './style.css';
 
 const BASE = (document.querySelector('meta[name=a2ui-base]') || {}).content || '/api/a2ui';
 
+// Interface language: ?lang=ar|en, then the last choice, then the browser language
+const TX = {
+  en: { title: 'Softwiro · A2UI 1.0', intro: 'Pick a calculator or the templates list. The server sends A2UI messages; this page draws them and sends your clicks back.', calcs: 'Calculators…', tpl: 'Templates (gym)', other: 'العربية', note: 'Calculator field names and descriptions come from the calculator catalog and are in English.' },
+  ar: { title: 'Softwiro · A2UI 1.0', intro: 'اختر حاسبة أو قائمة القوالب. السيرفر بيبعت رسائل A2UI وهذه الصفحة بترسمها وترجّع ضغطاتك له.', calcs: 'الحاسبات…', tpl: 'القوالب (الجيم)', other: 'English', note: 'أسماء حقول الحاسبات ووصفها بتيجي من كتالوج الحاسبات وهي بالإنجليزية.' },
+};
+function pickLang() {
+  const q = new URLSearchParams(location.search).get('lang');
+  if (q === 'ar' || q === 'en') return q;
+  try { const s = localStorage.getItem('a2ui-lang'); if (s === 'ar' || s === 'en') return s; } catch (e) { /* storage may be blocked */ }
+  return (navigator.language || '').toLowerCase().startsWith('ar') ? 'ar' : 'en';
+}
+
 // Reads a Server-Sent Events response and hands each JSON message to onMessage as it arrives (streaming UI)
 async function readSse(res, onMessage) {
   if (!res.ok) throw new Error('HTTP ' + res.status);
@@ -27,6 +39,9 @@ function App() {
   const processor = useMemo(() => new Processor(), []);
   const [calcs, setCalcs] = useState([]);
   const [busy, setBusy] = useState('');
+  const [lang, setLang] = useState(pickLang);
+  const T = TX[lang];
+  useEffect(() => { document.documentElement.lang = lang; document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr'; try { localStorage.setItem('a2ui-lang', lang); } catch (e) { /* ignore */ } }, [lang]);
   useSyncExternalStore(processor.subscribe.bind(processor), () => processor.surfaces.size + ':' + processor.errors.length);
   useEffect(() => { fetch('/api/v1/calculators').then(r => r.json()).then(d => setCalcs(d.calculators || [])).catch(() => {}); }, []);
 
@@ -34,7 +49,7 @@ function App() {
     setBusy('...');
     try {
       processor.surfaces.clear();
-      await readSse(await fetch(BASE + path), m => processor.process(m));
+      await readSse(await fetch(BASE + path + (path.includes('?') ? '&' : '?') + 'lang=' + lang), m => processor.process(m));
     } catch (e) { processor.error('EXECUTION_ERROR', String(e.message)); processor.emit(); }
     setBusy('');
   };
@@ -44,21 +59,23 @@ function App() {
       const sid = action.surfaceId;
       processor.process({ version: '1.0', updateDataModel: { surfaceId: sid, path: '/status', value: '...' } });
       try {
-        const res = await fetch(BASE + '/events', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ message: { version: '1.0', action } }) });
+        const res = await fetch(BASE + '/events?lang=' + lang, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ message: { version: '1.0', action } }) });
         await readSse(res, m => processor.process(m));
       } catch (e) { processor.process({ version: '1.0', updateDataModel: { surfaceId: sid, path: '/status', value: String(e.message) } }); }
     },
-  }), [processor]);
+  }), [processor, lang]);
 
   return <div className="a2-app">
-    <h1>Softwiro · A2UI 1.0</h1>
-    <p className="mut">Pick a calculator or the templates list. The server sends A2UI messages; this page draws them and sends your clicks back.</p>
+    <h1>{T.title}</h1>
+    <p className="mut">{T.intro}</p>
+    <p className="mut small">{T.note}</p>
     <div className="a2-bar">
       <select defaultValue="" onChange={e => e.target.value && open('/surface/calculator/' + e.target.value)}>
-        <option value="" disabled>Calculators…</option>
+        <option value="" disabled>{T.calcs}</option>
         {calcs.map(c => <option key={c.id} value={c.id}>{c.title || c.id}</option>)}
       </select>
-      <button className="a2-btn primary" onClick={() => open('/surface/templates?q=gym')}>Templates (gym)</button>
+      <button className="a2-btn primary" onClick={() => open('/surface/templates?q=gym')}>{T.tpl}</button>
+      <button className="a2-btn" onClick={() => { processor.surfaces.clear(); processor.emit(); setLang(lang === 'ar' ? 'en' : 'ar'); }}>{T.other}</button>
       <span className="mut">{busy}</span>
     </div>
     {Array.from(processor.surfaces.values()).map(s => <Surface key={s.id} surface={s} ctx={ctx} />)}

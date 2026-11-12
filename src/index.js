@@ -299,15 +299,15 @@ function mount(app, express) {
   app.get('/api/a2ui/surface/calculator/:id', lim('read', LIMITS.readPerMinute), (req, res) => {
     const c = calculators.catalog().find(x => x.id === req.params.id);
     if (!c) return res.status(404).json({ error: 'unknown calculator' });
-    count('a2ui_surface:calculator'); stream(res, a2ui.calculatorSurface(c));
+    count('a2ui_surface:calculator'); stream(res, a2ui.calculatorSurface(c, req.query.lang));
   });
   app.get('/api/a2ui/surface/templates', lim('read', LIMITS.readPerMinute), (req, res) => {
-    count('a2ui_surface:templates'); stream(res, a2ui.templatesSurface(catalogList(String(req.query.q || '').slice(0, 80))));
+    count('a2ui_surface:templates'); stream(res, a2ui.templatesSurface(catalogList(String(req.query.q || '').slice(0, 80)), req.query.lang));
   });
   app.post('/api/a2ui/events', lim('calc', LIMITS.perMinute), json, async (req, res) => {
     const parsed = a2ui.parseAction(req.body);
     count('a2ui_action:' + (parsed.action ? parsed.action.name : 'invalid'));
-    const out = await a2ui.handleAction(parsed, { calculators, mcpCall });
+    const out = await a2ui.handleAction(parsed, { calculators, mcpCall }, req.query.lang);
     if (out.error) return stream(res, [a2ui.errorMessage(out.error, parsed.action && parsed.action.surfaceId)]);
     stream(res, out.messages);
   });
