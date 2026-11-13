@@ -153,3 +153,12 @@ The MCP tools `list_calculators`, `list_templates` and `run_calculator` also ret
 Security: only basic-catalog components, no code, no inline catalogs; ids and inputs are checked against the server's own catalog and schemas; download URLs come from the server, never from the client; every message is validated (`version` must be `"1.0"`, exactly one operation, known action names). An action registered with `sensitive: true` (`registerAction` in `src/a2ui.js`) does not run on the first request: the server returns a confirm card holding a signed token bound to that action and context (5 minutes); the action runs only when the user presses Confirm and the token comes back. Nothing is stored.
 
 The React renderer is in `web/` (`npm install && npm run build`; `src/processor.js` applies messages, `src/A2uiRenderer.jsx` draws the catalog subset: Text, Column, Row, List, Card, Divider, Image, Button, TextField, CheckBox, ChoicePicker, Modal). The official `@a2ui/react` package (0.15) does not yet ship a v1.0 basic catalog, so this one is small and self-contained.
+
+
+## A2UI inside the MCP App (how the pieces fit)
+
+The `ui://softwiro/result` view is the A2UI renderer bundle (`web/dist/index.html`). Inside a host it speaks the MCP Apps
+bridge; tool results carry the screen as an embedded resource of type `application/a2ui+json` (a JSON array of A2UI 1.0
+messages). Model tools that open a screen: `open_calculator` (form), `list_templates` (table), `run_calculator` / `calculate`
+(result). Button presses go back through the app-only tool `a2ui_action` (`_meta.ui.visibility: ["app"]`), whose result is
+again `application/a2ui+json`. The same screens are available outside MCP as SSE under `/api/a2ui/*` and on `/api/a2ui/app`.

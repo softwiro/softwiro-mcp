@@ -156,8 +156,8 @@ function resultMarkdown(r, lang, calcId) {
   const walk = (v, prefix, depth) => {
     if (lines.length >= 60) return;
     if (v === null || v === undefined) return;
-    if (typeof v !== 'object') { lines.push(`- **${prefix}**: ${String(v).slice(0, 200)}`); return; }
-    if (depth >= 2) { lines.push(`- **${prefix}**: ${JSON.stringify(v).slice(0, 200)}`); return; }
+    if (typeof v !== 'object') { let t = String(v).slice(0, 200); t = t.replace(/^(\d{4}-\d{2}-\d{2})T(\d{2}:\d{2}):\d{2}(\.\d+)?Z$/, '$1 $2 UTC'); if (/^[\x20-\x7E]*\d[\x20-\x7E]*$/.test(t) && !/[A-Za-z]{3}/.test(t)) t = '\u2066' + t + '\u2069'; lines.push(`- **${prefix}**: ${t}`); return; }
+    if (depth >= 3) { lines.push(`- **${prefix}**: ${JSON.stringify(v).slice(0, 200)}`); return; }
     (Array.isArray(v) ? v.slice(0, 20).map((x, i) => [String(i + 1), x]) : Object.entries(v)).forEach(([k, x]) => walk(x, prefix ? prefix + ' / ' + keyLabel(k, lang, calcId) : keyLabel(k, lang, calcId), depth + 1));
   };
   walk(r, '', 0);
