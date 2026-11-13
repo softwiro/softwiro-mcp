@@ -83,14 +83,23 @@ function calculatorSurface(calc, lang) {
 }
 
 // A readable markdown view of a tool result: flat "key: value" lines, nested up to 2 levels, capped
-function resultMarkdown(r) {
+let RI = null;
+function resultLabels() { if (!RI) { try { RI = require('./result-i18n.json'); } catch (e) { RI = {}; } } return RI; }
+// Result key -> readable name: Arabic from result-i18n.json, English by splitting snake_case / camelCase
+function keyLabel(k, lang, calcId) {
+  if (/^\d+$/.test(k)) return k;
+  if (lang === 'ar') { const d = resultLabels(); return (d['@' + calcId] || {})[k] || d[k] || k; }
+  const w = k.replace(/_/g, ' ').replace(/([a-z0-9])([A-Z])/g, '$1 $2').toLowerCase();
+  return w.charAt(0).toUpperCase() + w.slice(1);
+}
+function resultMarkdown(r, lang, calcId) {
   const lines = [];
   const walk = (v, prefix, depth) => {
     if (lines.length >= 60) return;
     if (v === null || v === undefined) return;
     if (typeof v !== 'object') { lines.push(`- **${prefix}**: ${String(v).slice(0, 200)}`); return; }
     if (depth >= 2) { lines.push(`- **${prefix}**: ${JSON.stringify(v).slice(0, 200)}`); return; }
-    (Array.isArray(v) ? v.slice(0, 20).map((x, i) => [String(i + 1), x]) : Object.entries(v)).forEach(([k, x]) => walk(x, prefix ? prefix + ' / ' + k : k, depth + 1));
+    (Array.isArray(v) ? v.slice(0, 20).map((x, i) => [String(i + 1), x]) : Object.entries(v)).forEach(([k, x]) => walk(x, prefix ? prefix + ' / ' + keyLabel(k, lang, calcId) : keyLabel(k, lang, calcId), depth + 1));
   };
   walk(r, '', 0);
   return lines.join('\n') || '-';
@@ -199,7 +208,7 @@ function coerceInputs(schema, raw) {
 const ACTIONS = {
   run_calculator: {
     sensitive: false,
-    async handler(a, tools) {
+    async handler(a, tools, lang) {
       const id = String(a.context.id || '');
       if (!ID_RE.test(id)) throw Object.assign(new Error('unknown calculator'), { code: 'VALIDATION_FAILED' });
       const calc = tools.calculators.catalog().find(c => c.id === id);
@@ -209,7 +218,7 @@ const ACTIONS = {
       const result = await tools.calculators.run(id, inputs);
       return [
         msg('updateDataModel', { surfaceId: sid, path: '/status', value: '' }),
-        msg('updateDataModel', { surfaceId: sid, path: '/result', value: resultMarkdown(result) }),
+        msg('updateDataModel', { surfaceId: sid, path: '/result', value: resultMarkdown(result, lang, id) }),
       ];
     },
   },
@@ -228,9 +237,9 @@ async function handleAction(parsed, tools, lang) {
       const { confirmToken, ...ctx } = a.context;
       if (!confirmToken) return { messages: confirmCard(a.surfaceId, a.name, ctx, def.question || tx(lang).sure, lang) };
       if (!verifyToken(confirmToken, a.name, ctx)) return { error: { code: 'EXECUTION_ERROR', message: 'confirmation expired or invalid; confirm again' } };
-      return { messages: await def.handler({ ...a, context: ctx }, tools) };
+      return { messages: await def.handler({ ...a, context: ctx }, tools, lang) };
     }
-    return { messages: await def.handler(a, tools) };
+    return { messages: await def.handler(a, tools, lang) };
   } catch (e) {
     return { error: { code: e.code && typeof e.code === 'string' ? e.code : 'EXECUTION_ERROR', message: String(e.message).slice(0, 300) } };
   }
