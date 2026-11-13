@@ -29,7 +29,7 @@ const TX = {
   en: { run: 'Run', templates: n => `${n} templates`, open: 'Open', ask: t => `Open the download of "${t}" in a new tab?`, confirm: 'Confirm', cancel: 'Cancel', sure: 'Confirm this action?', json: 'JSON' },
   ar: { run: 'تشغيل', templates: n => `${n} قالب`, open: 'فتح', ask: t => `فتح تحميل «${t}» في تبويب جديد؟`, confirm: 'تأكيد', cancel: 'إلغاء', sure: 'تأكيد هذا الإجراء؟', json: 'JSON' },
 };
-const tx = lang => TX[lang === 'ar' ? 'ar' : 'en'];
+const tx = lang => ({ ...TX[lang === 'ar' ? 'ar' : 'en'], lang: lang === 'ar' ? 'ar' : 'en' });
 
 const msg = (key, body) => ({ version: VERSION, [key]: body });
 const text = (id, t, variant) => ({ id, component: 'Text', text: String(t).slice(0, MAX_TEXT), ...(variant ? { variant } : {}) });
@@ -44,9 +44,61 @@ function localize(calc, lang) {
   if (lang === 'en') return { title: t.titleEn || calc.title, description: calc.description, labels: {} };
   return { title: calc.title, description: t.descAr || calc.description, labels: t.fields || {} };
 }
+// Array inputs (lists of lines / subjects / holdings) are edited as a few labelled rows instead of raw JSON.
+// The form model holds an array of row objects (/form/<key>/<row>/<field>); coerceInputs() turns it back into the
+// array the calculator expects and drops rows whose `need` field is empty.
+const ROWS = {
+  lines: { n: 5, need: 'price', fields: [
+    { k: 'price', t: 'number', ar: 'السعر', en: 'Price' },
+    { k: 'quantity', t: 'number', ar: 'الكمية', en: 'Quantity', init: '1' }] },
+  subjects: { n: 5, need: 'name', fields: [
+    { k: 'name', t: 'text', ar: 'المادة', en: 'Subject' },
+    { k: 'exam_date', t: 'date', ar: 'تاريخ الامتحان', en: 'Exam date' },
+    { k: 'difficulty', t: 'enum', ar: 'الصعوبة', en: 'Difficulty', init: '2', options: [['1', 'سهلة', 'Easy'], ['2', 'متوسطة', 'Medium'], ['3', 'صعبة', 'Hard']] }] },
+  items: { n: 4, need: 'cost', fields: [
+    { k: 'cost', t: 'number', ar: 'التكلفة', en: 'Cost' },
+    { k: 'price', t: 'number', ar: 'سعر البيع', en: 'Selling price' },
+    { k: 'quantity', t: 'number', ar: 'الكمية', en: 'Quantity', init: '1' }] },
+  holdings: { n: 4, need: 'weightGrams', fields: [
+    { k: 'metalType', t: 'enum', ar: 'النوع', en: 'Metal', init: 'GOLD', options: [['GOLD', 'ذهب', 'Gold'], ['SILVER', 'فضة', 'Silver']] },
+    { k: 'karat', t: 'enum', ar: 'العيار (للذهب فقط)', en: 'Karat (gold only)', init: 'K21', options: [['K24', '24', '24'], ['K21', '21', '21'], ['K18', '18', '18']], goldOnly: true },
+    { k: 'weightGrams', t: 'number', ar: 'الوزن بالجرام', en: 'Weight in grams' },
+    { k: 'worn', t: 'bool', ar: 'ذهب مستعمل للزينة', en: 'Worn jewellery' }] },
+  cashItems: { n: 3, need: 'amount', fields: [
+    { k: 'currency', t: 'text', ar: 'العملة (مثل USD)', en: 'Currency (e.g. USD)' },
+    { k: 'amount', t: 'number', ar: 'المبلغ', en: 'Amount' }] },
+};
+
+// -> { cs: components, root: id of the group, init: array of row objects }
+function rowsFor(key, id, label, lang) {
+  const R = ROWS[key], en = lang === 'en';
+  const cs = [], rootKids = [];
+  const init = [];
+  for (let i = 0; i < R.n; i++) {
+    const kids = [], row = {};
+    R.fields.forEach(f => {
+      const cid = `${id}_r${i}_${f.k}`, path = `/form/${key}/${i}/${f.k}`, lab = en ? f.en : f.ar;
+      kids.push(cid);
+      if (f.t === 'enum') {
+        cs.push({ id: cid, component: 'ChoicePicker', label: lab, variant: 'mutuallyExclusive', displayStyle: 'chips', options: f.options.map(o => ({ label: en ? o[2] : o[1], value: o[0] })), value: { '@path': path } });
+        row[f.k] = f.init ? [f.init] : [];
+      } else if (f.t === 'bool') { cs.push({ id: cid, component: 'CheckBox', label: lab, value: { '@path': path } }); row[f.k] = false; }
+      else if (f.t === 'date') { cs.push({ id: cid, component: 'DateTimeInput', label: lab, enableDate: true, enableTime: false, value: { '@path': path } }); row[f.k] = ''; }
+      else { cs.push({ id: cid, component: 'TextField', label: lab, variant: f.t === 'number' ? 'number' : 'shortText', value: { '@path': path } }); row[f.k] = f.init || ''; }
+    });
+    cs.push({ id: `${id}_r${i}`, component: 'Column', children: [`${id}_r${i}_h`, ...kids] }, { id: `${id}_r${i}_h`, component: 'Text', text: (en ? 'Row ' : 'سطر ') + (i + 1), variant: 'caption' });
+    rootKids.push(`${id}_r${i}_card`);
+    cs.push({ id: `${id}_r${i}_card`, component: 'Card', child: `${id}_r${i}` });
+    init.push(row);
+  }
+  cs.push({ id, component: 'Column', children: [`${id}_t`, ...rootKids] }, { id: `${id}_t`, component: 'Text', text: label, variant: 'body' });
+  return { cs, root: id, init };
+}
+
 function fieldFor(key, spec, i, T, labels) {
   const id = 'f_' + i, s = spec || {}, path = '/form/' + key;
   const label = key + (labels && labels[key] ? ' - ' + labels[key] : s.description ? ' - ' + String(s.description).slice(0, 80) : '');
+  if (ROWS[key] && s.type === 'array') return { ...rowsFor(key, id, label.replace(/\s*\(JSON\)$/, ''), T.lang), c: null };
   // dates and times get a native picker: DateTimeInput (enableDate / enableTime) instead of free text
   const hint = key + ' ' + (s.description || '');
   const isTime = /HH:MM/i.test(hint) || /(^|_)time$/i.test(key);
@@ -73,10 +125,10 @@ function calculatorSurface(calc, lang) {
   fields.forEach(f => { form[f.k] = f.init; });
   const components = [
     { id: 'root', component: 'Card', child: 'body' },
-    { id: 'body', component: 'Column', children: ['title', 'desc', ...fields.map(f => f.c.id), 'run', 'status', 'result'] },
+    { id: 'body', component: 'Column', children: ['title', 'desc', ...fields.map(f => f.root || f.c.id), 'run', 'status', 'result'] },
     text('title', L.title || calc.id, 'body'),
     text('desc', L.description || '', 'caption'),
-    ...fields.map(f => f.c),
+    ...fields.flatMap(f => (f.cs ? f.cs : [f.c])),
     { id: 'run', component: 'Button', variant: 'primary', child: 'run_label',
       action: { event: { name: 'run_calculator', context: { id: calc.id, inputs: { '@path': '/form' } } } } },
     text('run_label', T.run),
@@ -199,6 +251,26 @@ function coerceInputs(schema, raw) {
   Object.keys(schema || {}).forEach(k => {
     let v = raw ? raw[k] : undefined;
     const s = schema[k] || {};
+    if (ROWS[k] && s.type === 'array' && Array.isArray(v) && v.every(x => x && typeof x === 'object' && !Array.isArray(x))) {
+      const R = ROWS[k], rowsOut = [];
+      v.slice(0, R.n).forEach(row => {
+        const needv = row[R.need];
+        if (needv === undefined || needv === null || String(needv).trim() === '') return;
+        const o = {};
+        R.fields.forEach(f => {
+          let x = row[f.k];
+          if (Array.isArray(x)) x = x[0];
+          if (f.t === 'bool') { if (x === true || x === 'true') o[f.k] = true; return; }
+          if (x === undefined || x === null || String(x).trim() === '') return;
+          if (f.goldOnly && String((row.metalType && row.metalType[0]) || row.metalType) === 'SILVER') return;
+          if (f.t === 'number') { const n = Number(x); if (!Number.isFinite(n)) throw new Error(`${k}: ${f.k} must be a number`); o[f.k] = n; }
+          else o[f.k] = String(x).trim().slice(0, 80);
+        });
+        rowsOut.push(o);
+      });
+      if (rowsOut.length) out[k] = rowsOut;
+      return;
+    }
     if (Array.isArray(v) && (s.enum || s.type !== 'array')) v = v[0];
     if (v === undefined || v === '' || v === null) return;
     if (s.type === 'number' || s.type === 'integer') { const n = Number(v); if (!Number.isFinite(n)) throw new Error(`${k} must be a number`); out[k] = n; }
