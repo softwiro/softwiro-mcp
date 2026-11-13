@@ -101,7 +101,7 @@ function resultSurface(id, title, result) {
 // The URLs come from the catalog (server side) and are sent in the data model, never from the client.
 function templatesSurface(items, lang) {
   const T = tx(lang);
-  const list = items.slice(0, 12).filter(t => t && ID_RE.test(t.id));
+  const list = items.slice(0, 12).filter(t => t && ID_RE.test(t.id)).map(t => lang === 'en' && t.titleEn ? { ...t, title: t.titleEn } : t);
   const links = {};
   const components = [{ id: 'root', component: 'Card', child: 'body' }, { id: 'body', component: 'Column', children: ['head', ...list.map((t, i) => 'row_' + i)] }, text('head', T.templates(list.length), 'body')];
   list.forEach((t, i) => {

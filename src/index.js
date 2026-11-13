@@ -44,7 +44,7 @@ function published() {
   const list = CFG.catalog ? CFG.catalog() : JSON.parse(fs.readFileSync(path.join(CFG.dataDir, 'catalog.json'), 'utf8'));
   const out = {};
   for (const m of list) {
-    if (fs.existsSync(path.join(BUILD, m.file)) && fs.existsSync(path.join(SCHEMA, m.id + '.json'))) out[m.id] = { m: { title: m.title, desc: m.description, sector: m.sector, file: m.file } };
+    if (fs.existsSync(path.join(BUILD, m.file)) && fs.existsSync(path.join(SCHEMA, m.id + '.json'))) out[m.id] = { m: { title: m.title, titleEn: m.titleEn, desc: m.description, sector: m.sector, file: m.file } };
   }
   published.cache = { at: Date.now(), v: out };
   return out;
@@ -135,7 +135,7 @@ function validate(r) {
 function catalogList(q) {
   const all = published();
   return Object.entries(all).map(([id, { m, c }]) => ({
-    id, title: m.title, description: m.desc, sector: m.sector,
+    id, title: m.title, titleEn: m.titleEn, description: m.desc, sector: m.sector,
     page: `${SITE}/ar/templates/${id}`,
     download: `${SITE}/downloads/templates/${m.file}`,
     schema: `${SITE}/api/v1/templates/${id}/schema`,
