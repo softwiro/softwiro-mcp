@@ -96,7 +96,7 @@ function resultLabels() { if (!RI) { try { RI = require('./result-i18n.json'); }
 function keyLabel(k, lang, calcId) {
   if (/^\d+$/.test(k)) return k;
   if (lang === 'ar') { const d = resultLabels(); return (d['@' + calcId] || {})[k] || d[k] || k; }
-  const w = k.replace(/_/g, ' ').replace(/([a-z0-9])([A-Z])/g, '$1 $2').toLowerCase();
+  const w = k.replace(/_/g, ' ').replace(/([a-z0-9])([A-Z])/g, '$1 $2').toLowerCase().replace(/\begp\b/g, 'EGP').replace(/\bpct\b/g, '%').replace(/\bvat\b/g, 'VAT').replace(/\busd\b/g, 'USD');
   return w.charAt(0).toUpperCase() + w.slice(1);
 }
 function resultMarkdown(r, lang, calcId) {
