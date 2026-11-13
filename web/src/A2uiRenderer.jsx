@@ -57,6 +57,10 @@ function Node({ id, surface, ctx, scope }) {
       const common = { value: v, placeholder: c.placeholder || '', onChange: e => bindable(c.value) && write(c.value, e.target.value) };
       return <label className="a2-field"><span>{r(c.label)}</span>{c.variant === 'longText' ? <textarea rows={3} {...common} /> : <input {...common} type={c.variant === 'number' ? 'number' : c.variant === 'obscured' ? 'password' : 'text'} step="any" />}</label>;
     }
+    case 'DateTimeInput': {
+      const type = c.enableDate && c.enableTime ? 'datetime-local' : c.enableTime ? 'time' : 'date';
+      return <label className="a2-field"><span>{r(c.label)}</span><input type={type} value={r(c.value) ?? ''} onChange={e => bindable(c.value) && write(c.value, e.target.value)} /></label>;
+    }
     case 'CheckBox': return <label className="a2-check"><input type="checkbox" checked={!!r(c.value)} onChange={e => bindable(c.value) && write(c.value, e.target.checked)} /> <span>{r(c.label)}</span></label>;
     case 'ChoicePicker': {
       const sel = Array.isArray(r(c.value)) ? r(c.value) : [];

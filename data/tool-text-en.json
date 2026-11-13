@@ -1,0 +1,519 @@
+{
+ "garment-cost": {
+  "tx": {
+   "currency": {
+    "EGP": "EGP",
+    "SAR": "SAR",
+    "USD": "USD",
+    "EUR": "EUR"
+   },
+   "unit": {
+    "m": "metre",
+    "kg": "kg"
+   },
+   "notes": {
+    "monthly": "Enter the monthly output so monthly costs can be spread over each piece.",
+    "reject": "The reject rate is above 90%. The calculator used 90%.",
+    "margin": "A margin on the selling price cannot be 100% or more.",
+    "loss": "Your actual price is below the cost per piece: every piece sells at a loss."
+   },
+   "share": "Copy link to this calculation",
+   "copied": "Link copied ✓"
+  },
+  "title": "Garment cost calculator"
+ },
+ "fabric-consumption": {
+  "tx": {
+   "unit": {
+    "m": "m",
+    "kg": "kg"
+   },
+   "notes": {
+    "kg": "Enter the width and GSM to see consumption in kilograms.",
+    "reject": "The reject rate is above 90%. The calculator used 90%."
+   }
+  },
+  "title": "Fabric consumption calculator"
+ },
+ "break-even": {
+  "tx": {
+   "notes": {
+    "price": "The selling price does not exceed the variable cost, so every piece adds to the loss and there is no break-even point.",
+    "below": "Your current output is below break-even: the factory loses money at this level."
+   },
+   "pieces": "pieces"
+  },
+  "title": "Break-even calculator for a garment factory"
+ },
+ "piece-rate": {
+  "tx": {
+   "notes": {
+    "efficiency": "Efficiency is above 100%: check the standard time, which is probably longer than the real one."
+   },
+   "pieces": "pieces"
+  },
+  "title": "Worker output and piece-rate calculator"
+ },
+ "vat-calculator": {
+  "tx": {
+   "currency": {
+    "EGP": "EGP",
+    "SAR": "SAR",
+    "AED": "AED",
+    "USD": "USD"
+   },
+   "notes": {
+    "rate": "Enter the VAT rate.",
+    "rateHigh": "The rate is above 100%. Check it."
+   },
+   "big": {
+    "add": "Total including VAT",
+    "extract": "VAT included in the price"
+   },
+   "net": "Amount before VAT",
+   "tax": "VAT",
+   "gross": "Total including VAT",
+   "copy": "Copy the result",
+   "copiedResult": "Result copied ✓",
+   "rates": {
+    "eg": 14,
+    "sa": 15,
+    "ae": 5
+   },
+   "rows": 10
+  },
+  "title": "VAT calculator"
+ },
+ "study-schedule": {
+  "tx": {
+   "share": "Copy link to this schedule",
+   "copied": "Link copied ✓",
+   "notes": {
+    "past": "The \"{name}\" exam is on or before the start date, so it is not in the schedule.",
+    "noDate": "Subjects without an exam date are spread over the days up to the last exam, with no revision day.",
+    "cap": "The schedule covers the first 120 days from the start date.",
+    "starved": "These subjects got no sessions: {names}. Add sessions or drop subjects.",
+    "sessionsCap": "The most is 12 sessions a day."
+   },
+   "sheetTitle": {
+    "exam": "Study schedule up to the last exam",
+    "week": "Weekly study timetable"
+   },
+   "day": "Day",
+   "session": "Session",
+   "restCell": "Day off",
+   "examTag": "Exam",
+   "reviewTag": "Final revision",
+   "summaryTitle": "Each subject’s share",
+   "sessionsCount": "Sessions",
+   "hoursCount": "Hours",
+   "blankTitle": "Weekly study timetable",
+   "name": "Name",
+   "am": "am",
+   "pm": "pm",
+   "days": [
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday"
+   ],
+   "months": [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December"
+   ],
+   "weekStart": 1,
+   "exampleSubjects": [
+    [
+     "English",
+     10,
+     "2"
+    ],
+    [
+     "Mathematics",
+     12,
+     "3"
+    ],
+    [
+     "Arabic",
+     14,
+     "2"
+    ],
+    [
+     "Science",
+     16,
+     "3"
+    ],
+    [
+     "Geography",
+     18,
+     "1"
+    ]
+   ],
+   "rows": 12,
+   "startRows": 4
+  },
+  "title": "Study schedule maker"
+ },
+ "bmi-calculator": {
+  "tx": {
+   "notes": {
+    "missing": "Enter your age, height and weight.",
+    "minor": "This calculator is for adults aged 18 and over. Children and teenagers are assessed on growth charts by age and sex, so ask your child’s doctor.",
+    "range": "Check the height and weight: the calculator accepts heights from 120 to 230 cm and weights from 30 to 300 kg.",
+    "ethnic": "If your family background is South Asian, Chinese, other Asian, Middle Eastern, Black African or African-Caribbean, the NHS uses lower thresholds: overweight from 23 and obesity from 27.5. Your doctor will read it with other factors."
+   },
+   "cats": [
+    "Underweight (below 18.5)",
+    "Healthy weight (18.5 to under 25)",
+    "Overweight (25 to under 30)",
+    "Obesity class 1 (30 to under 35)",
+    "Obesity class 2 (35 to under 40)",
+    "Obesity class 3 (40 or more)"
+   ],
+   "gap": {
+    "low": "You are about {x} below the lower end of the healthy range.",
+    "high": "You are about {x} above the upper end of the healthy range.",
+    "ok": "Your weight is inside the healthy range for your height."
+   },
+   "unit": "kg/m²",
+   "vizScale": "BMI {bmi} on a scale from 14 to 42, in the “{cat}” band. The healthy band is 18.5 to 24.9.",
+   "vizWeight": "Your weight {w} against the healthy range for your height, {lo} to {hi}.",
+   "kg": "kg",
+   "lbs": "lb"
+  },
+  "title": "BMI calculator and healthy weight range"
+ },
+ "calorie-calculator": {
+  "tx": {
+   "notes": {
+    "missing": "Enter your age, height and weight.",
+    "age": "The calculator is for adults aged 18 to 80. If you are younger or older, ask your doctor.",
+    "range": "Check the height and weight: the calculator accepts heights from 120 to 230 cm and weights from 30 to 300 kg.",
+    "floor": "The calculator never suggests less than {floor} kcal a day, because eating plans below that need a doctor or dietitian to supervise. So the cut here is smaller than 500. That is fine: going gently is safer.",
+    "floorKeep": "Your maintenance calories are already close to the minimum ({floor}) the calculator will suggest, so it does not suggest a reduction. If you want to lose weight, talk to your doctor or a dietitian.",
+    "thin": "Your BMI is below 18.5, so the calculator does not suggest losing weight. Talk to your doctor."
+   },
+   "unit": "kcal/day",
+   "actShort": [
+    "Sedentary",
+    "Light",
+    "Moderate",
+    "High",
+    "Very high"
+   ],
+   "vizCal": "Of {tdee} kcal to maintain your weight, {bmr} is basal metabolic rate and {act} is activity. Suggested: {t} kcal.",
+   "vizFloor": " The {floor} kcal floor limits the cut.",
+   "lgFloor": "Floor {floor}",
+   "act": [
+    [
+     "1.2",
+     "Sedentary: desk job, little movement"
+    ],
+    [
+     "1.375",
+     "Light: exercise 1 to 3 days a week"
+    ],
+    [
+     "1.55",
+     "Moderate: exercise 3 to 5 days a week"
+    ],
+    [
+     "1.725",
+     "High: hard exercise 6 to 7 days, or a physical job"
+    ],
+    [
+     "1.9",
+     "Very high: hard training twice a day, or a very physical job"
+    ]
+   ]
+  },
+  "title": "Calorie calculator: BMR and daily calories"
+ },
+ "due-date-calculator": {
+  "tx": {
+   "locale": "en-US",
+   "notes": {
+    "date": "Enter the date to see the result.",
+    "future": "That date has not happened yet, so a pregnancy cannot start from it. Check the date.",
+    "old": "That date is more than 42 weeks ago, longer than a pregnancy normally lasts, so no due date is shown. Check the date, and ask your doctor if you have questions.",
+    "cycle": "Enter a cycle length between 21 and 45 days. If your cycles are irregular, it is better to have your doctor date the pregnancy with an ultrasound scan.",
+    "cycleOdd": "Your cycle is outside the usual 21 to 35 days. The calculation is less reliable, so it is better to have your doctor date the pregnancy with an ultrasound scan.",
+    "past": "You have passed 40 weeks. If you have not given birth yet, contact your doctor or maternity service to ask what happens next.",
+    "asof": "The date you are calculating for is before the pregnancy starts, so no weeks are shown."
+   },
+   "copy": "Copy the result",
+   "copiedResult": "Result copied ✓",
+   "triNames": [
+    "First trimester",
+    "Second trimester",
+    "Third trimester"
+   ],
+   "units": {
+    "w1": "week",
+    "wn": "weeks",
+    "d1": "day",
+    "dn": "days"
+   },
+   "ms": [
+    [
+     "Start of counting (first day of last period)",
+     "0 weeks",
+     0
+    ],
+    [
+     "End of the first trimester",
+     "13 weeks 6 days",
+     97
+    ],
+    [
+     "Start of the second trimester",
+     "14 weeks",
+     98
+    ],
+    [
+     "Start of the third trimester",
+     "28 weeks",
+     196
+    ],
+    [
+     "Start of week 37",
+     "37 weeks",
+     259
+    ],
+    [
+     "Estimated due date",
+     "40 weeks",
+     280
+    ],
+    [
+     "42 weeks reached",
+     "42 weeks",
+     294
+    ]
+   ],
+   "resultLine": "Estimated due date",
+   "ga": "Weeks of pregnancy",
+   "tri": "Trimester",
+   "left": "Until the due date",
+   "v": {
+    "tlTitle": "Pregnancy timeline",
+    "today": "Today",
+    "due": "Due date",
+    "weeksCap": "weeks of pregnancy",
+    "tlAria": "Pregnancy timeline: first trimester to 13 weeks 6 days, second to 27 weeks 6 days, third from 28 weeks. {now}Estimated due date {due}.",
+    "nowAria": "You are in the {tri}, at {ga}. ",
+    "scrub": "Slide to a week of pregnancy",
+    "scrubHint": "Weeks here are completed weeks: “14 weeks” means 14 weeks 0 days to 14 weeks 6 days.",
+    "scrubOut": "{n} {wu}: {a} to {b}. {tri}.",
+    "scrubNow": " This is your current week.",
+    "scrubDue": " Your estimated due date is the first day of this week."
+   },
+   "d1": "day",
+   "leftSuffix": "days",
+   "wordWeeks": "{w} {wu} and {d} {du}"
+  },
+  "title": "Due date calculator: pregnancy weeks and trimester"
+ },
+ "ovulation-calculator": {
+  "tx": {
+   "locale": "en-US",
+   "notes": {
+    "date": "Enter the first day of your last period to see the result.",
+    "future": "That date has not happened yet. Enter the first day of a period that has started.",
+    "old": "That date is more than a year ago. Enter the first day of your most recent period.",
+    "cycle": "Enter a cycle length between 21 and 40 days. If yours is outside that range or irregular, ask your doctor.",
+    "luteal": "Enter a luteal phase between 10 and 16 days, or leave it empty for 14.",
+    "rolled": "That date is more than one cycle ago, so we show the cycle that contains today, assuming your cycles are regular.",
+    "irregular": "If your cycles are irregular, this estimate is less reliable, and ovulation can change from one cycle to the next."
+   },
+   "copy": "Copy the result",
+   "copiedResult": "Result copied ✓",
+   "big": "Estimated ovulation day",
+   "window": "Fertile window",
+   "period": "Next period",
+   "v": {
+    "sliderLabel": "Cycle length: move the slider to see it change instantly",
+    "days": "days",
+    "calTitle": "Your cycle calendar",
+    "calHint": "Select any day to see what it means.",
+    "legend": [
+     [
+      "p",
+      "●",
+      "First day of a period"
+     ],
+     [
+      "f",
+      "+",
+      "Fertile window (striped background)"
+     ],
+     [
+      "o",
+      "★",
+      "Estimated ovulation day"
+     ],
+     [
+      "t",
+      "▢",
+      "Today (dotted outline)"
+     ]
+    ],
+    "dPeriod": "Cycle day {n}: the first day of a period (the start of a cycle).",
+    "dOv": "Cycle day {n}: estimated ovulation day, the last day of the fertile window.",
+    "dFert": "Cycle day {n}: in the fertile window, {m} before ovulation.",
+    "dOther": "Cycle day {n}: outside the estimated fertile window.",
+    "before": [
+     "day",
+     "days",
+     "days",
+     "days"
+    ],
+    "today": " This is today.",
+    "calAria": "Calendar: the period starts {p}, the fertile window runs from {f} to {o}, and estimated ovulation is {o}."
+   }
+  },
+  "title": "Ovulation calculator: fertile window and next cycles"
+ },
+ "pharmacy-margin-calculator": {
+  "tx": {
+   "currency": {
+    "EGP": "EGP",
+    "SAR": "SAR",
+    "AED": "AED",
+    "USD": "USD"
+   },
+   "notes": {
+    "tm": "Enter a target margin above 0 and below 100%.",
+    "loss": "The selling price is below the cost price on at least one item, so those units are sold at a loss.",
+    "noProfit": "The profit before the discount is zero or negative, so there is no extra volume to work out.",
+    "noRecover": "The discount equals or exceeds the margin: profit after it is zero or negative, and no extra volume makes it up.",
+    "discHigh": "Enter a discount below 100%."
+   },
+   "share": "Copy link to this calculation",
+   "discUnitsOf": "instead of",
+   "vis": {
+    "title": "See it as a picture",
+    "barTitle": "What the selling price is made of",
+    "cost": "Cost",
+    "profit": "Profit",
+    "disc": "Discount",
+    "loss": "Loss: cost is above the selling price",
+    "barAria": "Selling price split: cost {c}%, profit {p}%",
+    "barAriaD": "Selling price split: cost {c}%, discount {d}%, profit left {p}%",
+    "barAriaLoss": "Cost is above the selling price: the sale makes a loss",
+    "mmTitle": "Markup and margin on the same numbers",
+    "mmHint": "The same profit in both, but markup divides it by the cost and margin divides it by the selling price.",
+    "mmMarkup": "Markup {x}% (÷ cost)",
+    "mmMargin": "Margin {x}% (÷ price)",
+    "mmAria": "Profit is {p}% of the selling price. Markup on cost is {mk}% and margin is {mg}%",
+    "exTitle": "Try a discount",
+    "slider": "Discount",
+    "read": "At a {d}% discount: margin {m}%, and you need {e}% more volume to earn the same profit.",
+    "readNo": "At a {d}% discount: profit after it is zero or negative, and no extra volume makes it up.",
+    "curveTitle": "Extra volume needed vs discount",
+    "curveX": "Discount %",
+    "curveY": "Extra volume %",
+    "asym": "Margin {m}%: no recovery",
+    "curveAria": "Curve of extra volume needed against discount. It climbs steeply as the discount nears the margin of {m}%. At a {d}% discount you need {e}% more.",
+    "curveAriaNo": "Curve of extra volume needed against discount. A {d}% discount equals or exceeds the margin of {m}%, so there is no recovery."
+   },
+   "rows": 8
+  },
+  "title": "Pharmacy margin calculator: profit and discount"
+ },
+ "reorder-point-calculator": {
+  "tx": {
+   "unit": "units",
+   "days": "days",
+   "vis": {
+    "title": "Stock level over three order cycles",
+    "slDs": "Daily sales",
+    "slLt": "Lead time",
+    "rop": "Reorder point {x}",
+    "ss": "Safety stock {x}",
+    "lead": "Lead time {x} d",
+    "order": "Order",
+    "arrive": "Delivery",
+    "expiry": "Batch expires",
+    "xAxis": "days",
+    "yAxis": "units",
+    "aria": "Chart of the item’s stock over {n} days: it starts at {peak} units and falls by {d} units a day to the reorder point of {rop}, an order is placed and arrives {lt} days later, and stock never drops below the safety stock of {ss} units.",
+    "ariaShelf": " Some batches expire before they are sold, so cut the quantity.",
+    "ariaShelfOk": " Every batch sells before it expires.",
+    "stockout": "Stock runs out before the delivery arrives because safety stock is zero."
+   },
+   "notes": {
+    "cover": "Enter the days of cover, or safety stock is zero.",
+    "sd": "Enter the standard deviation of daily sales, or safety stock is zero.",
+    "shelfSs": "The safety stock alone ({ss} units) takes {days} days to sell, longer than the shelf life left ({shelf} days). Some may expire unsold: lower it or ask for stock with longer dating.",
+    "shelfQty": "The highest stock after delivery ({peak} units) takes {days} days to sell, longer than the shelf life left ({shelf} days). Some may expire unsold. At these sales, keep the order to about {max} units or shorten the order cycle."
+   },
+   "assume": {
+    "base": "Daily sales hold steady around the average you entered, and the supplier delivers in the same lead time every time.",
+    "order": "You order as soon as stock falls to the reorder point, and you check stock every day.",
+    "days": "Safety stock = daily sales × days of cover.",
+    "service": "Safety stock = z × standard deviation of daily sales × square root of the lead time, assuming daily sales are roughly normally distributed and z = {z} for a {sl}% service level.",
+    "qty": "Suggested quantity = daily sales × order cycle. It is not a minimum order and ignores supplier terms and discounts.",
+    "round": "Figures are rounded up to a whole unit."
+   },
+   "share": "Copy link to this calculation",
+   "z": {
+    "90": 1.282,
+    "95": 1.645,
+    "99": 2.326,
+    "97.5": 1.96
+   }
+  },
+  "title": "Reorder point and safety stock calculator for pharmacies"
+ },
+ "no-show-cost-calculator": {
+  "tx": {
+   "vis": {
+    "title": "See the effect",
+    "slider": "Expected drop in no-shows",
+    "barTitle": "Revenue lost per month: now and under the scenario",
+    "now": "Now",
+    "after": "With reminders",
+    "recovered": "recovered",
+    "barAria": "Revenue lost per month is {now} now and {after} under the scenario, so {rec} is recovered ({red}% of the loss).",
+    "gaugeTitle": "Does the system pay for itself?",
+    "gBreak": "Break-even {x}",
+    "gYou": "Your system {x}",
+    "gOk": "Pays for itself",
+    "gNo": "Does not pay for itself",
+    "gaugeAria": "Break-even gauge: the most the scenario can pay for is {be} a month. Your system costs {cost}, so it {verdict}.",
+    "gaugeAriaNo": "Break-even gauge: the most the scenario can pay for is {be} a month. No system cost was entered.",
+    "verdictOk": "pays for itself",
+    "verdictNo": "does not pay for itself",
+    "hint": "Move the slider to see how the recovered revenue and the most worth paying change."
+   },
+   "currency": {
+    "EGP": "EGP",
+    "SAR": "SAR",
+    "AED": "AED",
+    "USD": "USD"
+   },
+   "notes": {
+    "over": "There are more no-shows than appointments due. Check the figures.",
+    "pct": "Enter a no-show rate below 100%.",
+    "redHigh": "The drop cannot be more than 100%.",
+    "neg": "The system costs more than this scenario recovers, so it does not pay for itself."
+   },
+   "share": "Copy link to this calculation"
+  },
+  "title": "Clinic no-show cost calculator"
+ }
+}

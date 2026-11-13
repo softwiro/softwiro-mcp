@@ -47,6 +47,13 @@ function localize(calc, lang) {
 function fieldFor(key, spec, i, T, labels) {
   const id = 'f_' + i, s = spec || {}, path = '/form/' + key;
   const label = key + (labels && labels[key] ? ' - ' + labels[key] : s.description ? ' - ' + String(s.description).slice(0, 80) : '');
+  // dates and times get a native picker: DateTimeInput (enableDate / enableTime) instead of free text
+  const hint = key + ' ' + (s.description || '');
+  const isTime = /HH:MM/i.test(hint) || /(^|_)time$/i.test(key);
+  const isDate = !isTime && (/YYYY-MM-DD/i.test(hint) || /(^|_)date$/i.test(key));
+  if ((isDate || isTime) && !s.enum && s.type !== 'array' && s.type !== 'object') {
+    return { c: { id, component: 'DateTimeInput', label: label.replace(/\s*[(（][^)）]*(YYYY-MM-DD|HH:MM)[^)）]*[)）]/g, ''), enableDate: isDate, enableTime: isTime, value: { '@path': path } }, init: s.default !== undefined ? String(s.default) : '' };
+  }
   if (Array.isArray(s.enum)) {
     return { c: { id, component: 'ChoicePicker', label, variant: 'mutuallyExclusive', displayStyle: 'chips',
       options: s.enum.map(v => ({ label: String(v), value: String(v) })), value: { '@path': path } }, init: s.default !== undefined ? [String(s.default)] : [] };
@@ -215,7 +222,7 @@ const ACTIONS = {
       if (!calc) throw Object.assign(new Error('unknown calculator'), { code: 'VALIDATION_FAILED' });
       const sid = a.surfaceId;
       const inputs = coerceInputs(calc.inputs, a.context.inputs);
-      const result = await tools.calculators.run(id, inputs);
+      const result = await tools.calculators.run(id, inputs, lang);
       return [
         msg('updateDataModel', { surfaceId: sid, path: '/status', value: '' }),
         msg('updateDataModel', { surfaceId: sid, path: '/result', value: resultMarkdown(result, lang, id) }),

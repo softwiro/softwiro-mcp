@@ -8,7 +8,13 @@ const API = 'https://qintar.app/api/v1/';
 const SOURCE = 'qintar.app';
 const TTL_MS = 60 * 1000;
 const TIMEOUT_MS = 5000;
-const DISCLAIMER = 'الحسابات استرشادية ولا تُعدّ نصيحة مالية أو فتوى.';
+const { AsyncLocalStorage } = require('async_hooks');
+const als = new AsyncLocalStorage(); // the language of the call in flight (runs are async, so no module global)
+const isEn = () => (als.getStore() || {}).lang === 'en';
+const pick = (ar, en) => (isEn() ? en : ar);
+const DISCLAIMER_AR = 'الحسابات استرشادية ولا تُعدّ نصيحة مالية أو فتوى.';
+const DISCLAIMER_EN = 'The calculations are indicative and are not financial advice or a fatwa.';
+const disclaimer = () => pick(DISCLAIMER_AR, DISCLAIMER_EN);
 
 const PURITY = { K24: 0.999, K21: 0.875, K18: 0.75 };
 const KARATS = ['K24', 'K21', 'K18'];
@@ -136,7 +142,7 @@ function kindKarat(L, inputs, { kindDef, karatDef }) {
 }
 const priceIn = (inputs, name) => numIn(inputs, name, { gt: 0, max: 10000000 });
 function stamp(L, obj) {
-  return { ...obj, pricesAsOf: L.at, source: SOURCE, disclaimer: DISCLAIMER };
+  return { ...obj, pricesAsOf: L.at, source: SOURCE, disclaimer: disclaimer() };
 }
 
 // ---------- local calculators ----------
@@ -158,11 +164,11 @@ async function fairPrice(inputs) {
   else if (pct <= 10) verdict = 'high';
   else verdict = 'very_high';
   const messages = {
-    below_gold: 'اللي دفعته أقل من قيمة الذهب نفسه بسعر النهارده. اتأكد من العيار والوزن.',
-    fair: 'السعر في النطاق المعتاد أو أقل منه. سعر الذهب بيتحرك خلال اليوم، فقارن دايمًا بسعر وقت الشراء.',
-    slightly_high: `أعلى من النطاق المعتاد بحوالي ${fmt(over, 0)} ج (${fmt(pct, 1)}%): فرق صغير ممكن يجي من حركة سعر الذهب خلال اليوم أو من مصنعية المحل.`,
-    high: `أعلى من النطاق المعتاد بحوالي ${fmt(over, 0)} ج (${fmt(pct, 1)}%). الفرق يستاهل تسأل عنه: راجع الفاتورة والوزن والدمغة وقارن بمحلات تانية.`,
-    very_high: `أعلى بوضوح من النطاق المعتاد: حوالي ${fmt(over, 0)} ج (${fmt(pct, 1)}%). مش معناها بالضرورة إن في خطأ، لكن الفرق كبير؛ راجع الفاتورة وقارن قبل ما تحكم.`,
+    below_gold: pick('اللي دفعته أقل من قيمة الذهب نفسه بسعر النهارده. اتأكد من العيار والوزن.', 'What you paid is less than the gold itself is worth at today\'s price. Check the karat and the weight.'),
+    fair: pick('السعر في النطاق المعتاد أو أقل منه. سعر الذهب بيتحرك خلال اليوم، فقارن دايمًا بسعر وقت الشراء.', 'The price is within the usual range or below it. The gold price moves during the day, so always compare with the price at the time of purchase.'),
+    slightly_high: pick(`أعلى من النطاق المعتاد بحوالي ${fmt(over, 0)} ج (${fmt(pct, 1)}%): فرق صغير ممكن يجي من حركة سعر الذهب خلال اليوم أو من مصنعية المحل.`, `About ${fmt(over, 0)} EGP (${fmt(pct, 1)}%) above the usual range: a small difference that can come from the gold price moving during the day or from the shop's making charge.`),
+    high: pick(`أعلى من النطاق المعتاد بحوالي ${fmt(over, 0)} ج (${fmt(pct, 1)}%). الفرق يستاهل تسأل عنه: راجع الفاتورة والوزن والدمغة وقارن بمحلات تانية.`, `About ${fmt(over, 0)} EGP (${fmt(pct, 1)}%) above the usual range. The difference is worth asking about: check the invoice, the weight and the hallmark, and compare with other shops.`),
+    very_high: pick(`أعلى بوضوح من النطاق المعتاد: حوالي ${fmt(over, 0)} ج (${fmt(pct, 1)}%). مش معناها بالضرورة إن في خطأ، لكن الفرق كبير؛ راجع الفاتورة وقارن قبل ما تحكم.`, `Clearly above the usual range: about ${fmt(over, 0)} EGP (${fmt(pct, 1)}%). It does not necessarily mean a mistake, but the gap is large; check the invoice and compare before you decide.`),
   };
   return stamp(L, {
     karat, kind, weightGrams: w, paidEGP: paid, sellPriceUsed: sell,
@@ -190,11 +196,11 @@ async function sellNow(inputs) {
   const be = paid / (w * (1 - d / 100)), rise = Math.max(0, be / buy - 1) * 100;
   const prem = paid - w * sell, loss = w * (sell - buy);
   let verdict, message;
-  if (res >= 0.005) { verdict = 'profit'; message = `لو بعت دلوقتي هتكسب حوالي ${fmt(res, 0)} ج (${fmt(resPct, 1)}%).`; }
+  if (res >= 0.005) { verdict = 'profit'; message = pick(`لو بعت دلوقتي هتكسب حوالي ${fmt(res, 0)} ج (${fmt(resPct, 1)}%).`, `If you sell now you would gain about ${fmt(res, 0)} EGP (${fmt(resPct, 1)}%).`); }
   else if (res <= -0.005) {
     verdict = 'loss';
-    message = `لو بعت دلوقتي هتخسر حوالي ${fmt(-res, 0)} ج (${fmt(-resPct, 1)}%). علشان تتعادل لازم سعر شراء الجرام عند الصايغ يوصل ${fmt(be, 2)} ج بدل ${fmt(buy, 2)} ج النهارده، يعني فرق ${fmt(rise, 2)}%. الحاسبة بتقول الشرط ده بس، ومش بتتوقع إنه هيحصل.`;
-  } else { verdict = 'break_even'; message = 'لو بعت دلوقتي هتطلع متعادل تقريبًا.'; }
+    message = pick(`لو بعت دلوقتي هتخسر حوالي ${fmt(-res, 0)} ج (${fmt(-resPct, 1)}%). علشان تتعادل لازم سعر شراء الجرام عند الصايغ يوصل ${fmt(be, 2)} ج بدل ${fmt(buy, 2)} ج النهارده، يعني فرق ${fmt(rise, 2)}%. الحاسبة بتقول الشرط ده بس، ومش بتتوقع إنه هيحصل.`, `If you sell now you would lose about ${fmt(-res, 0)} EGP (${fmt(-resPct, 1)}%). To break even, the jeweller's buy price per gram would have to reach ${fmt(be, 2)} EGP instead of today's ${fmt(buy, 2)} EGP, a rise of ${fmt(rise, 2)}%. The calculator only states this condition; it does not predict it will happen.`);
+  } else { verdict = 'break_even'; message = pick('لو بعت دلوقتي هتطلع متعادل تقريبًا.', 'If you sell now you would roughly break even.'); }
   return stamp(L, {
     karat, weightGrams: w, paidEGP: paid, deductionPercent: d, buyPriceUsed: buy, sellPriceUsed: sell,
     sellNowValueEGP: r2(sellNowV),
@@ -207,7 +213,7 @@ async function sellNow(inputs) {
     buySellSpreadCostEGP: r2(loss),
     verdict,
     message,
-    note: 'الصنعة (المصنعية) والفرق بين سعر البيع وسعر الشراء هما سبب إن البيع بعد الشراء مباشرة بيخسر.',
+    note: pick('الصنعة (المصنعية) والفرق بين سعر البيع وسعر الشراء هما سبب إن البيع بعد الشراء مباشرة بيخسر.', 'The making charge and the gap between the sell and buy prices are why selling right after buying loses money.'),
   });
 }
 
@@ -231,7 +237,7 @@ async function unitConvert(inputs) {
     buyPriceUsed: buy, sellPriceUsed: sell,
     valueAtSellPriceEGP: r2(g * sell),
     valueAtBuyPriceEGP: r2(g * buy),
-    note: 'جنيه الذهب = 8 جم عيار 21؛ دايمًا بيتحسب عيار 21.',
+    note: pick('جنيه الذهب = 8 جم عيار 21؛ دايمًا بيتحسب عيار 21.', 'A gold pound = 8 g of 21 karat; it is always counted as 21 karat.'),
   });
 }
 
@@ -248,7 +254,7 @@ async function budget(inputs) {
     makingPerGramRange: { min: r[0], max: r[1] },
     pricePerGramWithMakingAndVatEGP: { low: r2(lowG), high: r2(highG) },
     gramsAffordable: { min: r2(gMin), max: r2(gMax) },
-    message: `بميزانية ${fmt(b, 0)} ج تقدر تشتري تقريبًا من ${fmt(gMin, 2)} إلى ${fmt(gMax, 2)} جرام عيار ${karat.slice(1)}. الرقم الأعلى لو المصنعية في أقل المعتاد، والأقل لو في أعلاها. المصنعية الفعلية بتتحدد في المحل.`,
+    message: pick(`بميزانية ${fmt(b, 0)} ج تقدر تشتري تقريبًا من ${fmt(gMin, 2)} إلى ${fmt(gMax, 2)} جرام عيار ${karat.slice(1)}. الرقم الأعلى لو المصنعية في أقل المعتاد، والأقل لو في أعلاها. المصنعية الفعلية بتتحدد في المحل.`, `With a budget of ${fmt(b, 0)} EGP you can buy roughly ${fmt(gMin, 2)} to ${fmt(gMax, 2)} grams of ${karat.slice(1)} karat. The higher figure assumes the lowest usual making charge, the lower one the highest. The actual charge is set by the shop.`),
   };
   if (kind === 'BAR') {
     out.bars = L.bars.slice().sort((a, c) => a.grams - c.grams).map((x) => {
@@ -291,13 +297,13 @@ async function compare(inputs) {
   if (goldChange !== undefined) {
     const pa = buy * Math.pow(Math.max(0, 1 + goldChange / 100), years);
     out.gold = { ...line(grams * pa), gramsBought: r2(grams), pricePerGramPaidEGP: r2(per), buyPricePerGramAfterYearsEGP: r2(pa), assumedChangePercentPerYear: goldChange };
-    notes.push(`الذهب: بالمبلغ ده بتشتري ${fmt(grams, 2)} جرام بسعر ${fmt(per)} ج للجرام شامل المصنعية والضريبة، وبعد ${years} سنة بتتحسب بسعر الشراء ${fmt(pa)} ج للجرام.`);
+    notes.push(pick(`الذهب: بالمبلغ ده بتشتري ${fmt(grams, 2)} جرام بسعر ${fmt(per)} ج للجرام شامل المصنعية والضريبة، وبعد ${years} سنة بتتحسب بسعر الشراء ${fmt(pa)} ج للجرام.`, `Gold: this amount buys ${fmt(grams, 2)} grams at ${fmt(per)} EGP per gram including the making charge and tax; after ${years} years it is valued at the buy price of ${fmt(pa)} EGP per gram.`));
   } else out.gold = null;
   if (certRate !== undefined) out.certificates = { ...line(amt * Math.pow(1 + certRate / 100, years)), assumedRatePercentPerYear: certRate };
   else out.certificates = null;
   if (usdChange !== undefined) {
     out.dollar = { ...line(amt * (1 - sp) * Math.pow(Math.max(0, 1 + usdChange / 100), years) * (1 - sp)), assumedChangePercentPerYear: usdChange };
-    notes.push(`الدولار: الحسبة بتخصم ${fmt(spreadPct, 1)}% عند الشراء و${fmt(spreadPct, 1)}% عند البيع (افتراض تقدر تغيّره).`);
+    notes.push(pick(`الدولار: الحسبة بتخصم ${fmt(spreadPct, 1)}% عند الشراء و${fmt(spreadPct, 1)}% عند البيع (افتراض تقدر تغيّره).`, `Dollar: the calculation deducts ${fmt(spreadPct, 1)}% when buying and ${fmt(spreadPct, 1)}% when selling (an assumption you can change).`));
   } else out.dollar = null;
   out.missingInputs = [
     goldChange === undefined && 'goldChangePercentPerYear',
@@ -305,7 +311,7 @@ async function compare(inputs) {
     usdChange === undefined && 'usdChangePercentPerYear',
   ].filter(Boolean);
   out.notes = notes;
-  out.warning = 'النتائج مبنية على الأرقام المدخلة فقط، وده سيناريو مش توقع: تغيّر الذهب والدولار الفعلي مجهول مسبقًا، والشهادات ليها شروط البنك، والذهب فيه فرق البيع والشراء والمصنعية (محسوبين في الحسبة).';
+  out.warning = pick('النتائج مبنية على الأرقام المدخلة فقط، وده سيناريو مش توقع: تغيّر الذهب والدولار الفعلي مجهول مسبقًا، والشهادات ليها شروط البنك، والذهب فيه فرق البيع والشراء والمصنعية (محسوبين في الحسبة).', 'The results are based only on the numbers you entered. This is a scenario, not a forecast: the actual change in gold and the dollar is unknown in advance, certificates have the bank\'s terms, and gold has a buy-sell gap and a making charge (both counted here).');
   return stamp(L, out);
 }
 
@@ -331,7 +337,11 @@ async function exchange(inputs) {
   const tol = Math.max(200, newTotal * 0.02);
   const verdict = (gap >= -tol && gap <= tol) ? 'fair' : gap > tol ? 'generous' : gap >= -newTotal * 0.08 ? 'slightly_unfair' : 'unfair';
   const z = fmt(gap, 0), pc = fmt(gapPct, 1) + '%';
-  const message = verdict === 'fair' ? `الصفقة عادلة تقريبًا (فرق ${z} ج)`
+  const message = isEn() ? (verdict === 'fair' ? `The deal is roughly fair (difference ${z} EGP)`
+    : verdict === 'slightly_unfair' ? `You got about ${z} EGP less than you should have (${pc})`
+    : verdict === 'unfair' ? `A large gap: you got about ${z} EGP less than you should have (${pc})`
+    : `You got about ${z} EGP more than the calculation`)
+    : verdict === 'fair' ? `الصفقة عادلة تقريبًا (فرق ${z} ج)`
     : verdict === 'slightly_unfair' ? `خدت أقل من حقك بحوالي ${z} ج (${pc})`
     : verdict === 'unfair' ? `الفرق كبير: خدت أقل من حقك بحوالي ${z} ج (${pc})`
     : `خدت أكتر من الحسبة بحوالي ${z} ج`;
@@ -420,12 +430,12 @@ async function makingCharge(inputs) {
   const body = { karat, itemType, weightGrams };
   if (mk !== undefined) body.craftsmanshipPerGram = mk;
   const data = await fetchJson('calculators/craftsmanship', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) });
-  return withMeta(data, { date: data.calculatedAt, disclaimer: DISCLAIMER });
+  return withMeta(data, { date: data.calculatedAt, disclaimer: disclaimer() });
 }
 
 async function bullion() {
   const data = await fetchJson('calculators/bullion');
-  return withMeta(data, { date: data.calculatedAt, disclaimer: DISCLAIMER });
+  return withMeta(data, { date: data.calculatedAt, disclaimer: disclaimer() });
 }
 
 // ---------- catalogue ----------
@@ -578,10 +588,10 @@ const handlers = {
   'gold-exchange-old-for-new': exchange,
 };
 
-async function run(id, inputs) {
+async function run(id, inputs, lang) {
   const h = handlers[id];
   if (!h) throw new Error(`Unknown gold tool: ${id}`);
-  return h(checkInputs(inputs));
+  return als.run({ lang: lang === 'en' ? 'en' : 'ar' }, () => h(checkInputs(inputs)));
 }
 
 module.exports = { list, run };

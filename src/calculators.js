@@ -17,11 +17,11 @@ function catalog(query) {
     .map(c => ({ id: c.id, title: c.title, group: c.group, description: c.description, inputs: c.inputs, output: c.output }));
 }
 
-async function run(id, inputs) {
+async function run(id, inputs, lang) {
   for (const g of groups) {
     if (g.list.some(c => c.id === id)) {
       if (inputs !== undefined && (inputs === null || typeof inputs !== 'object' || Array.isArray(inputs))) throw new Error('inputs must be an object');
-      return g.run(id, inputs || {});
+      return g.run(id, inputs || {}, lang);
     }
   }
   throw Object.assign(new Error('unknown calculator id; call list_calculators'), { code: 404 });

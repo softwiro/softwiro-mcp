@@ -12,7 +12,10 @@
 const path = require('path');
 // The Arabic page text of each tool (notes, categories, ranges, titles), exported once from softwiro.com's tool pages
 const TEXT = require(path.join(__dirname, '..', 'data', 'tool-text.json'));
-function TX(id) { return TEXT[id].tx; }
+let TEXT_EN = null;
+function textEn() { if (!TEXT_EN) { try { TEXT_EN = require(path.join(__dirname, '..', 'data', 'tool-text-en.json')); } catch (e) { TEXT_EN = {}; } } return TEXT_EN; }
+let LANG = 'ar'; // set by run() for the duration of one synchronous calculation
+function TX(id) { return LANG === 'en' && textEn()[id] ? textEn()[id].tx : TEXT[id].tx; }
 
 // ---------- number formatting: the same formatters as common.client.js ----------
 const FMT = {
@@ -609,6 +612,7 @@ function dueDate(i) {
   const method = en(i, 'method', ['lmp', 'conception'], 'lmp');
   const byLmp = method === 'lmp';
   const unit = (n, what) => {
+    if (LANG === 'en') return n === 1 ? what : what + 's';
     if (n === 0 || n === 1) return what === 'week' ? 'أسبوع' : 'يوم';
     if (n === 2) return what === 'week' ? 'أسبوعان' : 'يومان';
     if (n <= 10) return what === 'week' ? 'أسابيع' : 'أيام';
@@ -1136,12 +1140,13 @@ const list = META.map(m => ({
   output: m.output,
 }));
 
-function run(id, inputs) {
+function run(id, inputs, lang) {
   const fn = IMPL[id];
   if (!fn) throw new Error(`Unknown tool "${id}"`);
   if (inputs === undefined || inputs === null) inputs = {};
   if (typeof inputs !== 'object' || Array.isArray(inputs)) throw new Error('inputs must be an object');
-  return fn(inputs);
+  LANG = lang === 'en' ? 'en' : 'ar';
+  try { return fn(inputs); } finally { LANG = 'ar'; }
 }
 
 module.exports = { list, run };
