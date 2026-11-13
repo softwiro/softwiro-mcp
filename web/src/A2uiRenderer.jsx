@@ -48,7 +48,7 @@ function Node({ id, surface, ctx, scope }) {
       const click = () => {
         const a = c.action || {};
         if (a.event) ctx.sendAction({ name: a.event.name, surfaceId: surface.id, sourceComponentId: c.id, timestamp: new Date().toISOString(), context: r(a.event.context || {}) });
-        else if (a.functionCall && a.functionCall['@call'] === 'openUrl') { const u = safeUrl(r(a.functionCall.args && a.functionCall.args.url)); if (u) window.open(u, '_blank', 'noopener,noreferrer'); }
+        else if (a.functionCall && a.functionCall['@call'] === 'openUrl') { const u = safeUrl(r(a.functionCall.args && a.functionCall.args.url)); if (u) { if (ctx.openUrl) ctx.openUrl(u); else window.open(u, '_blank', 'noopener,noreferrer'); } }
       };
       return <button className={'a2-btn ' + (c.variant || 'default')} onClick={click}><Node id={c.child} surface={surface} ctx={ctx} scope={scope} /></button>;
     }

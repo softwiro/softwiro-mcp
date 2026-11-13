@@ -199,12 +199,25 @@ function mcpTools() {
       }, required: ['id'] },
       annotations: ro('Run a calculator', true),
     },
+    {
+      name: 'open_calculator',
+      description: 'Opens one of the 23 calculators as an interactive form inside the chat (A2UI screen rendered by the Softwiro view): the person fills the fields, with date pickers and row editors, and presses Run. Use it when the person wants to enter the numbers themselves instead of you passing them. Call list_calculators first for the ids. Read-only, nothing is stored. In hosts without interactive views it returns the calculator\'s input schema as text.',
+      inputSchema: { type: 'object', properties: { id: { type: 'string', description: 'Calculator id from list_calculators, for example vat-calculator.' }, lang: { type: 'string', enum: ['ar', 'en'], description: 'Language of the form. Default: Arabic when the request is Arabic, otherwise English.' } }, required: ['id'] },
+      annotations: ro('Open a calculator form'),
+    },
+    {
+      name: 'a2ui_action',
+      description: 'Internal: used by the Softwiro interactive view to send a button press (A2UI action) back to the server. Not meant to be called by the model.',
+      inputSchema: { type: 'object', properties: { name: { type: 'string' }, surfaceId: { type: 'string' }, context: { type: 'object' }, lang: { type: 'string', enum: ['ar', 'en'] } }, required: ['name', 'surfaceId'] },
+      annotations: ro('A2UI action'),
+      _meta: { ui: { visibility: ['app'] } },
+    },
   ];
 }
 
 // MCP Apps (interactive connector): these tools open the result view in hosts that support it.
 // Hosts without support ignore the metadata and keep using the plain text result.
-const UI_TOOLS = new Set(['list_templates', 'calculate', 'list_calculators', 'run_calculator']);
+const UI_TOOLS = new Set(['list_templates', 'calculate', 'list_calculators', 'run_calculator', 'open_calculator']);
 function withUi(t) {
   if (!UI_TOOLS.has(t.name)) return t;
   return { ...t, _meta: { ...(t._meta || {}), ui: { resourceUri: appUi.UI_URI }, 'ui/resourceUri': appUi.UI_URI } };
@@ -233,7 +246,35 @@ async function mcpCall(name, a) {
   if (name === 'calculate') { const { id, ...req } = a; return runCalc(id, req); }
   if (name === 'list_calculators') return { count: calculators.count(), calculators: calculators.catalog(a.query) };
   if (name === 'run_calculator') { count('calculator:' + String(a.id).slice(0, 60)); return calculators.run(a.id, a.inputs); }
+  if (name === 'open_calculator') {
+    const c = calculators.catalog().find(x => x.id === a.id);
+    if (!c) throw new Error('unknown calculator id; call list_calculators');
+    return { id: c.id, title: c.title, description: c.description, inputs: c.inputs, note: 'An interactive form was shown. If you cannot see it, ask the person for the inputs and call run_calculator.' };
+  }
+  if (name === 'a2ui_action') return null; // handled in tools/call (needs the embedded-resource result)
   throw new Error('unknown tool');
+}
+
+// ---- A2UI inside MCP Apps (pattern 3): the view bundles the renderer; tool results carry the A2UI messages
+// as an embedded resource of type application/a2ui+json. ----
+const A2UI_MIME = 'application/a2ui+json';
+const pickLang = (args, fallback) => (args && (args.lang === 'en' || args.lang === 'ar') ? args.lang : (/[\u0600-\u06FF]/.test(JSON.stringify(args || {})) ? 'ar' : fallback || 'en'));
+function a2uiResource(name, messages) {
+  return { type: 'resource', resource: { uri: 'a2ui://softwiro/' + name, mimeType: A2UI_MIME, text: JSON.stringify(messages) } };
+}
+function a2uiMessagesFor(name, args, r) {
+  const lang = pickLang(args);
+  if (name === 'open_calculator') { const c = calculators.catalog().find(x => x.id === args.id); return c ? a2ui.calculatorSurface(c, lang) : []; }
+  if (name === 'list_templates' && Array.isArray(r) && r.length) return a2ui.templatesSurface(r, lang);
+  if (name === 'run_calculator' || name === 'calculate') return a2ui.resultSurface(String((args && args.id) || 'calc').replace(/[^a-z0-9_-]/gi, ''), String((args && args.id) || 'Result'), structured(r), lang);
+  return [];
+}
+
+// The MCP App view: the A2UI renderer bundle (web/dist/index.html, runs the MCP Apps bridge when it is inside a host)
+let VIEW = null;
+function viewHtml() {
+  if (VIEW === null) { try { VIEW = fs.readFileSync(path.join(__dirname, '..', 'web', 'dist', 'index.html'), 'utf8'); } catch (e) { VIEW = ''; } }
+  return VIEW || appUi.HTML;
 }
 
 function mount(app, express) {
@@ -277,13 +318,24 @@ function mount(app, express) {
       if (b.method === 'resources/read') {
         if (!b.params || b.params.uri !== appUi.UI_URI) return res.json({ jsonrpc: '2.0', id: b.id, error: { code: -32002, message: 'resource not found' } });
         count('mcp_ui_read');
-        return ok({ contents: [{ uri: appUi.UI_URI, mimeType: appUi.MIME, text: appUi.HTML, _meta: { ui: { prefersBorder: true } } }] });
+        return ok({ contents: [{ uri: appUi.UI_URI, mimeType: appUi.MIME, text: viewHtml(), _meta: { ui: { prefersBorder: true } } }] });
       }
       if (b.method === 'tools/call') {
-        count('mcp_tool:' + (b.params && b.params.name));
+        const name = b.params && b.params.name, args = (b.params && b.params.arguments) || {};
+        count('mcp_tool:' + name);
         try {
-          const r = await mcpCall(b.params && b.params.name, b.params && b.params.arguments);
-          return ok({ content: [{ type: 'text', text: JSON.stringify(r) }], structuredContent: withA2ui(b.params.name, b.params.arguments, structured(r)) });
+          if (name === 'a2ui_action') {
+            const parsed = a2ui.parseAction({ message: { version: '1.0', action: { name: args.name, surfaceId: args.surfaceId, context: args.context } } });
+            const lang = pickLang({ lang: args.lang || (args.context || {}).lang }, 'ar');
+            const out = parsed.error ? { error: parsed.error } : await a2ui.handleAction(parsed, { calculators, mcpCall }, lang);
+            const msgs = out.error ? [a2ui.errorMessage(out.error, args.surfaceId)] : out.messages;
+            return ok({ content: [{ type: 'text', text: 'A2UI action handled' }, a2uiResource('action', msgs)] });
+          }
+          const r = await mcpCall(name, args);
+          const msgs = a2uiMessagesFor(name, args, r);
+          const content = [{ type: 'text', text: JSON.stringify(r) }];
+          if (msgs.length) content.push(a2uiResource(name, msgs));
+          return ok({ content, structuredContent: withA2ui(name, args, structured(r)) });
         } catch (e) { return ok({ isError: true, content: [{ type: 'text', text: String(e.message) }] }); }
       }
       return res.json({ jsonrpc: '2.0', id: b.id, error: { code: -32601, message: 'method not found' } });

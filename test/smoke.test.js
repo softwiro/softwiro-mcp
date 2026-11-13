@@ -23,12 +23,12 @@ const srv = http.createServer(app).listen(0, '127.0.0.1', async () => {
     assert.strictEqual(init.result.serverInfo.name, 'softwiro-templates');
 
     const tools = (await rpc('tools/list')).result.tools;
-    assert.deepStrictEqual(tools.map(t => t.name), ['list_templates', 'get_schema', 'calculate', 'get_download', 'list_calculators', 'run_calculator']);
+    assert.deepStrictEqual(tools.map(t => t.name), ['list_templates', 'get_schema', 'calculate', 'get_download', 'list_calculators', 'run_calculator', 'open_calculator', 'a2ui_action']);
     for (const t of tools) assert.strictEqual(t.annotations.readOnlyHint, true, t.name + ' should be read-only');
 
     // MCP Apps: result tools point at the ui:// view, the view is served as an MCP App, results carry structuredContent
     const ui = (await rpc('tools/list')).result.tools;
-    for (const n of ['list_templates', 'calculate', 'list_calculators', 'run_calculator']) {
+    for (const n of ['list_templates', 'calculate', 'list_calculators', 'run_calculator', 'open_calculator']) {
       const t = ui.find(x => x.name === n);
       assert.strictEqual(t._meta.ui.resourceUri, 'ui://softwiro/result', n + ' should open the view');
     }
@@ -36,6 +36,17 @@ const srv = http.createServer(app).listen(0, '127.0.0.1', async () => {
     const rd = (await rpc('resources/read', { uri: 'ui://softwiro/result' })).result.contents[0];
     assert.strictEqual(rd.mimeType, 'text/html;profile=mcp-app');
     assert.ok(rd.text.includes('ui/initialize') && !/<script[^>]+src=/.test(rd.text), 'view is self-contained');
+    assert.deepStrictEqual(ui.find(x => x.name === 'a2ui_action')._meta.ui.visibility, ['app'], 'a2ui_action is app-only');
+    // A2UI inside the MCP App: tool results carry application/a2ui+json embedded resources
+    const emb = r => r.content.filter(c => c.type === 'resource' && c.resource.mimeType === 'application/a2ui+json').flatMap(c => JSON.parse(c.resource.text));
+    const oc = (await rpc('tools/call', { name: 'open_calculator', arguments: { id: 'vat-calculator', lang: 'ar' } })).result;
+    assert.ok(emb(oc)[0].createSurface.components.some(c => c.component === 'TextField'), 'open_calculator returns a form surface');
+    const lt = (await rpc('tools/call', { name: 'list_templates', arguments: { query: 'gym' } })).result;
+    assert.ok(emb(lt).some(m => m.createSurface), 'list_templates returns a surface');
+    const actR = (await rpc('tools/call', { name: 'a2ui_action', arguments: { name: 'run_calculator', surfaceId: 'calc-vat-calculator', context: { id: 'vat-calculator', lang: 'en', inputs: { country: ['eg'], mode: ['add'], lines: [{ price: '1000', quantity: '2' }] } } } })).result;
+    assert.ok(emb(actR).some(m => m.updateDataModel && m.updateDataModel.path === '/result' && /2.?280/.test(m.updateDataModel.value)), 'a2ui_action runs the calculator');
+    const bad = (await rpc('tools/call', { name: 'a2ui_action', arguments: { name: 'nope', surfaceId: 'x' } })).result;
+    assert.ok(emb(bad).some(m => m.error), 'unknown action is an A2UI error');
     assert.ok((await rpc('resources/read', { uri: 'ui://other' })).error, 'unknown resource is an error');
     const sc = (await rpc('tools/call', { name: 'list_templates', arguments: { query: 'gym' } })).result;
     assert.ok(Array.isArray(sc.structuredContent.items) && sc.structuredContent.items[0].page, 'structuredContent wraps arrays');

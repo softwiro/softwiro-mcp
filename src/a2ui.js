@@ -130,7 +130,7 @@ function calculatorSurface(calc, lang) {
     text('desc', L.description || '', 'caption'),
     ...fields.flatMap(f => (f.cs ? f.cs : [f.c])),
     { id: 'run', component: 'Button', variant: 'primary', child: 'run_label',
-      action: { event: { name: 'run_calculator', context: { id: calc.id, inputs: { '@path': '/form' } } } } },
+      action: { event: { name: 'run_calculator', context: { id: calc.id, lang: lang === 'ar' ? 'ar' : 'en', inputs: { '@path': '/form' } } } } },
     text('run_label', T.run),
     text('status', { '@path': '/status' }),
     text('result', { '@path': '/result' }),
@@ -165,12 +165,14 @@ function resultMarkdown(r, lang, calcId) {
 }
 
 // A surface that only shows a finished result (used when a tool already ran)
-function resultSurface(id, title, result) {
+function resultSurface(id, title, result, lang) {
+  const cal = require('./calculators').catalog().find(x => x.id === id);
+  if (cal) title = localize(cal, lang === 'ar' ? 'ar' : 'en').title;
   return [msg('createSurface', { surfaceId: 'result-' + id, catalogId: CATALOG, components: [
     { id: 'root', component: 'Card', child: 'body' },
     { id: 'body', component: 'Column', children: ['title', 'md'] },
     text('title', title, 'body'),
-    text('md', resultMarkdown(result)),
+    text('md', resultMarkdown(result, lang, id)),
   ] })];
 }
 

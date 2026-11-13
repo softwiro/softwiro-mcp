@@ -4,6 +4,7 @@ import React, { useEffect, useMemo, useState, useSyncExternalStore } from 'react
 import { createRoot } from 'react-dom/client';
 import { Processor } from './processor.js';
 import { Surface } from './A2uiRenderer.jsx';
+import { EMBEDDED, createBridge, messagesOf } from './mcpBridge.js';
 import './style.css';
 
 const BASE = (document.querySelector('meta[name=a2ui-base]') || {}).content || '/api/a2ui';
@@ -53,9 +54,20 @@ function App() {
     } catch (e) { processor.error('EXECUTION_ERROR', String(e.message)); processor.emit(); }
     setBusy('');
   };
+  const bridge = useMemo(() => EMBEDDED ? createBridge({ onToolResult: r => { const ms = messagesOf(r); if (!ms.length) return; processor.surfaces.clear(); const ar = /[\u0600-\u06FF]/.test(JSON.stringify(ms)); document.documentElement.dir = ar ? 'rtl' : 'ltr'; document.documentElement.lang = ar ? 'ar' : 'en'; ms.forEach(m => processor.process(m)); } }) : null, [processor]);
   const ctx = useMemo(() => ({
     processor,
+    openUrl: bridge ? (u => bridge.openLink(u).catch(() => {})) : null,
     sendAction: async action => {
+      if (bridge) {
+        const sid = action.surfaceId;
+        processor.process({ version: '1.0', updateDataModel: { surfaceId: sid, path: '/status', value: '...' } });
+        try {
+          const r = await bridge.callTool('a2ui_action', { name: action.name, surfaceId: sid, context: action.context, lang: (action.context && action.context.lang) || undefined });
+          messagesOf(r).forEach(m => processor.process(m));
+        } catch (e) { processor.process({ version: '1.0', updateDataModel: { surfaceId: sid, path: '/status', value: String(e.message) } }); }
+        return;
+      }
       const sid = action.surfaceId;
       processor.process({ version: '1.0', updateDataModel: { surfaceId: sid, path: '/status', value: '...' } });
       try {
@@ -63,7 +75,12 @@ function App() {
         await readSse(res, m => processor.process(m));
       } catch (e) { processor.process({ version: '1.0', updateDataModel: { surfaceId: sid, path: '/status', value: String(e.message) } }); }
     },
-  }), [processor, lang]);
+  }), [processor, lang, bridge]);
+
+  if (EMBEDDED) return <div className="a2-app a2-embedded">
+    {Array.from(processor.surfaces.values()).map(s => <Surface key={s.id} surface={s} ctx={ctx} />)}
+    {processor.errors.length > 0 && <pre className="a2-errors">{processor.errors.slice(-3).map(e => e.code + ': ' + e.message).join('\n')}</pre>}
+  </div>;
 
   return <div className="a2-app">
     <h1>{T.title}</h1>
