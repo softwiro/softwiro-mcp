@@ -10,8 +10,8 @@ const BASE = (document.querySelector('meta[name=a2ui-base]') || {}).content || '
 
 // Interface language: ?lang=ar|en, then the last choice, then the browser language
 const TX = {
-  en: { title: 'Softwiro · A2UI 1.0', intro: 'Pick a calculator or the templates list. The server sends A2UI messages; this page draws them and sends your clicks back.', calcs: 'Calculators…', tpl: 'Templates (gym)', other: 'العربية', note: 'Calculator field names and descriptions come from the calculator catalog and are in English.' },
-  ar: { title: 'Softwiro · A2UI 1.0', intro: 'اختر حاسبة أو قائمة القوالب. السيرفر بيبعت رسائل A2UI وهذه الصفحة بترسمها وترجّع ضغطاتك له.', calcs: 'الحاسبات…', tpl: 'القوالب (الجيم)', other: 'English', note: 'أسماء حقول الحاسبات ووصفها بتيجي من كتالوج الحاسبات وهي بالإنجليزية.' },
+  en: { title: 'Softwiro · A2UI 1.0', intro: 'Pick a calculator or the templates list. The server sends A2UI messages; this page draws them and sends your clicks back.', calcs: 'Calculators…', tpl: 'Templates (gym)', other: 'العربية', note: '' },
+  ar: { title: 'Softwiro · A2UI 1.0', intro: 'اختر حاسبة أو قائمة القوالب. يرسل الخادم رسائل A2UI، وترسمها هذه الصفحة وتعيد إليه ضغطاتك.', calcs: 'الحاسبات…', tpl: 'القوالب (الجيم)', other: 'English', note: '' },
 };
 function pickLang() {
   const q = new URLSearchParams(location.search).get('lang');
@@ -43,7 +43,7 @@ function App() {
   const T = TX[lang];
   useEffect(() => { document.documentElement.lang = lang; document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr'; try { localStorage.setItem('a2ui-lang', lang); } catch (e) { /* ignore */ } }, [lang]);
   useSyncExternalStore(processor.subscribe.bind(processor), () => processor.surfaces.size + ':' + processor.errors.length);
-  useEffect(() => { fetch('/api/v1/calculators').then(r => r.json()).then(d => setCalcs(d.calculators || [])).catch(() => {}); }, []);
+  useEffect(() => { fetch('/api/a2ui/calculators?lang=' + lang).then(r => r.json()).then(d => setCalcs(d.calculators || [])).catch(() => {}); }, [lang]);
 
   const open = async (path, replaceId) => {
     setBusy('...');

@@ -36,9 +36,17 @@ const text = (id, t, variant) => ({ id, component: 'Text', text: String(t).slice
 
 // ---------- building blocks ----------
 // A calculator input schema field -> one component + the initial value it binds to
-function fieldFor(key, spec, i, T) {
+let I18N = null;
+function i18n() { if (!I18N) { try { I18N = require('./calc-i18n.json'); } catch (e) { I18N = {}; } } return I18N; }
+// Title/description/field labels of a calculator in the page language (catalog titles are Arabic, descriptions English)
+function localize(calc, lang) {
+  const t = i18n()[calc.id] || {};
+  if (lang === 'en') return { title: t.titleEn || calc.title, description: calc.description, labels: {} };
+  return { title: calc.title, description: t.descAr || calc.description, labels: t.fields || {} };
+}
+function fieldFor(key, spec, i, T, labels) {
   const id = 'f_' + i, s = spec || {}, path = '/form/' + key;
-  const label = key + (s.description ? ' - ' + String(s.description).slice(0, 80) : '');
+  const label = key + (labels && labels[key] ? ' - ' + labels[key] : s.description ? ' - ' + String(s.description).slice(0, 80) : '');
   if (Array.isArray(s.enum)) {
     return { c: { id, component: 'ChoicePicker', label, variant: 'mutuallyExclusive', displayStyle: 'chips',
       options: s.enum.map(v => ({ label: String(v), value: String(v) })), value: { '@path': path } }, init: s.default !== undefined ? [String(s.default)] : [] };
@@ -52,14 +60,15 @@ function fieldFor(key, spec, i, T) {
 // Messages that open a calculator form. `calc` is an entry of calculators.catalog().
 function calculatorSurface(calc, lang) {
   const T = tx(lang);
-  const fields = Object.keys(calc.inputs || {}).slice(0, 12).map((k, i) => ({ k, ...fieldFor(k, calc.inputs[k], i, T) }));
+  const L = localize(calc, lang);
+  const fields = Object.keys(calc.inputs || {}).slice(0, 12).map((k, i) => ({ k, ...fieldFor(k, calc.inputs[k], i, T, L.labels) }));
   const form = {};
   fields.forEach(f => { form[f.k] = f.init; });
   const components = [
     { id: 'root', component: 'Card', child: 'body' },
     { id: 'body', component: 'Column', children: ['title', 'desc', ...fields.map(f => f.c.id), 'run', 'status', 'result'] },
-    text('title', calc.title || calc.id, 'body'),
-    text('desc', calc.description || '', 'caption'),
+    text('title', L.title || calc.id, 'body'),
+    text('desc', L.description || '', 'caption'),
     ...fields.map(f => f.c),
     { id: 'run', component: 'Button', variant: 'primary', child: 'run_label',
       action: { event: { name: 'run_calculator', context: { id: calc.id, inputs: { '@path': '/form' } } } } },
@@ -231,4 +240,4 @@ async function handleAction(parsed, tools, lang) {
 const sse = m => `data: ${JSON.stringify(m)}\n\n`;
 const errorMessage = (e, surfaceId) => ({ version: VERSION, error: { ...(surfaceId ? { surfaceId } : {}), code: e.code, message: e.message } });
 
-module.exports = { VERSION, CATALOG, calculatorSurface, resultSurface, templatesSurface, confirmCard, parseAction, handleAction, registerAction, verifyToken, signToken, sse, errorMessage, resultMarkdown, coerceInputs };
+module.exports = { localize, VERSION, CATALOG, calculatorSurface, resultSurface, templatesSurface, confirmCard, parseAction, handleAction, registerAction, verifyToken, signToken, sse, errorMessage, resultMarkdown, coerceInputs };

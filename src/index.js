@@ -301,6 +301,10 @@ function mount(app, express) {
     if (!c) return res.status(404).json({ error: 'unknown calculator' });
     count('a2ui_surface:calculator'); stream(res, a2ui.calculatorSurface(c, req.query.lang));
   });
+  app.get('/api/a2ui/calculators', lim('read', LIMITS.readPerMinute), (req, res) => {
+    const lang = req.query.lang === 'en' ? 'en' : 'ar';
+    res.json({ calculators: calculators.catalog().map(c => ({ id: c.id, title: a2ui.localize(c, lang).title })) });
+  });
   app.get('/api/a2ui/surface/templates', lim('read', LIMITS.readPerMinute), (req, res) => {
     count('a2ui_surface:templates'); stream(res, a2ui.templatesSurface(catalogList(String(req.query.q || '').slice(0, 80)), req.query.lang));
   });
